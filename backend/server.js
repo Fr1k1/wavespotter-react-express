@@ -16,6 +16,10 @@ const PORT = 3000;
 
 app.use("/api/v1", router);
 
+app.use("/", (req, res) => {
+  res.send("Server is running");
+});
+
 db.sequelize
   .authenticate()
   .then(() => {
