@@ -30,7 +30,7 @@ db.sequelize
       .then(() => {
         console.log("Table created successfully!");
 
-        app.listen(PORT, (error) => {
+        app.listen(PORT, "0.0.0.0", (error) => {
           if (!error) {
             console.log(
               "Server is Successfully Running, and App is listening on port " +
