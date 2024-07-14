@@ -12,7 +12,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use("/api/v1", router);
 
@@ -30,11 +30,11 @@ db.sequelize
       .then(() => {
         console.log("Table created successfully!");
 
-        app.listen(port, "0.0.0.0", (error) => {
+        app.listen(PORT, "0.0.0.0", (error) => {
           if (!error) {
             console.log(
               "Server is Successfully Running, and App is listening on port " +
-                port
+                PORT
             );
           } else {
             console.log("Error occurred, server can't start", error);
