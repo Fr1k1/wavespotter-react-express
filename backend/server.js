@@ -13,7 +13,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const corsOptions = {
-  origin: "https://diplomski-frontend.netlify.app/", //change this based on use case
+  origin: "https://diplomski-frontend.netlify.app", //change this based on use case
   credentials: true,
   methods: "GET, POST, PATCH, DELETE, PUT",
   allowedHeaders: "Content-Type, Authorization",
