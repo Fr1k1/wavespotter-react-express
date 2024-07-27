@@ -1,9 +1,9 @@
 import express from "express";
 import { createClient } from "@supabase/supabase-js";
 import db from "./app/models/index.js";
-import { Router } from "express";
 import router from "./app/routes/index.js";
 import "dotenv/config"; //needed for work with env files
+import cors from "cors";
 
 const app = express();
 
@@ -12,7 +12,16 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const corsOptions = {
+  origin: "http://localhost:5173", //change this based on use case
+  credentials: true,
+  methods: "GET, POST, PATCH, DELETE, PUT",
+  allowedHeaders: "Content-Type, Authorization",
+};
+
 const PORT = process.env.PORT || 3000;
+
+app.use(cors(corsOptions));
 
 app.use("/api/v1", router);
 
