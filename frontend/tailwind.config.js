@@ -16,6 +16,11 @@ export default {
           DEFAULT: "#0891B2",
           90: "rgba(14, 165, 233, 0.9)",
         },
+        "custom-gray": "#EDF5F6",
+      },
+
+      fontSize: {
+        "256px": "256px",
       },
     },
   },

@@ -3,6 +3,18 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
+}
+
+@layer components {
+  .nerko-one-regular {
+    font-family: "Nerko One", cursive;
+    font-weight: 800;
+    font-style: normal;
+  }
+}
+
+* {
+  font-family: "Montserrat", sans-serif;
 }

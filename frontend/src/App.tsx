@@ -1,42 +1,17 @@
+import { Route, Routes } from "react-router";
 import "./App.css";
-import { Button } from "./components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+
+import Layout from "./components/ui/layout";
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
     <>
-      <h2 className="text-red-500 text-2xl">Homepage</h2>
-
-      <div className="flex gap-6">
-        <Button
-          onClick={() => {
-            console.log("Button clicked");
-          }}
-          variant={"secondary"}
-          underlined
-        >
-          Click me
-        </Button>
-
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
-        <Switch />
-      </div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Homepage />} />
+        </Route>
+      </Routes>
     </>
   );
 }
