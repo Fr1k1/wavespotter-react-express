@@ -11,7 +11,12 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      colors: {},
+      colors: {
+        primary: {
+          DEFAULT: "#0891B2",
+          90: "rgba(14, 165, 233, 0.9)",
+        },
+      },
     },
   },
   plugins: [tailwindcssAnimate],
