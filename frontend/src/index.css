@@ -18,3 +18,8 @@
 * {
   font-family: "Montserrat", sans-serif;
 }
+
+/*because of stars rating component*/
+svg.star-svg {
+  display: inline;
+}
