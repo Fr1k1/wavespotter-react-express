@@ -1,18 +1,27 @@
-import HeroImage from "../../assets/hero_image.png";
+import HeroImage from "../../assets/hero_image.svg";
 
 const Hero = () => {
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-2 max-w-screen-2xl m-auto p-4">
       <div>
         <img src={HeroImage} alt="" className="w-full" />
       </div>
-      <div>
-        <div className="flex bg-red-700 flex-col">
-          <h2 className="nerko-one-regular text-256px">Beach,</h2>
-          <h2 className="nerko-one-regular text-256px">please!</h2>
+      <div className="flex flex-col items-center justify-center gap-5">
+        <div className="text-center">
+          <h2 className="nerko-one-regular text-156px text-cyan-800 leading-none">
+            Beach,
+          </h2>
+          <h2 className="nerko-one-regular text-156px text-cyan-800 leading-none -mt-10">
+            please!
+          </h2>
         </div>
 
-        <p>Find your perfect sandy spot in seconds</p>
+        <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold">
+          Find your perfect sandy spot{" "}
+        </p>
+        <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold -mt-3">
+          in seconds
+        </p>
       </div>
     </div>
   );

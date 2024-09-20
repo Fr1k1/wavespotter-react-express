@@ -13,14 +13,23 @@ export default {
       },
       colors: {
         primary: {
-          DEFAULT: "#0891B2",
+          DEFAULT: "#0891B2", //cyan-600
           90: "rgba(14, 165, 233, 0.9)",
         },
-        "custom-gray": "#EDF5F6",
+        "primary-500": "#06B6D4",
+        "primary-700": "#0E7490",
+        "primary-800": "#075985",
+
+        secondary: "#EA580C",
+        "gray-800": "#27272A",
+        "gray-700": "#3F3F46",
+        "gray-600": "#52525B",
+
+        bg: "#EDF5F6",
       },
 
       fontSize: {
-        "256px": "256px",
+        "156px": "156px",
       },
     },
   },

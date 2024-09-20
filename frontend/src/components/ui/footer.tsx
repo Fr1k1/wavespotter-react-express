@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FacebookLogo } from "@phosphor-icons/react";
+import { FacebookLogo, InstagramLogo, XLogo } from "@phosphor-icons/react";
 
 const Footer = () => {
   return (
@@ -21,9 +21,9 @@ const Footer = () => {
         </div>
 
         <div className="flex gap-6 justify-center">
-          <FacebookLogo size={32} />
-          <FacebookLogo size={32} />
-          <FacebookLogo size={32} />
+          <FacebookLogo size={32} weight="duotone" color="white" />
+          <InstagramLogo size={32} weight="duotone" color="white" />
+          <XLogo size={32} weight="duotone" color="white" />
         </div>
 
         <div className="flex justify-center text-white">
