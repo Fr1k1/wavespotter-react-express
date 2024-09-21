@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Rating } from "react-simple-star-rating";
 import { Button } from "./button";
+import { Link } from "react-router-dom";
 
 interface CardData {
   title: string;
@@ -29,12 +30,16 @@ const CardItem = ({ data }: { data: CardData }) => {
               </div>
             </div>
             <div>
-              <Button>More</Button>
+              <Link to="/more">
+                <Button underlined variant={"darker"}>
+                  More
+                </Button>
+              </Link>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <img src={data?.image} alt="" />
+          <img src={data?.image} alt="" className="w-full h-full" />
         </CardContent>
       </Card>
     </div>

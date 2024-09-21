@@ -11,7 +11,7 @@ const NavbarDesktop = () => {
 
       <div className="flex gap-6 p-2 items-center">
         <Link to="/">Homepage</Link>
-        <Link to="/">Find a beach</Link>
+        <Link to="/place/:id">Find a beach</Link>
         <Link to="/">About</Link>
         <div>
           <Button>Login</Button>
