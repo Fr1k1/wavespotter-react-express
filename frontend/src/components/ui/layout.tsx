@@ -1,12 +1,20 @@
 import Header from "./header";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Footer from "./footer";
 
 const Layout = () => {
+  const location = useLocation();
   return (
     <main className="min-h-screen flex flex-col ">
       <Header />
-      <div className="flex-grow max-w-screen-2xl mx-auto w-full">
+
+      <div
+        className={`  ${
+          location.pathname === "/login"
+            ? "flex items-center justify-center flex-grow"
+            : "flex-grow max-w-screen-2xl mx-auto w-full"
+        }`}
+      >
         <Outlet />
       </div>
       <Footer />
