@@ -4,7 +4,7 @@ import Beach2 from "../../assets/beach_2.png";
 import Beach3 from "../../assets/beach_3.png";
 import { Link } from "react-router-dom";
 
-//nebude se tu fetchalo, ovo budu koristile ostale komponente
+//nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
 
 const CardsGrid = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
   const cardData = [

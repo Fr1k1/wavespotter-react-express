@@ -30,7 +30,7 @@ const CardItem = ({ data }: { data: CardData }) => {
               </div>
             </div>
             <div>
-              <Link to="/more">
+              <Link to="/beach/1">
                 <Button underlined variant={"darker"}>
                   More
                 </Button>
