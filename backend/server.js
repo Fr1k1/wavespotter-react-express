@@ -13,7 +13,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const corsOptions = {
-  origin: "https://diplomski-frontend.netlify.app", //change this based on use case
+  origin: "http://localhost:5173", //change this based on use case, "https://diplomski-frontend.netlify.app" for production
   credentials: true,
   methods: "GET, POST, PATCH, DELETE, PUT",
   allowedHeaders: "Content-Type, Authorization",
