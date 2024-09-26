@@ -14,7 +14,14 @@ const NavbarDesktop = () => {
       <div className="flex gap-6 p-2 items-center">
         <Link to="/">Homepage</Link>
         <Link to="/place/:id">Find a beach</Link>
-        <Link to="/">About</Link>
+        <Button
+          variant={"secondary"}
+          onClick={() => {
+            navigate("/add-beach");
+          }}
+        >
+          Add new beach
+        </Button>
         <div>
           <Button
             onClick={() => {

@@ -1,8 +1,5 @@
 import { X } from "@phosphor-icons/react";
-
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-
 import {
   Select,
   SelectContent,
@@ -14,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "./label";
 import { Button } from "./button";
+import Characteristics from "./Characteristics";
 
 const Filter: React.FC<{
   setIsToggledFilter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,7 +41,6 @@ const Filter: React.FC<{
                 </TabsList>
               </Tabs>
             </div>
-
             <div>
               <Select>
                 <Label htmlFor="" className="text-white">
@@ -66,16 +63,7 @@ const Filter: React.FC<{
           </div>
           <div className="text-white">
             <h2>Characteristics</h2>
-            <div className="grid grid-cols-7 gap-6">
-              {Array.from({ length: 50 }).map((_, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <Switch id={`airplane-mode-${index}`} />
-                  <Label htmlFor={`airplane-mode-${index}`}>
-                    Airplane Mode
-                  </Label>
-                </div>
-              ))}
-            </div>
+            <Characteristics />
           </div>
         </div>
         <div className="flex flex-end justify-end ">
