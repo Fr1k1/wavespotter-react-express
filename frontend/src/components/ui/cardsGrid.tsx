@@ -7,7 +7,13 @@ import Title from "./Title";
 
 //nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
 
-const CardsGrid = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
+const CardsGrid = ({
+  title,
+  hasMoreButton,
+}: {
+  title: string;
+  hasMoreButton: boolean;
+}) => {
   const cardData = [
     { title: "Beautiful Beach", image: Beach1 },
     { title: "Mountain Retreat", image: Beach2 },
@@ -20,7 +26,7 @@ const CardsGrid = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <Title>Top picks for this season</Title>
+        <Title>{title}</Title>
         {hasMoreButton && (
           <Link to={"/more"}>
             <h4 className="text-primary-800 underline text-base mb-6">More</h4>

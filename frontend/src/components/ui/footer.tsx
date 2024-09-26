@@ -3,7 +3,7 @@ import { FacebookLogo, InstagramLogo, XLogo } from "@phosphor-icons/react";
 
 const Footer = () => {
   return (
-    <div className="bg-cyan-800 flex justify-center h-64">
+    <div className="bg-primary-800 flex justify-center h-64">
       <div className="flex gap-6 flex-col max-w-7xl  justify-center">
         <div className="flex gap-10">
           <Link to="/" className="text-white p-4">

@@ -41,7 +41,9 @@ const Login = () => {
           </CardDescription>
         </CardContent>
         <CardFooter className="flex w-full">
-          <Button className="w-full">Login</Button>
+          <Button className="w-full" variant={"darker"}>
+            Login
+          </Button>
         </CardFooter>
       </Card>
     </div>

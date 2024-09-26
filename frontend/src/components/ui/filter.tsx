@@ -62,7 +62,7 @@ const Filter: React.FC<{
             </div>
           </div>
           <div className="text-white">
-            <h2>Characteristics</h2>
+            <h2 className="mb-2">Characteristics</h2>
             <Characteristics />
           </div>
         </div>

@@ -8,10 +8,10 @@ const Hero = () => {
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         <div className="text-center">
-          <h2 className="nerko-one-regular text-156px text-cyan-800 leading-none">
+          <h2 className="nerko-one-regular text-156px text-primary-800 leading-none">
             Beach,
           </h2>
-          <h2 className="nerko-one-regular text-156px text-cyan-800 leading-none -mt-10">
+          <h2 className="nerko-one-regular text-156px text-primary-800 leading-none -mt-10">
             please!
           </h2>
         </div>

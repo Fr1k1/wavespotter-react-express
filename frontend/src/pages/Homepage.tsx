@@ -7,8 +7,10 @@ const Homepage = () => {
     <div>
       <Hero />
       <div className=" flex flex-col gap-6">
-        <CardsGrid hasMoreButton />
+        <CardsGrid hasMoreButton title="Top picks this season" />
         <MapSearcher />
+        <CardsGrid hasMoreButton title="Best rated sea beaches" />
+        <CardsGrid hasMoreButton title="Best rated river beaches" />
       </div>
     </div>
   );
