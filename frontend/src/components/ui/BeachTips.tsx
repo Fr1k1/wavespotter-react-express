@@ -1,9 +1,10 @@
+import Subtitle from "./Subtitle";
 import { Textarea } from "./textarea";
 
 const BeachTips = () => {
   return (
     <div className=" flex flex-col gap-6 ">
-      <h2 className="font-bold text-2xl">Beach tips</h2>
+      <Subtitle>Beach tips</Subtitle>
       <div className="grid grid-cols-2 items-center">
         <h3>Best time to come?</h3>
         <Textarea />

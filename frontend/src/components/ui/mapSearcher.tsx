@@ -10,15 +10,14 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "./button";
+import Title from "./Title";
 
 //ovo treba biti neka forma kasnije
 
 const MapSearcher = () => {
   return (
     <div>
-      <h3 className="font-extrabold text-2xl text-gray-800 mb-6">
-        Find the perfect beach
-      </h3>
+      <Title className="mb-6">Find the perfect beach</Title>
       <div className="flex flex-row gap-5">
         <div className="bg-red-500 w-4/6">
           <Map />

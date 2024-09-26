@@ -25,6 +25,8 @@ import FileInput from "@/components/ui/FileInput";
 import { PlusCircle } from "@phosphor-icons/react";
 import Characteristics from "@/components/ui/Characteristics";
 import BeachTips from "@/components/ui/BeachTips";
+import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/Subtitle";
 
 const formSchema = z.object({
   beach_name: z.string().min(2, {
@@ -51,8 +53,8 @@ const AddNewBeach = () => {
   });
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold text-2xl">Add new beach</h2>
-      <h3 className="font-semibold text-xl">Basic info</h3>
+      <Title>Add new beach</Title>
+      <Subtitle>Basic info</Subtitle>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className=" grid grid-cols-2 gap-6">
@@ -263,7 +265,7 @@ const AddNewBeach = () => {
           />
           <div className=" w-2/4 flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-2xl">Images</h2>
+              <Subtitle>Images</Subtitle>
               <PlusCircle size={32} weight="fill" />
             </div>
 
@@ -276,9 +278,7 @@ const AddNewBeach = () => {
 
           <div>
             <div>
-              <h2 className="font-bold text-2xl">
-                Featured info (up to 5 items)
-              </h2>
+              <Subtitle>Featured info (up to 5 items)</Subtitle>
               <div className="flex flex-row justify-between gap-6">
                 <FormField
                   control={form.control}
@@ -405,7 +405,7 @@ const AddNewBeach = () => {
           </div>
 
           <div>
-            <h2>Characteristics</h2>
+            <Subtitle className="mb-6">Characteristics</Subtitle>
             <Characteristics />
           </div>
           <BeachTips />

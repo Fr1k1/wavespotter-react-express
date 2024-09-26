@@ -3,6 +3,7 @@ import Beach1 from "../../assets/beach_1.png";
 import Beach2 from "../../assets/beach_2.png";
 import Beach3 from "../../assets/beach_3.png";
 import { Link } from "react-router-dom";
+import Title from "./Title";
 
 //nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
 
@@ -19,9 +20,7 @@ const CardsGrid = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h3 className="font-extrabold text-2xl text-gray-800">
-          Top picks for this season
-        </h3>
+        <Title>Top picks for this season</Title>
         {hasMoreButton && (
           <Link to={"/more"}>
             <h4 className="text-primary-800 underline text-base mb-6">More</h4>
