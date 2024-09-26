@@ -6,6 +6,7 @@ import PlacePage from "./pages/PlacePage";
 import Login from "./pages/Login";
 import BeachDetails from "./pages/BeachDetails";
 import AddNewBeach from "./pages/AddNewBeach";
+import BeachRequests from "./pages/BeachRequests";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/place/:id" element={<PlacePage />} />
           <Route path="/beach/:id" element={<BeachDetails />} />
           <Route path="/add-beach" element={<AddNewBeach />} />
+          <Route path="/beach-requests" element={<BeachRequests />} />
         </Route>
       </Routes>
     </>
