@@ -266,7 +266,7 @@ const AddNewBeach = () => {
           <div className=" w-2/4 flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <Subtitle>Images</Subtitle>
-              <PlusCircle size={32} weight="fill" />
+              <PlusCircle size={32} weight="fill" color="#0E7490" />
             </div>
 
             <div>
@@ -286,7 +286,7 @@ const AddNewBeach = () => {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Beach city</FormLabel>
-                      <FormControl className="">
+                      <FormControl>
                         <Select value={field.value}>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose beach city" />

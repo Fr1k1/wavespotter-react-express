@@ -12,9 +12,9 @@ const CardItem = ({ data }: { data: CardData }) => {
   return (
     <div>
       <Card>
-        <CardHeader className="">
+        <CardHeader>
           <div className=" flex flex-row items-center justify-between">
-            <div className="">
+            <div>
               <CardTitle>{data?.title}</CardTitle>
               <div className=" flex items-center gap-2">
                 <Rating
