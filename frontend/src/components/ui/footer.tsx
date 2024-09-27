@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className="bg-primary-800 flex justify-center h-64">
       <div className="flex gap-6 flex-col max-w-7xl  justify-center">
-        <div className="flex gap-10">
+        <div className="flex-row justify-between ">
           <Link to="/" className="text-white p-4">
             About us
           </Link>
@@ -16,7 +16,7 @@ const Footer = () => {
             Contribute
           </Link>
           <Link to="/" className="text-white p-4">
-            Add or edit beach
+            Add a beach
           </Link>
         </div>
 

@@ -1,27 +1,49 @@
+import { useEffect, useState } from "react";
 import HeroImage from "../../assets/hero_image.svg";
 
 const Hero = () => {
+  const [isDesktop, setDesktop] = useState(window.innerWidth >= 1024);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth >= 1024);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
   return (
-    <div className="grid grid-cols-2 max-w-screen-2xl m-auto p-4">
+    <div className="flex flex-col items-center justify-center lg:grid lg:grid-cols-2 lg:max-w-screen-2xl m-auto p-4">
       <div>
-        <img src={HeroImage} alt="" className="w-full" />
+        <img src={HeroImage} alt="" className="lg:w-full" />
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         <div className="text-center">
-          <h2 className="nerko-one-regular text-156px text-primary-800 leading-none">
+          <h2 className="nerko-one-regular text-primary-800 mb-3 leading-none text-8xl md:text-9xl lg:text-156px lg:mb-0 ">
             Beach,
           </h2>
-          <h2 className="nerko-one-regular text-156px text-primary-800 leading-none -mt-10">
+          <h2 className="nerko-one-regular text-156px text-primary-800 leading-none -mt-10 text-8xl md:text-9xl lg:text-156px">
             please!
           </h2>
         </div>
 
-        <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold">
-          Find your perfect sandy spot{" "}
-        </p>
-        <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold -mt-3">
-          in seconds
-        </p>
+        {isDesktop ? (
+          <>
+            <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold">
+              Find your perfect sandy spot{" "}
+            </p>
+            <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold -mt-4">
+              in seconds
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="nerko-one-regular text-4xl text-primary leading-none font-semibold">
+              Find your perfect sandy spot in seconds
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

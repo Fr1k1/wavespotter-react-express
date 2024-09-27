@@ -16,10 +16,10 @@ import Title from "./Title";
 
 const MapSearcher = () => {
   return (
-    <div>
+    <div className="px-4 lg:px-0">
       <Title className="mb-6">Find the perfect beach</Title>
-      <div className="flex flex-row gap-5">
-        <div className="w-4/6">
+      <div className="flex flex-col gap-5 lg:flex-row ">
+        <div className="lg:w-4/6">
           <Map />
         </div>
         <div>
