@@ -5,7 +5,7 @@ const BeachFeaturesCheck = () => {
   const amenitiesWithX = Array(20).fill("Market");
 
   return (
-    <div className="flex flex-row flex-wrap gap-x-4 gap-y-1">
+    <div className="flex flex-row flex-wrap gap-x-4 gap-y-1 items-center justify-center lg:items-baseline lg:justify-normal">
       {amenitiesWithCheck.map((amenity, index) => (
         <div key={`check-${index}`} className="flex items-center gap-2">
           <CheckCircle size={32} weight="fill" color="#16A34A" />

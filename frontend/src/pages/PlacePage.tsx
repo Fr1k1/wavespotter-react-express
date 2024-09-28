@@ -25,7 +25,7 @@ const PlacePage = () => {
           Filter
         </Button>
       </div>
-      <div className="flex gap-4">
+      <div className="grid grid-cols-3 gap-4 lg:flex ">
         <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
           <p>Sea</p>
         </div>

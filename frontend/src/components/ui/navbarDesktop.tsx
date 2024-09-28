@@ -11,7 +11,7 @@ const NavbarDesktop = () => {
         <img src={Plazomat} alt="" />
       </div>
 
-      <div className="flex gap-6 p-2 items-center">
+      <nav className="flex gap-6 p-2 items-center">
         <Link to="/">Homepage</Link>
         <Link to="/place/:id">Find a beach</Link>
         <Button
@@ -31,7 +31,7 @@ const NavbarDesktop = () => {
             Login
           </Button>
         </div>
-      </div>
+      </nav>
     </div>
   );
 };

@@ -9,11 +9,11 @@ import BaechDetailsAccordion from "@/components/ui/BaechDetailsAccordion";
 const BeachDetails = () => {
   return (
     <div>
-      <div className="grid grid-cols-2">
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <div>
           <Carousel />
         </div>
-        <div className="p-6 flex flex-col gap-6">
+        <div className=" flex flex-col gap-6 lg:p-6">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-col gap-1">
               <h2 className="font-extrabold text-3xl">Beach Zlatni Rat</h2>
@@ -73,7 +73,7 @@ const BeachDetails = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2">
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <BeachFeaturesCheck />
         <BaechDetailsAccordion />
       </div>

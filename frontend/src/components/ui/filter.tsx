@@ -30,7 +30,7 @@ const Filter: React.FC<{
             className="cursor-pointer"
           />
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           <div className=" w-60">
             <div className="w-44">
               <p className="text-white">Water type</p>

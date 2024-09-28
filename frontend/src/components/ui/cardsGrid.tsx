@@ -25,7 +25,7 @@ const CardsGrid = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6 px-4 lg:px-0">
+      <div className="flex items-center justify-between mb-6 ">
         <Title>{title}</Title>
         {hasMoreButton && (
           <Link to={"/more"} className="text-primary-800 underline text-base ">
@@ -34,7 +34,7 @@ const CardsGrid = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 px-4 lg:px-0 ">
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 ">
         {cardData.map((data, index) => (
           <CardItem key={index} data={data} />
         ))}

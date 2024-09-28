@@ -52,12 +52,12 @@ const AddNewBeach = () => {
     },
   });
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
       <Subtitle>Basic info</Subtitle>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className=" grid grid-cols-2 gap-6">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
             <div className=" flex flex-col gap-4">
               <FormField
                 control={form.control}
@@ -279,7 +279,7 @@ const AddNewBeach = () => {
           <div>
             <div>
               <Subtitle>Featured info (up to 5 items)</Subtitle>
-              <div className="flex flex-row justify-between gap-6">
+              <div className="flex flex-col justify-between gap-6 lg:flex lg:flex-row ">
                 <FormField
                   control={form.control}
                   name="beach_name"

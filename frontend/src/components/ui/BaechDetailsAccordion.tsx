@@ -7,7 +7,7 @@ import {
 
 const BaechDetailsAccordion = () => {
   return (
-    <div className="p-4">
+    <div className="p-4 mb-4 lg:mb-0">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger>Best time to visit?</AccordionTrigger>
