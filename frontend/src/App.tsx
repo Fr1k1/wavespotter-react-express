@@ -7,10 +7,12 @@ import Login from "./pages/Login";
 import BeachDetails from "./pages/BeachDetails";
 import AddNewBeach from "./pages/AddNewBeach";
 import BeachRequests from "./pages/BeachRequests";
+import ScrollToTop from "./components/ui/ScrollToTop";
 
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Homepage />} />

@@ -13,6 +13,11 @@ const Header = () => {
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   });
+
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+  });
+
   return <div>{isDesktop ? <NavbarDesktop /> : <NavbarMobile />}</div>;
 };
 
