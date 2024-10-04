@@ -5,10 +5,11 @@ import Gravel from "../assets/gravel.png";
 import BeachDetailsFeaturedCard from "@/components/ui/beachDetailsFeaturedCard";
 import BeachFeaturesCheck from "@/components/ui/BeachFeaturesCheck";
 import BaechDetailsAccordion from "@/components/ui/BaechDetailsAccordion";
+import BeachDetailsReviews from "@/components/ui/BeachDetailsReviews";
 
 const BeachDetails = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <div>
           <Carousel />
@@ -76,6 +77,10 @@ const BeachDetails = () => {
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <BeachFeaturesCheck />
         <BaechDetailsAccordion />
+      </div>
+
+      <div>
+        <BeachDetailsReviews />
       </div>
     </div>
   );

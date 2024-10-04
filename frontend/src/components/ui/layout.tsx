@@ -12,7 +12,7 @@ const Layout = () => {
         className={`  ${
           location.pathname === "/login"
             ? "flex items-center justify-center flex-grow "
-            : "flex-grow max-w-screen-2xl mx-auto w-full my-8 px-4 lg:px-0 "
+            : "flex-grow max-w-screen-2xl mx-auto w-full my-8 px-4 xl:px-0 "
         }`}
       >
         <Outlet />
