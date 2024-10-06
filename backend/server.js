@@ -4,8 +4,12 @@ import db from "./app/models/index.js";
 import router from "./app/routes/index.js";
 import "dotenv/config"; //needed for work with env files
 import cors from "cors";
+import { createAssociations } from "./app/database_management.js";
 
 const app = express();
+
+//create all entity relationships
+createAssociations();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -35,7 +39,7 @@ db.sequelize
     console.log("Connection has been established successfully.");
 
     db.sequelize
-      .sync()
+      .sync({ alter: true }) //alter true to force changes
       .then(() => {
         console.log("Table created successfully!");
 
