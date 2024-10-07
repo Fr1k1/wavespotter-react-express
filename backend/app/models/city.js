@@ -5,8 +5,8 @@ export default (sequelize, DataTypes) => {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
       },
       name: { type: DataTypes.STRING(70), allowNull: false, unique: true },
       latitude: { type: DataTypes.DECIMAL(10, 8), allowNull: false }, //precision and scale in decimal type

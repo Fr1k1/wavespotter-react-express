@@ -5,8 +5,8 @@ export default (sequelize, DataTypes) => {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
       },
       name: { type: DataTypes.STRING(30), allowNull: false, unique: true },
       img_url: { type: DataTypes.STRING(200), allowNull: false, unique: true },
