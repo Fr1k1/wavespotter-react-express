@@ -5,8 +5,8 @@ export default (sequelize, DataTypes) => {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
       },
       username: { type: DataTypes.STRING(30), allowNull: false, unique: true },
       email: { type: DataTypes.STRING(80), allowNull: false, unique: true },
