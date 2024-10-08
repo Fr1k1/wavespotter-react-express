@@ -9,6 +9,7 @@ import AddNewBeach from "./pages/AddNewBeach";
 import BeachRequests from "./pages/BeachRequests";
 import ScrollToTop from "./components/ui/ScrollToTop";
 import AddReview from "./pages/AddBeachReview";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Homepage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/place/:id" element={<PlacePage />} />
           <Route path="/beach/:id" element={<BeachDetails />} />
           <Route path="/add-beach" element={<AddNewBeach />} />
