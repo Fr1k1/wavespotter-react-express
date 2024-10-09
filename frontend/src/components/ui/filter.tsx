@@ -44,15 +44,15 @@ const Filter: React.FC<{
             <div>
               <Select>
                 <Label htmlFor="" className="text-white">
-                  Beach type
+                  Beach texture
                 </Label>
 
                 <SelectTrigger>
-                  <SelectValue placeholder="Select beach type" />
+                  <SelectValue placeholder="Select beach texture" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Beach types</SelectLabel>
+                    <SelectLabel>Beach textures</SelectLabel>
                     <SelectItem value="sand">Sand</SelectItem>
                     <SelectItem value="gravel">Gravel</SelectItem>
                     <SelectItem value="rocks">Rocks</SelectItem>
