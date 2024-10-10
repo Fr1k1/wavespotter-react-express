@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../supaBaseClient";
 import { notifyFailure, notifySuccess } from "@/components/ui/Toast";
 
 const Register = () => {

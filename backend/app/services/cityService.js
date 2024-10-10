@@ -10,6 +10,15 @@ class CityService {
       return [];
     }
   }
+
+  async getCitiesByCountryId(id) {
+    try {
+      const Cities = await db.models.City.findByPk(id);
+      return Cities;
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export default new CityService();
