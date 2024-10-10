@@ -12,10 +12,34 @@ import {
 import { Label } from "./label";
 import { Button } from "./button";
 import Characteristics from "./Characteristics";
+import { useEffect, useState } from "react";
+import { BeachType } from "@/types/BeachType";
+import { getBeachTypes } from "@/api/beachTypes";
+import { getBeachTextures } from "@/api/beachTextures";
+import { BeachTexture } from "@/types/BeachTexture";
 
 const Filter: React.FC<{
   setIsToggledFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setIsToggledFilter }) => {
+  const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
+  const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
+
+  const fetchBeachTypes = async () => {
+    const response = await getBeachTypes();
+
+    setBeachTypes(response);
+  };
+
+  const fetchBeachTextures = async () => {
+    const response = await getBeachTextures();
+
+    setBeachTextures(response);
+  };
+
+  useEffect(() => {
+    fetchBeachTypes();
+    fetchBeachTextures();
+  }, []);
   return (
     <div className="bg-gradient-to-r from-primary-800 to-gray-800 z-50 absolute left-0 w-full  ">
       <div className="max-w-screen-2xl m-auto p-4 flex flex-col gap-6">
@@ -36,8 +60,11 @@ const Filter: React.FC<{
               <p className="text-white">Water type</p>
               <Tabs defaultValue="account" className=" bg-white p-1 rounded-lg">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="account">River</TabsTrigger>
-                  <TabsTrigger value="password">Sea</TabsTrigger>
+                  {beachTypes.map((beachType) => (
+                    <TabsTrigger key={beachType.id} value={beachType.name}>
+                      {beachType.name}
+                    </TabsTrigger>
+                  ))}
                 </TabsList>
               </Tabs>
             </div>
@@ -53,9 +80,12 @@ const Filter: React.FC<{
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Beach textures</SelectLabel>
-                    <SelectItem value="sand">Sand</SelectItem>
-                    <SelectItem value="gravel">Gravel</SelectItem>
-                    <SelectItem value="rocks">Rocks</SelectItem>
+
+                    {beachTextures.map((beachTexture: BeachTexture) => (
+                      <SelectItem key={beachTexture.id} value={beachTexture.id}>
+                        {beachTexture.name}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
