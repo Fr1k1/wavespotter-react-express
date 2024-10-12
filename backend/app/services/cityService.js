@@ -4,8 +4,8 @@ class CityService {
   //treba mi za mapu na homepage
   async getCities() {
     try {
-      const Cities = await db.models.City.findAll({});
-      return Cities;
+      const cities = await db.models.City.findAll({});
+      return cities;
     } catch (error) {
       return [];
     }
@@ -13,8 +13,11 @@ class CityService {
 
   async getCitiesByCountryId(id) {
     try {
-      const Cities = await db.models.City.findByPk(id);
-      return Cities;
+      //tu treba find all je findByPk vraca samo jedan item!!
+      const cities = await db.models.City.findAll({
+        where: { countryId: id },
+      });
+      return cities;
     } catch (error) {
       return [];
     }

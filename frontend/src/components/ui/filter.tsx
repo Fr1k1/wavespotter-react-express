@@ -25,15 +25,21 @@ const Filter: React.FC<{
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
 
   const fetchBeachTypes = async () => {
-    const response = await getBeachTypes();
-
-    setBeachTypes(response);
+    try {
+      const response = await getBeachTypes();
+      setBeachTypes(response);
+    } catch {
+      console.log("Error fetching beach types");
+    }
   };
 
   const fetchBeachTextures = async () => {
-    const response = await getBeachTextures();
-
-    setBeachTextures(response);
+    try {
+      const response = await getBeachTextures();
+      setBeachTextures(response);
+    } catch {
+      console.log("Error fetching beach textures");
+    }
   };
 
   useEffect(() => {

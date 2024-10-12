@@ -4,6 +4,7 @@ import beachTexture from "./beachTextureRoute.js";
 import characteristic from "./characteristicRoute.js";
 import country from "./countryRoute.js";
 import beachType from "./beachTypeRoute.js";
+import beachDepth from "./beachDepthRoute.js";
 
 const router = new Router();
 //ja zapravo trebam dobivati sve gradove koji imaju plazu, a ne sve opcenito
@@ -16,5 +17,7 @@ router.use("/characteristics", characteristic);
 router.use("/countries", country);
 
 router.use("/beach-types", beachType);
+
+router.use("/beach-depths", beachDepth);
 
 export default router;
