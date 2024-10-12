@@ -1,8 +1,8 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Title from "./title";
-import BeachDetailsReviewCard from "./beachDetails";
 import { Button } from "./button";
 import { supabase } from "@/supaBaseClient";
+import BeachDetailsReviewCard from "./beachDetailsReviewCard";
 
 const BeachDetailsReviews = () => {
   const navigate = useNavigate();
