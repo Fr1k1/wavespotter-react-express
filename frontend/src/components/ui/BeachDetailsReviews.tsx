@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Title from "./Title";
-import BeachDetailsReviewCard from "./BeachDetailsReviewCard";
+import Title from "./title";
+import BeachDetailsReviewCard from "./beachDetails";
 import { Button } from "./button";
 import { supabase } from "@/supaBaseClient";
 

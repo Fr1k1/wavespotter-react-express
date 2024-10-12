@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import BeachDetails from "./pages/BeachDetails";
 import AddNewBeach from "./pages/AddNewBeach";
 import BeachRequests from "./pages/BeachRequests";
-import ScrollToTop from "./components/ui/ScrollToTop";
+import ScrollToTop from "./components/ui/scrollToTop";
 import AddReview from "./pages/AddBeachReview";
 import Register from "./pages/Register";
 

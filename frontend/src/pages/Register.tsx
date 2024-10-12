@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { supabase } from "../supaBaseClient";
-import { notifyFailure, notifySuccess } from "@/components/ui/Toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");

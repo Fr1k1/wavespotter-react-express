@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { notifyFailure } from "@/components/ui/Toast";
+import { notifyFailure } from "@/components/ui/toast";
 import { supabase } from "@/supaBaseClient";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";

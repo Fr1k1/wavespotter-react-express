@@ -3,9 +3,9 @@ import { MapPin } from "@phosphor-icons/react";
 import { Rating } from "react-simple-star-rating";
 import Gravel from "../assets/gravel.png";
 import BeachDetailsFeaturedCard from "@/components/ui/beachDetailsFeaturedCard";
-import BeachFeaturesCheck from "@/components/ui/BeachFeaturesCheck";
-import BaechDetailsAccordion from "@/components/ui/BaechDetailsAccordion";
-import BeachDetailsReviews from "@/components/ui/BeachDetailsReviews";
+import BeachFeaturesCheck from "@/components/ui/beachFeaturesCheck";
+import BaechDetailsAccordion from "@/components/ui/beachDetailsAccordion";
+import BeachDetailsReviews from "@/components/ui/beachDetailsReviews";
 
 const BeachDetails = () => {
   return (

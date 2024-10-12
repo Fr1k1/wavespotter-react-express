@@ -1,4 +1,4 @@
-import Subtitle from "./Subtitle";
+import Subtitle from "./subtitle";
 import { Textarea } from "./textarea";
 
 const BeachTips = () => {

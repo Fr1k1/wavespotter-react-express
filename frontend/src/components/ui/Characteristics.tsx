@@ -19,8 +19,8 @@ const Characteristics = () => {
     <div className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-7 lg:gap-6">
       {characteristics.map((characteristic: Characteristic, index) => (
         <div key={index} className="flex items-center space-x-2">
-          <Switch id={`airplane-mode-${index}`} />
-          <Label htmlFor={`airplane-mode-${index}`}>
+          <Switch id={`characteristic-${index}`} />
+          <Label htmlFor={`characteristic-${index}`}>
             {characteristic.name}
           </Label>
         </div>

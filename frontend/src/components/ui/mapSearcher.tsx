@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "./button";
-import Title from "./Title";
+import Title from "./title";
 
 //ovo treba biti neka forma kasnije
 

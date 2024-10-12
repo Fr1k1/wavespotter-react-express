@@ -1,5 +1,5 @@
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/subtitle";
+import Title from "@/components/ui/title";
 import { Info, MapPin } from "@phosphor-icons/react";
 import {
   Form,

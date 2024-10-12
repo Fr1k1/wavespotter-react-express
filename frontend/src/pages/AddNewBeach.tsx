@@ -21,12 +21,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import FileInput from "@/components/ui/FileInput";
+import FileInput from "@/components/ui/fileInput";
 import { PlusCircle } from "@phosphor-icons/react";
-import Characteristics from "@/components/ui/Characteristics";
-import BeachTips from "@/components/ui/BeachTips";
-import Title from "@/components/ui/Title";
-import Subtitle from "@/components/ui/Subtitle";
+import Characteristics from "@/components/ui/characteristics";
+import BeachTips from "@/components/ui/beachTips";
+import Title from "@/components/ui/title";
+import Subtitle from "@/components/ui/subtitle";
 
 const formSchema = z.object({
   beach_name: z.string().min(2, {

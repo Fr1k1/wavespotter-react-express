@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "./label";
 import { Button } from "./button";
-import Characteristics from "./Characteristics";
+import Characteristics from "./characteristics";
 import { useEffect, useState } from "react";
 import { BeachType } from "@/types/BeachType";
 import { getBeachTypes } from "@/api/beachTypes";
