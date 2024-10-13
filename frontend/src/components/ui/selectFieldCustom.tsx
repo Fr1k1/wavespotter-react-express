@@ -14,11 +14,14 @@ import {
   SelectItem,
   SelectLabel,
 } from "@/components/ui/select";
+
 import { FieldValues, Path, useForm } from "react-hook-form";
 
 interface Option {
   id: string | number;
-  name: string;
+  name?: string;
+  description?: string;
+  icon_url?: string;
 }
 
 interface SelectFieldCustomProps<T extends FieldValues> {
@@ -43,7 +46,7 @@ const SelectFieldCustom = <T extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Select
@@ -64,7 +67,22 @@ const SelectFieldCustom = <T extends FieldValues>({
                   <SelectLabel>{label}</SelectLabel>
                   {options.map((option) => (
                     <SelectItem key={option.id} value={option.id.toString()}>
-                      {option.name}
+                      <div className="flex flex-row gap-2 ">
+                        {option.name}
+
+                        {option.description && (
+                          <span>{option.description}</span>
+                        )}
+                        {option.icon_url && (
+                          <div className="bg-primary-500 rounded-lg p-0.5 ">
+                            <img
+                              src={option.icon_url}
+                              alt={option.name}
+                              className="w-6 h-6 "
+                            />
+                          </div>
+                        )}
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectGroup>

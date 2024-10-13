@@ -7,12 +7,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "./input";
 import { useForm, FieldValues, Path } from "react-hook-form";
+import { Textarea } from "./textarea";
 
 interface FormFieldCustomProps<T extends FieldValues> {
   form: ReturnType<typeof useForm<T>>;
   name: Path<T>; //for type safety
   label: string;
   placeholder?: string;
+  textarea?: boolean;
 }
 
 const FormFieldCustom = <T extends FieldValues>({
@@ -20,16 +22,21 @@ const FormFieldCustom = <T extends FieldValues>({
   name,
   label,
   placeholder = "",
+  textarea = false,
 }: FormFieldCustomProps<T>) => {
   return (
     <FormField
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} />
+            {textarea ? (
+              <Textarea placeholder={placeholder} {...field} />
+            ) : (
+              <Input placeholder={placeholder} {...field} />
+            )}
           </FormControl>
           <FormMessage />
         </FormItem>

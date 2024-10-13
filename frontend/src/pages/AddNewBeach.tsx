@@ -10,8 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   Select,
   SelectContent,
@@ -27,6 +26,21 @@ import Characteristics from "@/components/ui/characteristics";
 import BeachTips from "@/components/ui/beachTips";
 import Title from "@/components/ui/title";
 import Subtitle from "@/components/ui/subtitle";
+import { useEffect, useState } from "react";
+import { BeachType } from "@/types/BeachType";
+import { BeachTexture } from "@/types/BeachTexture";
+import { getBeachTypes } from "@/api/beachTypes";
+import { getBeachTextures } from "@/api/beachTextures";
+import { BeachDepth } from "@/types/BeachDepth";
+import { getBeachDepths } from "@/api/beachDepths";
+import { Country } from "@/types/Country";
+import { getCountries } from "@/api/countries";
+import { getCitiesByCountry } from "@/api/cities";
+import { City } from "@/types/City";
+import { getCharacteristics } from "@/api/characteristics";
+import FormFieldCustom from "@/components/ui/formFieldCustom";
+import SelectFieldCustom from "@/components/ui/selectFieldCustom";
+import { Characteristic } from "@/types/Characteristic";
 
 const formSchema = z.object({
   beach_name: z.string().min(2, {
@@ -34,6 +48,33 @@ const formSchema = z.object({
   }),
   beach_address: z.string().min(2, {
     message: "Beach address must be at least 2 characters.",
+  }),
+  beach_type: z.string().min(2, {
+    message: "Beach type must be at least 2 characters.",
+  }),
+
+  beach_depth: z.string().min(2, {
+    message: "Beach depth must be at least 2 characters.",
+  }),
+
+  beach_country: z.string().min(2, {
+    message: "Beach country must be at least 2 characters.",
+  }),
+
+  beach_texture: z.string().min(2, {
+    message: "Beach texture must be at least 2 characters.",
+  }),
+
+  beach_city: z.string().min(2, {
+    message: "Beach city must be at least 2 characters.",
+  }),
+
+  beach_working_hours: z.string().min(2, {
+    message: "Beach city must be at least 2 characters.",
+  }),
+
+  beach_description: z.string().min(2, {
+    message: "Beach description must be at least 2 characters.",
   }),
 });
 
@@ -49,8 +90,84 @@ const AddNewBeach = () => {
     defaultValues: {
       beach_name: "",
       beach_address: "",
+      beach_country: "",
+      beach_city: "",
+      beach_type: "",
+      beach_depth: "",
+      beach_texture: "",
     },
   });
+
+  const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
+  const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
+  const [beachDepths, setBeachDepths] = useState<BeachDepth[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [featuredCharacteristics, setFeaturedCharacteristics] = useState<
+    Characteristic[]
+  >([]);
+
+  const [isCountryChanged, setIsCountryChanged] = useState(false);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const [
+          typesRes,
+          texturesRes,
+          depthsRes,
+          countriesRes,
+          characteristicsRes,
+        ] = await Promise.all([
+          getBeachTypes(),
+          getBeachTextures(),
+          getBeachDepths(),
+          getCountries(),
+          getCharacteristics(),
+        ]);
+        setBeachTypes(typesRes);
+        setBeachTextures(texturesRes);
+        setBeachDepths(depthsRes);
+        setCountries(countriesRes);
+        setFeaturedCharacteristics(characteristicsRes);
+        console.log("Fetched initial data:", {
+          typesRes,
+          texturesRes,
+          depthsRes,
+          countriesRes,
+        });
+      } catch (err) {
+        console.error("Error fetching initial data:", err);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const fetchCitiesByCountry = async (countryId: string) => {
+    try {
+      const citiesRes = await getCitiesByCountry(countryId);
+      setCities(citiesRes);
+    } catch (err) {
+      console.error("Error fetching cities:", err);
+      setCities([]);
+    }
+  };
+
+  const [fileInputs, setFileInputs] = useState([0]);
+
+  const addFileInput = () => {
+    setFileInputs((prev) => [...prev, prev.length]);
+  };
+
+  const featuredItemFields = [
+    { name: "featured_item_1", label: "Featured item" },
+    { name: "featured_item_2", label: "Featured item" },
+    { name: "featured_item_3", label: "Featured item" },
+    { name: "featured_item_4", label: "Featured item" },
+    { name: "featured_item_5", label: "Featured item" },
+  ];
+
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
@@ -59,189 +176,99 @@ const AddNewBeach = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
             <div className=" flex flex-col gap-4">
-              <FormField
-                control={form.control}
+              <FormFieldCustom
+                form={form}
                 name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach name </FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Beach name"
+                placeholder="Enter beach name"
               />
-              <FormField
-                control={form.control}
+
+              <SelectFieldCustom
+                form={form}
+                name="beach_country"
+                label="Beach country"
+                placeholder="Choose beach country"
+                options={countries}
+                onValueChange={(value) => {
+                  setIsCountryChanged(true);
+                  fetchCitiesByCountry(value.toString());
+                }}
+              />
+
+              <FormFieldCustom
+                form={form}
                 name="beach_address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Latitude</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Beach address"
+                placeholder="Enter beach address"
               />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach country</FormLabel>
-                    <FormControl>
-                      <Select value={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose beach country" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Beach countries</SelectLabel>
 
-                            <SelectItem value="1">Croatia</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+              <SelectFieldCustom
+                form={form}
+                name="beach_city"
+                label="Beach city"
+                placeholder="Choose beach city"
+                options={cities}
+                disabled={!isCountryChanged}
               />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Water type</FormLabel>
-                    <FormControl>
-                      <Select value={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose water type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Water types</SelectLabel>
+            </div>
 
-                            <SelectItem value="1">Salted</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            <div className="flex flex-col gap-4">
+              <SelectFieldCustom
+                form={form}
+                name="beach_type"
+                label="Beach type"
+                placeholder="Choose beach type"
+                options={beachTypes}
               />
+
+              <SelectFieldCustom
+                form={form}
+                name="beach_texture"
+                label="Beach texture"
+                placeholder="Choose beach texture"
+                options={beachTextures}
+              />
+
+              <FormFieldCustom
+                form={form}
+                name="beach_working_hours"
+                label="Beach working hours"
+                placeholder="Enter beach working hours"
+              />
+              {/*because it has description and not name*/}
               <FormField
                 control={form.control}
-                name="beach_name"
+                name="beach_depth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Beach depth</FormLabel>
                     <FormControl>
-                      <Select value={field.value}>
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value)}
+                      >
                         <SelectTrigger>
-                          <SelectValue placeholder="Choose beach depth" />
+                          <SelectValue placeholder="Choose beach depth">
+                            {beachDepths.find(
+                              (beach_depth) => beach_depth.id == field.value
+                            )?.description || "Choose beach depth"}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>Beach depths</SelectLabel>
 
-                            <SelectItem value="1">Very deep</SelectItem>
+                            {beachDepths.map((beachDepth) => (
+                              <SelectItem
+                                key={beachDepth.id}
+                                value={beachDepth.id}
+                              >
+                                {beachDepth.description}
+                              </SelectItem>
+                            ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Longitude</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach city</FormLabel>
-                    <FormControl>
-                      <Select value={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose beach city" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Beach cities</SelectLabel>
-
-                            <SelectItem value="1">Dubrovnik</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach type</FormLabel>
-                    <FormControl>
-                      <Select value={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose beach type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Beach types</SelectLabel>
-
-                            <SelectItem value="1">Sandy</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="beach_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Beach working hours</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -250,29 +277,30 @@ const AddNewBeach = () => {
             </div>
           </div>
 
-          <FormField
-            control={form.control}
-            name="beach_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Beach description</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <FormFieldCustom
+            form={form}
+            name="beach_description"
+            label="Beach description"
+            placeholder="Enter beach description"
+            textarea
           />
           <div className=" w-2/4 flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <Subtitle>Images</Subtitle>
-              <PlusCircle size={32} weight="fill" color="#0E7490" />
+              <PlusCircle
+                size={32}
+                weight="fill"
+                color="#0E7490"
+                onClick={addFileInput}
+                style={{ cursor: "pointer" }}
+              />
             </div>
 
             <div>
               <FormLabel>Beach images</FormLabel>
-              <FileInput />
-              <FileInput />
+              {fileInputs.map((id) => (
+                <FileInput key={id} id={`picture-${id}`} />
+              ))}
             </div>
           </div>
 
@@ -280,126 +308,16 @@ const AddNewBeach = () => {
             <div>
               <Subtitle>Featured info (up to 5 items)</Subtitle>
               <div className="flex flex-col justify-between gap-6 lg:flex lg:flex-row ">
-                <FormField
-                  control={form.control}
-                  name="beach_name"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Beach city</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose beach city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Beach cities</SelectLabel>
-
-                              <SelectItem value="1">Dubrovnik</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="beach_name"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Beach city</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose beach city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Beach cities</SelectLabel>
-
-                              <SelectItem value="1">Dubrovnik</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="beach_name"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Beach city</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose beach city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Beach cities</SelectLabel>
-
-                              <SelectItem value="1">Dubrovnik</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="beach_name"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Beach city</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose beach city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Beach cities</SelectLabel>
-
-                              <SelectItem value="1">Dubrovnik</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="beach_name"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Beach city</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose beach city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Beach cities</SelectLabel>
-
-                              <SelectItem value="1">Dubrovnik</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {featuredItemFields.map((field, index) => (
+                  <SelectFieldCustom
+                    key={index}
+                    form={form}
+                    name={field.name}
+                    label={field.label}
+                    placeholder={`Choose ${field.label.toLowerCase()}`}
+                    options={featuredCharacteristics}
+                  />
+                ))}
               </div>
             </div>
           </div>

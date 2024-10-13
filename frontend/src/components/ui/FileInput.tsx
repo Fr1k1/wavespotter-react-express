@@ -1,9 +1,9 @@
 import { Input } from "@/components/ui/input";
 
-const FileInput = () => {
+const FileInput = ({ id }: { id: string }) => {
   return (
     <div className="grid w-full items-center gap-1.5">
-      <Input id="picture" type="file" />
+      <Input id={id} type="file" />
     </div>
   );
 };
