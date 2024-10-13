@@ -326,7 +326,7 @@ const AddNewBeach = () => {
             <Subtitle className="mb-6">Characteristics</Subtitle>
             <Characteristics />
           </div>
-          <BeachTips />
+          <BeachTips form={form} />
           <div className="flex justify-end ">
             <Button type="submit" className="px-24 mb-6">
               Create request
