@@ -7,21 +7,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { notifyFailure } from "@/components/ui/toast";
 import { supabase } from "@/supaBaseClient";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormFieldCustom from "@/components/ui/formFieldCustom";
+
+const formSchema = z.object({
+  email: z.string().min(2, {
+    message: "Email must be at least 2 characters.",
+  }),
+  password: z.string().min(2, {
+    message: "Password must be at least 2 characters.",
+  }),
+});
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
+  const handleLogin = async (data: z.infer<typeof formSchema>) => {
+    const { email, password } = data;
     const { data: authUser, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -46,43 +61,45 @@ const Login = () => {
       navigate("/");
     }
   };
+
   return (
     <div>
       <Card className="w-96 flex flex-col gap-6">
         <CardHeader>
           <CardTitle className="text-primary-800 text-3xl">Login</CardTitle>
-          <CardDescription>if you already have an acount</CardDescription>
+          <CardDescription>If you already have an account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="mb-4">
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleLogin)}
+              className="mb-4"
+              id="form"
+            >
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="email"
+                    placeholder="Email"
+                    form={form}
+                  />
+                </div>
 
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="password"
-                  placeholder="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="password"
+                    placeholder="Password"
+                    form={form}
+                  />
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </FormProvider>
 
           <CardDescription>
-            or{" "}
+            Or{" "}
             <Link to="/register">
-              {" "}
-              <span className="underline text-secondary"> sign up </span>{" "}
+              <span className="underline text-secondary">sign up</span>
             </Link>{" "}
             to create an account
           </CardDescription>
@@ -92,7 +109,7 @@ const Login = () => {
             className="w-full"
             variant={"darker"}
             type="submit"
-            onClick={handleLogin}
+            form="form"
           >
             Login
           </Button>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,29 +7,57 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../supaBaseClient";
 import { notifyFailure, notifySuccess } from "@/components/ui/toast";
+import { z } from "zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormFieldCustom from "@/components/ui/formFieldCustom";
+
+const formSchema = z.object({
+  first_name: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
+  last_name: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
+  }),
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Invalid email address.",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+});
 
 const Register = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleRegister = async (data: z.infer<typeof formSchema>) => {
+    const { email, password, first_name, last_name, username } = data;
 
     const { data: authUser, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          first_name: firstName,
-          last_name: lastName,
-          username: username,
+          first_name,
+          last_name,
+          username,
         },
       },
     });
@@ -46,8 +73,8 @@ const Register = () => {
           id: authUser?.user?.id,
           username,
           email,
-          first_name: firstName,
-          last_name: lastName,
+          first_name,
+          last_name,
           is_admin: false,
         },
       ]);
@@ -56,12 +83,8 @@ const Register = () => {
         return;
       }
 
-      notifySuccess("Successfull registration");
-      setFirstName("");
-      setLastName("");
-      setUsername("");
-      setEmail("");
-      setPassword("");
+      notifySuccess("Successful registration");
+      navigate("/login");
     }
   };
 
@@ -73,60 +96,51 @@ const Register = () => {
           <CardDescription>if you don't have an account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="mb-4">
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="first_name"
-                  placeholder="First name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                />
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleRegister)}
+              className="mb-4"
+              id="form"
+            >
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="first_name"
+                    placeholder="First Name"
+                    form={form}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="last_name"
+                    placeholder="Last Name"
+                    form={form}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="username"
+                    placeholder="Username"
+                    form={form}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="email"
+                    placeholder="Email"
+                    form={form}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <FormFieldCustom
+                    name="password"
+                    placeholder="Password"
+                    form={form}
+                  />
+                </div>
               </div>
-
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="last_name"
-                  placeholder="Last name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="username"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-          </form>
+            </form>
+          </FormProvider>
 
           <CardDescription>
             or{" "}
@@ -141,7 +155,7 @@ const Register = () => {
             className="w-full"
             variant={"darker"}
             type="submit"
-            onClick={handleRegister}
+            form="form"
           >
             Register
           </Button>
