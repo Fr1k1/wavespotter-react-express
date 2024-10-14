@@ -30,6 +30,7 @@ interface SelectFieldCustomProps<T extends FieldValues> {
   label: string;
   placeholder?: string;
   options: Option[];
+  disabled?: boolean;
   onValueChange?: (value: string | number) => void;
 }
 
@@ -39,6 +40,7 @@ const SelectFieldCustom = <T extends FieldValues>({
   label,
   placeholder = "Choose an option",
   options,
+  disabled,
   onValueChange,
 }: SelectFieldCustomProps<T>) => {
   return (
@@ -55,6 +57,7 @@ const SelectFieldCustom = <T extends FieldValues>({
                 field.onChange(value);
                 onValueChange?.(value); // optional callback
               }}
+              disabled={disabled}
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder}>
