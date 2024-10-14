@@ -61,7 +61,7 @@ const MapSearcher = () => {
       <Title className="mb-6">Find the perfect beach</Title>
       <div className="flex flex-col gap-5 lg:flex-row ">
         <div className="lg:w-4/6">
-          <Map />
+          <Map cities={cities} />
         </div>
         <div>
           <h2 className="text-gray-800 font-semibold text-xl mb-4">
