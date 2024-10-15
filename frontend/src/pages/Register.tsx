@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../supaBaseClient";
+import { supabase } from "../supabaseClient";
 import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";

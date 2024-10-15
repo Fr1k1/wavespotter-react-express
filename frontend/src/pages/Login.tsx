@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { notifyFailure } from "@/components/ui/toast";
-import { supabase } from "@/supaBaseClient";
+import { supabase } from "@/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
