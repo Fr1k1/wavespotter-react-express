@@ -85,6 +85,7 @@ const formSchema = z.object({
   restaurants_and_bars_nearby: z.string().min(2, {
     message: "Beach and bars nearby must be at least 2 characters.",
   }),
+  characteristics: z.array(z.number()).optional(),
 });
 
 const AddNewBeach = () => {
@@ -101,6 +102,7 @@ const AddNewBeach = () => {
       beach_type: "",
       beach_depth: "",
       beach_texture: "",
+      characteristics: [],
     },
   });
 
@@ -168,12 +170,29 @@ const AddNewBeach = () => {
     { name: "featured_item_5", label: "Featured item" },
   ];
 
+  const handleSubmit = form.handleSubmit(
+    (data) => {
+      console.log("Form is valid. Calling onSubmit with data:", data);
+      onSubmit(data);
+    },
+    (errors) => {
+      console.log("Form is invalid. Validation errors:", errors);
+    }
+  );
+
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
       <Subtitle>Basic info</Subtitle>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={(e) => {
+            console.log("Form submission triggered");
+            console.log("Vrijednosti su", form.getValues());
+            handleSubmit(e);
+          }}
+          className="space-y-8"
+        >
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
             <div className=" flex flex-col gap-4">
               <FormFieldCustom
@@ -324,20 +343,11 @@ const AddNewBeach = () => {
 
           <div>
             <Subtitle className="mb-6">Characteristics</Subtitle>
-            <Characteristics />
+            <Characteristics form={form} />
           </div>
           <BeachTips form={form} />
           <div className="flex justify-end ">
-            <Button
-              type="submit"
-              className="px-24 mb-6"
-              onClick={() => {
-                console.log("Submit gumb je kliknut");
-                {
-                  form.handleSubmit(onSubmit);
-                }
-              }}
-            >
+            <Button type="submit" className="px-24 mb-6">
               Create request
             </Button>
           </div>
