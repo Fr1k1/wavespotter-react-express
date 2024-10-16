@@ -1,1 +1,0 @@
-import { apiUrl } from "./api";

@@ -41,19 +41,20 @@ import { getCharacteristics } from "@/api/characteristics";
 import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { Characteristic } from "@/types/Characteristic";
+import { addBeach } from "@/api/beaches";
 
 const formSchema = z.object({
-  beach_name: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Beach name must be at least 2 characters.",
   }),
-  beach_address: z.string().min(2, {
+  address: z.string().min(2, {
     message: "Beach address must be at least 2 characters.",
   }),
-  beach_type: z.string().min(1, {
+  beachTypeId: z.string().min(1, {
     message: "Beach type must be selected.",
   }),
 
-  beach_depth: z.string().min(1, {
+  beachDepthId: z.string().min(1, {
     message: "Beach depth must be selected.",
   }),
 
@@ -61,7 +62,7 @@ const formSchema = z.object({
     message: "Beach country must be selected.",
   }),
 
-  beach_texture: z.string().min(1, {
+  beachTextureId: z.string().min(1, {
     message: "Beach texture must be selected.",
   }),
 
@@ -73,7 +74,7 @@ const formSchema = z.object({
     message: "Beach city must be at least 2 characters.",
   }),
 
-  beach_description: z.string().min(2, {
+  description: z.string().min(2, {
     message: "Beach description must be at least 2 characters.",
   }),
   best_time_to_visit: z.string().min(2, {
@@ -91,29 +92,37 @@ const formSchema = z.object({
   featured_item_3: z.string().optional(),
   featured_item_4: z.string().optional(),
   featured_item_5: z.string().optional(),
+
+  approved: z.boolean().optional(),
 });
 
 const AddNewBeach = () => {
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Slal budem na backend", values);
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const featuredValues = Object.entries(values)
       .filter(([key, value]) => key.startsWith("featured_item_") && value)
       .map(([_, value]) => value);
+    const beachData = { ...values, featured_items: featuredValues };
 
-    console.log("Featured values je", featuredValues);
-  }
+    try {
+      await addBeach(beachData);
+      console.log("Data successfully sent to backend", beachData);
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      beach_name: "",
-      beach_address: "",
+      name: "",
+      address: "",
       beach_country: "",
       beach_city: "",
-      beach_type: "",
-      beach_depth: "",
-      beach_texture: "",
+      beachTypeId: "",
+      beachDepthId: "",
+      beachTextureId: "",
       characteristics: [],
+      approved: false,
     },
   });
 
@@ -181,34 +190,26 @@ const AddNewBeach = () => {
     { name: "featured_item_5", label: "Featured item" },
   ];
 
-  const handleSubmit = form.handleSubmit(
-    (data) => {
-      console.log("Form is valid. Calling onSubmit with data:", data);
-      onSubmit(data);
-    },
-    (errors) => {
-      console.log("Form is invalid. Validation errors:", errors);
-    }
-  );
+  // const handleSubmit = form.handleSubmit(
+  //   (data) => {
+  //     console.log("Form is valid. Calling onSubmit with data:", data);
+  //   },
+  //   (errors) => {
+  //     console.log("Form is invalid. Validation errors:", errors);
+  //   }
+  // );
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
       <Subtitle>Basic info</Subtitle>
       <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            console.log("Form submission triggered");
-            console.log("Vrijednosti su", form.getValues());
-            handleSubmit(e);
-          }}
-          className="space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
             <div className=" flex flex-col gap-4">
               <FormFieldCustom
                 form={form}
-                name="beach_name"
+                name="name"
                 label="Beach name"
                 placeholder="Enter beach name"
               />
@@ -227,7 +228,7 @@ const AddNewBeach = () => {
 
               <FormFieldCustom
                 form={form}
-                name="beach_address"
+                name="address"
                 label="Beach address"
                 placeholder="Enter beach address"
               />
@@ -245,7 +246,7 @@ const AddNewBeach = () => {
             <div className="flex flex-col gap-4">
               <SelectFieldCustom
                 form={form}
-                name="beach_type"
+                name="beachTypeId"
                 label="Beach type"
                 placeholder="Choose beach type"
                 options={beachTypes}
@@ -253,7 +254,7 @@ const AddNewBeach = () => {
 
               <SelectFieldCustom
                 form={form}
-                name="beach_texture"
+                name="beachTextureId"
                 label="Beach texture"
                 placeholder="Choose beach texture"
                 options={beachTextures}
@@ -268,7 +269,7 @@ const AddNewBeach = () => {
               {/*because it has description and not name*/}
               <FormField
                 control={form.control}
-                name="beach_depth"
+                name="beachDepthId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Beach depth</FormLabel>
@@ -280,7 +281,7 @@ const AddNewBeach = () => {
                         <SelectTrigger>
                           <SelectValue placeholder="Choose beach depth">
                             {beachDepths.find(
-                              (beach_depth) => beach_depth.id == field.value
+                              (beachDepthId) => beachDepthId.id == field.value
                             )?.description || "Choose beach depth"}
                           </SelectValue>
                         </SelectTrigger>
@@ -309,7 +310,7 @@ const AddNewBeach = () => {
 
           <FormFieldCustom
             form={form}
-            name="beach_description"
+            name="description"
             label="Beach description"
             placeholder="Enter beach description"
             textarea
