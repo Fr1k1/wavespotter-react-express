@@ -86,11 +86,22 @@ const formSchema = z.object({
     message: "Beach and bars nearby must be at least 2 characters.",
   }),
   characteristics: z.array(z.number()).optional(),
+  featured_item_1: z.string().optional(),
+  featured_item_2: z.string().optional(),
+  featured_item_3: z.string().optional(),
+  featured_item_4: z.string().optional(),
+  featured_item_5: z.string().optional(),
 });
 
 const AddNewBeach = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Slal budem na backend", values);
+
+    const featuredValues = Object.entries(values)
+      .filter(([key, value]) => key.startsWith("featured_item_") && value)
+      .map(([_, value]) => value);
+
+    console.log("Featured values je", featuredValues);
   }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
