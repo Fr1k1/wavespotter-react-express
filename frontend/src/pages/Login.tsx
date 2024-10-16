@@ -50,14 +50,18 @@ const Login = () => {
     if (authUser) {
       const { data: userData, error: userError } = await supabase
         .from("users")
-        .select("is_admin, username, first_name, last_name")
+        .select("is_admin, username, first_name, last_name,id")
         .eq("id", authUser.user.id)
         .single();
+
+      console.log("Response korisnika je: ", userData);
       if (userError) {
         return;
       }
 
       localStorage.setItem("is_admin", userData?.is_admin);
+      localStorage.setItem("user_id", userData?.id);
+
       navigate("/");
     }
   };

@@ -8,6 +8,9 @@ import { createAssociations } from "./app/database_management.js";
 
 const app = express();
 
+//this has to be on top!!!!
+app.use(express.json());
+
 //create all entity relationships
 createAssociations();
 

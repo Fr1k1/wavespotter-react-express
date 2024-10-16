@@ -66,7 +66,7 @@ const formSchema = z.object({
     message: "Beach texture must be selected.",
   }),
 
-  beach_city: z.string().min(1, {
+  cityId: z.string().min(1, {
     message: "Beach city must be selected.",
   }),
 
@@ -87,6 +87,8 @@ const formSchema = z.object({
     message: "Beach and bars nearby must be at least 2 characters.",
   }),
   characteristics: z.array(z.number()).optional(),
+
+  //ovo potencijalno ne treba jer saljem polje featured_items
   featured_item_1: z.string().optional(),
   featured_item_2: z.string().optional(),
   featured_item_3: z.string().optional(),
@@ -94,6 +96,10 @@ const formSchema = z.object({
   featured_item_5: z.string().optional(),
 
   approved: z.boolean().optional(),
+
+  userId: z.string().min(1, {
+    message: "User id must not be null.",
+  }),
 });
 
 const AddNewBeach = () => {
@@ -117,12 +123,13 @@ const AddNewBeach = () => {
       name: "",
       address: "",
       beach_country: "",
-      beach_city: "",
+      cityId: "",
       beachTypeId: "",
       beachDepthId: "",
       beachTextureId: "",
       characteristics: [],
       approved: false,
+      userId: localStorage.getItem("user_id") || "",
     },
   });
 
@@ -190,15 +197,6 @@ const AddNewBeach = () => {
     { name: "featured_item_5", label: "Featured item" },
   ];
 
-  // const handleSubmit = form.handleSubmit(
-  //   (data) => {
-  //     console.log("Form is valid. Calling onSubmit with data:", data);
-  //   },
-  //   (errors) => {
-  //     console.log("Form is invalid. Validation errors:", errors);
-  //   }
-  // );
-
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
@@ -235,7 +233,7 @@ const AddNewBeach = () => {
 
               <SelectFieldCustom
                 form={form}
-                name="beach_city"
+                name="cityId"
                 label="Beach city"
                 placeholder="Choose beach city"
                 options={cities}

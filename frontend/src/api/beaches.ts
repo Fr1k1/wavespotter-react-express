@@ -9,9 +9,7 @@ export async function addBeach(beachData) {
       // Authorization: `Bearer ${token}`,
     },
     method: "POST",
-    body: JSON.stringify({
-      beachData,
-    }),
+    body: JSON.stringify(beachData),
   });
 
   const data = await response.json();
