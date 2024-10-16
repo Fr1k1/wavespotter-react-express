@@ -49,24 +49,24 @@ const formSchema = z.object({
   beach_address: z.string().min(2, {
     message: "Beach address must be at least 2 characters.",
   }),
-  beach_type: z.string().min(2, {
-    message: "Beach type must be at least 2 characters.",
+  beach_type: z.string().min(1, {
+    message: "Beach type must be selected.",
   }),
 
-  beach_depth: z.string().min(2, {
-    message: "Beach depth must be at least 2 characters.",
+  beach_depth: z.string().min(1, {
+    message: "Beach depth must be selected.",
   }),
 
-  beach_country: z.string().min(2, {
-    message: "Beach country must be at least 2 characters.",
+  beach_country: z.string().min(1, {
+    message: "Beach country must be selected.",
   }),
 
-  beach_texture: z.string().min(2, {
-    message: "Beach texture must be at least 2 characters.",
+  beach_texture: z.string().min(1, {
+    message: "Beach texture must be selected.",
   }),
 
-  beach_city: z.string().min(2, {
-    message: "Beach city must be at least 2 characters.",
+  beach_city: z.string().min(1, {
+    message: "Beach city must be selected.",
   }),
 
   beach_working_hours: z.string().min(2, {
@@ -76,15 +76,21 @@ const formSchema = z.object({
   beach_description: z.string().min(2, {
     message: "Beach description must be at least 2 characters.",
   }),
+  best_time_to_visit: z.string().min(2, {
+    message: "Best time to visit must be at least 2 characters.",
+  }),
+  local_wildlife: z.string().min(2, {
+    message: "Local wildlife must be at least 2 characters.",
+  }),
+  restaurants_and_bars_nearby: z.string().min(2, {
+    message: "Beach and bars nearby must be at least 2 characters.",
+  }),
 });
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values.
-  // ✅ This will be type-safe and validated.
-  console.log(values);
-}
-
 const AddNewBeach = () => {
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Slal budem na backend", values);
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -130,12 +136,6 @@ const AddNewBeach = () => {
         setBeachDepths(depthsRes);
         setCountries(countriesRes);
         setFeaturedCharacteristics(characteristicsRes);
-        console.log("Fetched initial data:", {
-          typesRes,
-          texturesRes,
-          depthsRes,
-          countriesRes,
-        });
       } catch (err) {
         console.error("Error fetching initial data:", err);
       }
@@ -328,7 +328,16 @@ const AddNewBeach = () => {
           </div>
           <BeachTips form={form} />
           <div className="flex justify-end ">
-            <Button type="submit" className="px-24 mb-6">
+            <Button
+              type="submit"
+              className="px-24 mb-6"
+              onClick={() => {
+                console.log("Submit gumb je kliknut");
+                {
+                  form.handleSubmit(onSubmit);
+                }
+              }}
+            >
               Create request
             </Button>
           </div>
