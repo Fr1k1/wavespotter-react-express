@@ -3,14 +3,19 @@ import beachService from "../services/beachService.js";
 class BeachController {
   async addBeach(req, res) {
     try {
-      const response = await beachService.addBeach(req.body);
-      if (response.length == 0) {
-        res.status(400).json({ error: "Error inserting beach" });
-      } else {
-        console.log(response.toJSON());
-      }
-    } catch {
-      res.status(500).send("Internal server error");
+      const newBeach = await beachService.addBeach(req.body);
+      res.status(201).json({
+        success: true,
+        message: "Beach added successfully",
+        data: newBeach,
+      });
+    } catch (error) {
+      console.error("Error in addBeach controller:", error);
+      res.status(500).json({
+        success: false,
+        message: "An error occurred while adding the beach",
+        error: error.message,
+      });
     }
   }
 }

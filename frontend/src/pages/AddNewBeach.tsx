@@ -102,6 +102,8 @@ const formSchema = z.object({
   }),
 });
 
+//todo dodaj da samo logirani user moze dodavati plaze
+
 const AddNewBeach = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const featuredValues = Object.entries(values)
@@ -197,12 +199,17 @@ const AddNewBeach = () => {
     { name: "featured_item_5", label: "Featured item" },
   ];
 
+  const handleSubmit = form.handleSubmit(onSubmit, (errors) => {
+    console.error("Validation Errors:", errors);
+    //user id ne smije biti 0....
+  });
+
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
       <Title>Add new beach</Title>
       <Subtitle>Basic info</Subtitle>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
             <div className=" flex flex-col gap-4">
               <FormFieldCustom
