@@ -3,12 +3,13 @@ import { MapPin } from "@phosphor-icons/react";
 import { Rating } from "react-simple-star-rating";
 import Gravel from "../assets/gravel.png";
 import BeachDetailsFeaturedCard from "@/components/ui/beachDetailsFeaturedCard";
-import BeachFeaturesCheck from "@/components/ui/BeachFeaturesCheck";
-import BaechDetailsAccordion from "@/components/ui/BaechDetailsAccordion";
+import BeachFeaturesCheck from "@/components/ui/beachFeaturesCheck";
+import BaechDetailsAccordion from "@/components/ui/beachDetailsAccordion";
+import BeachDetailsReviews from "@/components/ui/beachDetailsReviews";
 
 const BeachDetails = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <div>
           <Carousel />
@@ -76,6 +77,10 @@ const BeachDetails = () => {
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <BeachFeaturesCheck />
         <BaechDetailsAccordion />
+      </div>
+
+      <div>
+        <BeachDetailsReviews />
       </div>
     </div>
   );

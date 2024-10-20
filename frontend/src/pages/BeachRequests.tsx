@@ -1,5 +1,5 @@
-import BeachRequestsCard from "@/components/ui/BeachRequestsCard";
-import Title from "@/components/ui/Title";
+import BeachRequestsCard from "@/components/ui/beachRequestsCard";
+import Title from "@/components/ui/title";
 
 const BeachRequests = () => {
   return (

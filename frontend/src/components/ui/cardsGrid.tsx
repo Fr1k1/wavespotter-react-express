@@ -3,7 +3,7 @@ import Beach1 from "../../assets/beach_1.png";
 import Beach2 from "../../assets/beach_2.png";
 import Beach3 from "../../assets/beach_3.png";
 import { Link } from "react-router-dom";
-import Title from "./Title";
+import Title from "./title";
 
 //nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
 

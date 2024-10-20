@@ -1,6 +1,10 @@
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-const Map = () => {
+import { City } from "@/types/City";
+import { useNavigate } from "react-router";
+
+const Map = ({ cities }: { cities: City[] }) => {
+  const navigate = useNavigate();
   return (
     <div>
       <MapContainer
@@ -13,6 +17,17 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        {cities.map((city) => (
+          <Marker
+            position={[city.latitude, city.longitude]}
+            eventHandlers={{
+              click: () => {
+                navigate("/place/" + city.id);
+              },
+            }}
+          />
+        ))}
       </MapContainer>
     </div>
   );
