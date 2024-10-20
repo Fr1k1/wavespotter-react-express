@@ -8,6 +8,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
       },
+      path: {
+        allowNull: false,
+        type: DataTypes.TEXT,
+      },
     },
     {
       underscored: true,

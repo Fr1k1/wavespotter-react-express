@@ -42,6 +42,7 @@ import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { Characteristic } from "@/types/Characteristic";
 import { addBeach } from "@/api/beaches";
+import { supabase } from "../supabaseClient";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -100,6 +101,8 @@ const formSchema = z.object({
   userId: z.string().min(1, {
     message: "User id must not be null.",
   }),
+
+  images: z.array(z.any()).optional(),
 });
 
 //todo dodaj da samo logirani user moze dodavati plaze
@@ -112,7 +115,10 @@ const AddNewBeach = () => {
     const beachData = { ...values, featured_items: featuredValues };
 
     try {
-      await addBeach(beachData);
+      const response = await addBeach(beachData);
+      if (images?.length && response) {
+        await uploadImages(images, response.data.id);
+      }
       console.log("Data successfully sent to backend", beachData);
     } catch (error) {
       console.error("Error sending data to backend:", error);
@@ -143,6 +149,7 @@ const AddNewBeach = () => {
   const [featuredCharacteristics, setFeaturedCharacteristics] = useState<
     Characteristic[]
   >([]);
+  const [images, setImages] = useState<File[]>([]);
 
   const [isCountryChanged, setIsCountryChanged] = useState(false);
 
@@ -175,6 +182,37 @@ const AddNewBeach = () => {
     fetchInitialData();
   }, []);
 
+  const uploadImages = async (images: File[], beachId: string) => {
+    const uploadedImageIds: string[] = [];
+
+    for (let file of images) {
+      const { data, error } = await supabase.storage
+        .from("beach_images") // ime bucketa
+        .upload(`beaches/${beachId}/${file.name}`, file, {
+          cacheControl: "3600", // 1 hour
+          upsert: false, // Do not overwrite
+        });
+
+      if (error) {
+        console.error("Error uploading image:", error);
+        continue;
+      }
+
+      const { error: insertError } = await supabase.from("images").insert({
+        beach_id: beachId,
+        path: data?.path,
+      });
+
+      if (insertError) {
+        console.error("Error inserting image record:", insertError);
+      } else {
+        uploadedImageIds.push(data?.path);
+      }
+    }
+
+    return uploadedImageIds;
+  };
+
   const fetchCitiesByCountry = async (countryId: string) => {
     try {
       const citiesRes = await getCitiesByCountry(countryId);
@@ -189,6 +227,12 @@ const AddNewBeach = () => {
 
   const addFileInput = () => {
     setFileInputs((prev) => [...prev, prev.length]);
+  };
+
+  const handleFileChange = (files: FileList | null) => {
+    if (files) {
+      setImages((prevImages) => [...prevImages, ...Array.from(files)]);
+    }
   };
 
   const featuredItemFields = [
@@ -335,7 +379,11 @@ const AddNewBeach = () => {
             <div>
               <FormLabel>Beach images</FormLabel>
               {fileInputs.map((id) => (
-                <FileInput key={id} id={`picture-${id}`} />
+                <FileInput
+                  key={id}
+                  id={`picture-${id}`}
+                  onFileChange={handleFileChange}
+                />
               ))}
             </div>
           </div>
