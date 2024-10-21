@@ -18,6 +18,38 @@ class BeachController {
       });
     }
   }
+
+  async getBeachByType(req, res) {
+    try {
+      const { id } = req.params;
+      const response = await beachService.getBeachesByType(id);
+      if (response.length == 0) {
+        res.status(404).json({ error: `No beaches found for provided type` });
+      } else {
+        res.status(200).json(response);
+      }
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  //dodaj slike
+  async getBeachById(req, res) {
+    try {
+      const { id } = req.params;
+      const response = await beachService.getBeachById(id);
+      if (!response || response.length === 0) {
+        return res
+          .status(404)
+          .json({ error: `No beaches found for provided id` });
+      } else {
+        return res.status(200).json(response);
+      }
+    } catch (error) {
+      console.error("Error fetching beach by id:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new BeachController();

@@ -5,4 +5,8 @@ const router = new Router();
 
 router.post("/", controller.addBeach);
 
+router.get("/:id", controller.getBeachById);
+
+router.get("/type/:id", controller.getBeachByType);
+
 export default router;

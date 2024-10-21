@@ -52,6 +52,71 @@ class BeachService {
       throw error;
     }
   }
+
+  //get beach by type, by city- to mi treba za homepage
+  //filtriranje mi treba za filter
+  //trebam gettanje prema ratingu, ali jos nemam implementirane recenzije
+  //beach by id mi isto treba za beach details
+
+  async getBeachesByType(typeId) {
+    try {
+      const beaches = await db.models.Beach.findAll({
+        where: { beach_type_id: typeId },
+      });
+      return beaches;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  //trebam jos dodati slike. za to moram videti kak se slike dobe.
+
+  async getBeachById(id) {
+    try {
+      const beach = await db.models.Beach.findOne({
+        where: { id },
+        include: [
+          {
+            model: db.models.BeachTexture,
+            attributes: ["name", "img_url"],
+          },
+          {
+            model: db.models.BeachType,
+            attributes: ["name"],
+          },
+          {
+            model: db.models.BeachDepth,
+            attributes: ["description"],
+          },
+          {
+            model: db.models.City,
+            attributes: ["name", "latitude", "longitude"],
+          },
+
+          {
+            model: db.models.User,
+            attributes: ["first_name", "last_name"],
+          },
+
+          {
+            model: db.models.Image,
+            attributes: ["path"],
+          },
+          {
+            model: db.models.Characteristic,
+            attributes: ["name", "icon_url"],
+            through: {
+              model: db.models.BeachHasCharacteristic,
+              attributes: ["featured"],
+            },
+          },
+        ],
+      });
+      return beach;
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export default new BeachService();
