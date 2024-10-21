@@ -4,9 +4,11 @@ import { Button } from "./button";
 import { Link } from "react-router-dom";
 
 interface CardData {
-  title: string;
+  name: string;
   image: string;
 }
+
+//on jos treba dobivati rating, drzavu i grad
 
 const CardItem = ({ data }: { data: CardData }) => {
   return (
@@ -15,7 +17,7 @@ const CardItem = ({ data }: { data: CardData }) => {
         <CardHeader>
           <div className=" flex flex-row items-center justify-between">
             <div>
-              <CardTitle>{data?.title}</CardTitle>
+              <CardTitle>{data?.name}</CardTitle>
               <div className=" flex items-center gap-2">
                 <Rating
                   // onClick={handleRating1}

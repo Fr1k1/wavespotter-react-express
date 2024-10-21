@@ -1,28 +1,22 @@
 import CardItem from "./cardItem";
-import Beach1 from "../../assets/beach_1.png";
-import Beach2 from "../../assets/beach_2.png";
-import Beach3 from "../../assets/beach_3.png";
 import { Link } from "react-router-dom";
 import Title from "./title";
+import { useEffect } from "react";
 
 //nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
 
 const CardsGrid = ({
   title,
   hasMoreButton,
+  cardData,
 }: {
   title: string;
   hasMoreButton: boolean;
+  cardData: [];
 }) => {
-  const cardData = [
-    { title: "Beautiful Beach", image: Beach1 },
-    { title: "Mountain Retreat", image: Beach2 },
-    { title: "City Skyline", image: Beach3 },
-    { title: "Island Paradise", image: Beach1 },
-    { title: "Desert Oasis", image: Beach1 },
-    { title: "Tropical Forest", image: Beach1 },
-  ];
-
+  useEffect(() => {
+    console.log("Cards grid ima data: ", cardData);
+  });
   return (
     <div>
       <div className="flex items-center justify-between mb-6 ">
@@ -35,7 +29,7 @@ const CardsGrid = ({
       </div>
 
       <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 ">
-        {cardData.map((data, index) => (
+        {cardData?.map((data, index) => (
           <CardItem key={index} data={data} />
         ))}
       </div>
