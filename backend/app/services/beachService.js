@@ -69,8 +69,6 @@ class BeachService {
     }
   }
 
-  //trebam jos dodati slike. za to moram videti kak se slike dobe.
-
   async getBeachById(id) {
     try {
       const beach = await db.models.Beach.findOne({
@@ -97,11 +95,6 @@ class BeachService {
             model: db.models.User,
             attributes: ["first_name", "last_name"],
           },
-
-          {
-            model: db.models.Image,
-            attributes: ["path"],
-          },
           {
             model: db.models.Characteristic,
             attributes: ["name", "icon_url"],
@@ -109,6 +102,23 @@ class BeachService {
               model: db.models.BeachHasCharacteristic,
               attributes: ["featured"],
             },
+          },
+        ],
+      });
+      return beach;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async getBeachImages(id) {
+    try {
+      const beach = await db.models.Beach.findOne({
+        where: { id },
+        include: [
+          {
+            model: db.models.Image,
+            attributes: ["path"],
           },
         ],
       });

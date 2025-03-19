@@ -33,7 +33,6 @@ class BeachController {
     }
   }
 
-  //dodaj slike
   async getBeachById(req, res) {
     try {
       const { id } = req.params;
@@ -47,6 +46,23 @@ class BeachController {
       }
     } catch (error) {
       console.error("Error fetching beach by id:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async getBeachImages(req, res) {
+    try {
+      const { id } = req.params;
+      const response = await beachService.getBeachImages(id);
+      if (!response || response.length === 0) {
+        return res
+          .status(404)
+          .json({ error: `No beach images found for provided beach` });
+      } else {
+        return res.status(200).json(response);
+      }
+    } catch (error) {
+      console.error("Error fetching beach images by id:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }

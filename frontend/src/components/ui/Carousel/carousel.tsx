@@ -1,11 +1,52 @@
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";
-import MainCarousel from "../../../assets/main_carousel_image.png";
-import Beach1 from "../../../assets/beach_1.png";
-import Beach2 from "../../../assets/beach_2.png";
 import "./Carousel.scss";
+import { useEffect, useState } from "react";
+import { supabase } from "@/supabaseClient";
+import { getBeachImages } from "@/api/beaches";
 
-const Carousel = () => {
+const Carousel = ({ beachId }: { beachId: string }) => {
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBeachImages();
+  }, [beachId]);
+
+  const fetchBeachImages = async () => {
+    try {
+      setLoading(true);
+      const beachImages = await getBeachImages(beachId);
+      if (beachImages && beachImages.images && beachImages.images.length > 0) {
+        const signedUrlPromises = beachImages.images.map(async (image) => {
+          const { data, error } = await supabase.storage
+            .from("beach_images")
+            .createSignedUrl(image.path, 7200);
+
+          if (error) {
+            console.error("Error creating URL:", error);
+            return null;
+          }
+
+          return data.signedUrl;
+        });
+
+        const urls = await Promise.all(signedUrlPromises);
+        const validUrls = urls.filter((url) => url !== null);
+
+        setImageUrls(validUrls);
+      }
+    } catch (error) {
+      console.error("Error fetching beach images:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading images...</div>;
+  }
+
   return (
     <div className="relative">
       <ReactCarousel
@@ -17,27 +58,15 @@ const Carousel = () => {
         emulateTouch
         showStatus={false}
       >
-        <div className="h-[550px]">
-          <img
-            src={MainCarousel}
-            className="w-full h-full object-cover"
-            alt="Main Carousel"
-          />
-        </div>
-        <div className="h-[550px]">
-          <img
-            src={Beach1}
-            className="w-full h-full object-cover"
-            alt="Beach 1"
-          />
-        </div>
-        <div className="h-[550px]">
-          <img
-            src={Beach2}
-            className="w-full h-full object-cover"
-            alt="Beach 2"
-          />
-        </div>
+        {imageUrls.map((url, index) => (
+          <div key={index} className="h-[550px]">
+            <img
+              src={url}
+              className="w-full h-full object-cover"
+              alt="Beach image"
+            />
+          </div>
+        ))}
       </ReactCarousel>
     </div>
   );

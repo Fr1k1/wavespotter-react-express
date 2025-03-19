@@ -6,13 +6,30 @@ import BeachDetailsFeaturedCard from "@/components/ui/beachDetailsFeaturedCard";
 import BeachFeaturesCheck from "@/components/ui/beachFeaturesCheck";
 import BaechDetailsAccordion from "@/components/ui/beachDetailsAccordion";
 import BeachDetailsReviews from "@/components/ui/beachDetailsReviews";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { getBeachById } from "@/api/beaches";
 
 const BeachDetails = () => {
+  const { id } = useParams();
+
+  //kreiraj objekt plaza response
+  const [beach, setBeach] = useState<any>(null);
+
+  useEffect(() => {
+    fetchBeach();
+  }, []);
+
+  const fetchBeach = async () => {
+    const response = await getBeachById(id);
+    setBeach(response);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col-reverse lg:grid lg:grid-cols-2">
         <div>
-          <Carousel />
+          <Carousel beachId={id} />
         </div>
         <div className=" flex flex-col gap-6 lg:p-6">
           <div className="flex flex-row justify-between items-center">
