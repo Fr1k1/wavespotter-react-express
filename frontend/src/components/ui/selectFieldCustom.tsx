@@ -61,14 +61,14 @@ const SelectFieldCustom = <T extends FieldValues>({
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder}>
-                  {options.find((option) => option.id == field.value)?.name ||
+                  {options?.find((option) => option.id == field.value)?.name ||
                     placeholder}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>{label}</SelectLabel>
-                  {options.map((option) => (
+                  {options?.map((option) => (
                     <SelectItem key={option.id} value={option.id.toString()}>
                       <div className="flex flex-row gap-2 ">
                         {option.name}

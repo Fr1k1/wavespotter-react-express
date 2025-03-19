@@ -43,6 +43,8 @@ import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { Characteristic } from "@/types/Characteristic";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -89,15 +91,9 @@ const formSchema = z.object({
   }),
   characteristics: z.array(z.number()).optional(),
 
-  //ovo potencijalno ne treba jer saljem polje featured_items
-  featured_item_1: z.string().optional(),
-  featured_item_2: z.string().optional(),
-  featured_item_3: z.string().optional(),
-  featured_item_4: z.string().optional(),
-  featured_item_5: z.string().optional(),
+  featured_items: z.array(z.string()).default([]),
 
   approved: z.boolean().optional(),
-
   userId: z.string().min(1, {
     message: "User id must not be null.",
   }),
@@ -105,21 +101,17 @@ const formSchema = z.object({
   images: z.array(z.any()).optional(),
 });
 
-//todo dodaj da samo logirani user moze dodavati plaze
-
 const AddNewBeach = () => {
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const featuredValues = Object.entries(values)
-      .filter(([key, value]) => key.startsWith("featured_item_") && value)
-      .map(([_, value]) => value);
-    const beachData = { ...values, featured_items: featuredValues };
+  const navigate = useNavigate();
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await addBeach(beachData);
+      const response = await addBeach(values);
       if (images?.length && response) {
         await uploadImages(images, response.data.id);
       }
-      console.log("Data successfully sent to backend", beachData);
+      console.log("Data successfully sent to backend", values);
+      notifySuccess("Beach request successfully sent!");
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }
@@ -137,7 +129,7 @@ const AddNewBeach = () => {
       beachTextureId: "",
       characteristics: [],
       approved: false,
-      userId: localStorage.getItem("user_id") || "",
+      userId: localStorage.getItem("user_id") || "" || null,
     },
   });
 
@@ -152,6 +144,12 @@ const AddNewBeach = () => {
   const [images, setImages] = useState<File[]>([]);
 
   const [isCountryChanged, setIsCountryChanged] = useState(false);
+
+  const [featuredItems, setFeaturedItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    form.setValue("featured_items", featuredItems);
+  }, [featuredItems, form]);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -235,18 +233,21 @@ const AddNewBeach = () => {
     }
   };
 
-  const featuredItemFields = [
-    { name: "featured_item_1", label: "Featured item" },
-    { name: "featured_item_2", label: "Featured item" },
-    { name: "featured_item_3", label: "Featured item" },
-    { name: "featured_item_4", label: "Featured item" },
-    { name: "featured_item_5", label: "Featured item" },
-  ];
-
   const handleSubmit = form.handleSubmit(onSubmit, (errors) => {
     console.error("Validation Errors:", errors);
-    //user id ne smije biti 0....
+    if (errors.userId) {
+      notifyFailure("You have to login first");
+      navigate("/login");
+    }
   });
+
+  const [featuredItemFields] = useState([
+    { name: "featured_item_1", label: "Featured Item" },
+    { name: "featured_item_2", label: "Featured Item" },
+    { name: "featured_item_3", label: "Featured Item" },
+    { name: "featured_item_4", label: "Featured Item" },
+    { name: "featured_item_5", label: "Featured Item" },
+  ]);
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-0">
@@ -255,7 +256,7 @@ const AddNewBeach = () => {
       <Form {...form}>
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
-            <div className=" flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
               <FormFieldCustom
                 form={form}
                 name="name"
@@ -364,7 +365,7 @@ const AddNewBeach = () => {
             placeholder="Enter beach description"
             textarea
           />
-          <div className=" w-2/4 flex flex-col gap-6">
+          <div className="w-2/4 flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <Subtitle>Images</Subtitle>
               <PlusCircle
@@ -391,15 +392,21 @@ const AddNewBeach = () => {
           <div>
             <div>
               <Subtitle>Featured info (up to 5 items)</Subtitle>
-              <div className="flex flex-col justify-between gap-6 lg:flex lg:flex-row ">
+              <div className="flex flex-col justify-between gap-6 lg:flex lg:flex-row">
                 {featuredItemFields.map((field, index) => (
                   <SelectFieldCustom
                     key={index}
                     form={form}
-                    name={field.name}
+                    name={`featured_items.${index}`}
                     label={field.label}
                     placeholder={`Choose ${field.label.toLowerCase()}`}
                     options={featuredCharacteristics}
+                    onValueChange={(value) => {
+                      const newItems = [...featuredItems];
+                      newItems[index] = value.toString();
+                      setFeaturedItems(newItems.filter(Boolean));
+                      form.setValue("featured_items", newItems.filter(Boolean));
+                    }}
                   />
                 ))}
               </div>
@@ -411,7 +418,7 @@ const AddNewBeach = () => {
             <Characteristics form={form} />
           </div>
           <BeachTips form={form} />
-          <div className="flex justify-end ">
+          <div className="flex justify-end">
             <Button type="submit" className="px-24 mb-6">
               Create request
             </Button>

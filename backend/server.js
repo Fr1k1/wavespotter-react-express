@@ -42,7 +42,7 @@ db.sequelize
     console.log("Connection has been established successfully.");
 
     db.sequelize
-      .sync({ alter: true }) //alter true to force changes
+      .sync() //alter true to force changes, force true to delete everything
       .then(() => {
         console.log("Table created successfully!");
 

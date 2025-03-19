@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import Title from "./title";
 import { useEffect } from "react";
 
-//nebude se tu fetchalo, ovo budu koristile ostale komponente, svaka sa svojim drugim datasetom
-
 const CardsGrid = ({
   title,
   hasMoreButton,
