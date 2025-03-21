@@ -4,6 +4,7 @@ import "./Carousel.scss";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { getBeachImages } from "@/api/beaches";
+import { Image } from "@/common/types";
 
 const Carousel = ({ beachId }: { beachId: string }) => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -17,8 +18,8 @@ const Carousel = ({ beachId }: { beachId: string }) => {
     try {
       setLoading(true);
       const beachImages = await getBeachImages(beachId);
-      if (beachImages && beachImages.images && beachImages.images.length > 0) {
-        const signedUrlPromises = beachImages.images.map(async (image) => {
+      if (beachImages && beachImages.length > 0) {
+        const signedUrlPromises = beachImages.map(async (image: Image) => {
           const { data, error } = await supabase.storage
             .from("beach_images")
             .createSignedUrl(image.path, 7200);

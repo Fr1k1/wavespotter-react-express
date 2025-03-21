@@ -98,7 +98,7 @@ const formSchema = z.object({
     message: "User id must not be null.",
   }),
 
-  images: z.array(z.any()).optional(),
+  images: z.array(z.string()).optional(),
 });
 
 const AddNewBeach = () => {
@@ -129,7 +129,7 @@ const AddNewBeach = () => {
       beachTextureId: "",
       characteristics: [],
       approved: false,
-      userId: localStorage.getItem("user_id") || "" || null,
+      userId: localStorage.getItem("user_id") || "",
     },
   });
 
@@ -183,7 +183,7 @@ const AddNewBeach = () => {
   const uploadImages = async (images: File[], beachId: string) => {
     const uploadedImageIds: string[] = [];
 
-    for (let file of images) {
+    for (const file of images) {
       const { data, error } = await supabase.storage
         .from("beach_images") // ime bucketa
         .upload(`beaches/${beachId}/${file.name}`, file, {

@@ -10,8 +10,43 @@ import BeachRequests from "./pages/BeachRequests";
 import ScrollToTop from "./components/ui/scrollToTop";
 import AddReview from "./pages/AddBeachReview";
 import Register from "./pages/Register";
+import ProtectedRoute from "./components/ui/protectedRoute";
+import { useEffect, useState } from "react";
+
+const originalSetItem = localStorage.setItem;
+localStorage.setItem = function (key, value) {
+  originalSetItem.apply(this, [key, value]);
+  const event = new Event("localStorageChange");
+  window.dispatchEvent(event);
+};
+
+const originalRemoveItem = localStorage.removeItem;
+localStorage.removeItem = function (key) {
+  originalRemoveItem.apply(this, [key]);
+  const event = new Event("localStorageChange");
+  window.dispatchEvent(event);
+};
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("user_id") ? true : false
+  );
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedInStatus = localStorage.getItem("user_id") ? true : false;
+      setIsLoggedIn(loggedInStatus);
+    };
+
+    window.addEventListener("localStorageChange", checkLoginStatus);
+
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("localStorageChange", checkLoginStatus);
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, []);
   return (
     <>
       <ScrollToTop />
@@ -22,7 +57,14 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/place/:id" element={<PlacePage />} />
           <Route path="/beach/:id" element={<BeachDetails />} />
-          <Route path="/add-beach" element={<AddNewBeach />} />
+          <Route
+            path="/add-beach"
+            element={
+              <ProtectedRoute redirectPath="/login" isAllowed={isLoggedIn}>
+                <AddNewBeach />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/beach-requests" element={<BeachRequests />} />
           <Route path="/beach/:id/add-review" element={<AddReview />} />
         </Route>

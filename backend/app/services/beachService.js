@@ -122,7 +122,10 @@ class BeachService {
           },
         ],
       });
-      return beach;
+      if (beach && beach.images) {
+        return beach.images;
+      }
+      return [];
     } catch (error) {
       return [];
     }

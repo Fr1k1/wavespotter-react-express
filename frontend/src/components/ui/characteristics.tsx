@@ -6,7 +6,7 @@ import { Characteristic } from "@/types/Characteristic";
 import { UseFormReturn } from "react-hook-form";
 
 interface CharacteristicsProps {
-  form: UseFormReturn<any>;
+  form?: UseFormReturn<any>;
 }
 
 const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
@@ -25,7 +25,7 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
     characteristicId: string,
     isChecked: boolean
   ) => {
-    const currentCharacteristics = form.getValues("characteristics") || [];
+    const currentCharacteristics = form?.getValues("characteristics") || [];
     let newCharacteristics;
 
     if (isChecked) {
@@ -36,7 +36,7 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
       );
     }
 
-    form.setValue("characteristics", newCharacteristics);
+    form?.setValue("characteristics", newCharacteristics);
     console.log("Nove karakteristike su: ", newCharacteristics);
   };
 

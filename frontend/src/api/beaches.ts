@@ -1,7 +1,8 @@
+import { BeachData } from "@/common/types";
 import { apiUrl } from "./api";
 
-//napravi objekt i za sve postove i te operacije dodaj neki auth
-export async function addBeach(beachData) {
+// dodaj neki auth
+export async function addBeach(beachData: BeachData) {
   console.log("Podaci su mi: ", beachData);
   const response = await fetch(`${apiUrl}/beaches`, {
     headers: {
@@ -22,7 +23,7 @@ export async function addBeach(beachData) {
   return data;
 }
 
-export async function getBeachById(id: string) {
+export async function getBeachById(id: string | undefined) {
   const response = await fetch(`${apiUrl}/beaches/${id}`);
 
   const data = await response.json();
