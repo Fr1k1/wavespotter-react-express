@@ -43,8 +43,7 @@ import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { Characteristic } from "@/types/Characteristic";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
-import { notifyFailure, notifySuccess } from "@/components/ui/toast";
-import { useNavigate } from "react-router";
+import { notifySuccess } from "@/components/ui/toast";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -102,8 +101,6 @@ const formSchema = z.object({
 });
 
 const AddNewBeach = () => {
-  const navigate = useNavigate();
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await addBeach(values);
@@ -235,10 +232,6 @@ const AddNewBeach = () => {
 
   const handleSubmit = form.handleSubmit(onSubmit, (errors) => {
     console.error("Validation Errors:", errors);
-    if (errors.userId) {
-      notifyFailure("You have to login first");
-      navigate("/login");
-    }
   });
 
   const [featuredItemFields] = useState([

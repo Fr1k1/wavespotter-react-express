@@ -16,30 +16,62 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Rating } from "react-simple-star-rating";
+import { useParams } from "react-router";
+import { addReview } from "@/api/reviews";
+import { notifySuccess } from "@/components/ui/toast";
+import { useState } from "react";
 
 const AddBeachReview = () => {
+  const { id } = useParams();
+
+  const [ratingValue, setRatingValue] = useState(0);
+
   const formSchema = z.object({
     beach_name: z.string().min(2, {
       message: "Beach name must be at least 2 characters.",
     }),
-    beach_address: z.string().min(2, {
-      message: "Beach address must be at least 2 characters.",
+    description: z.string().min(2, {
+      message: "Description must be at least 2 characters.",
+    }),
+
+    rating: z.number().min(1, {
+      message: "Rating is required.",
+    }),
+    userId: z.string().min(1, {
+      message: "User id must not be null.",
+    }),
+    beachId: z.string().min(1, {
+      message: "Beach id must not be null.",
     }),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await addReview(values);
+      if (response) {
+        console.log("Data successfully sent to backend", values);
+        notifySuccess("Beach review successfully added!");
+      }
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       beach_name: "",
-      beach_address: "",
+      description: "",
+      rating: 0,
+      beachId: id,
+      userId: localStorage.getItem("user_id") || "",
     },
   });
+
+  const handleRating = (rating: number) => {
+    setRatingValue(rating);
+    form.setValue("rating", rating);
+  };
   return (
     <div className="flex flex-col gap-4">
       <Title className="">Beach Zlatni rat</Title>
@@ -75,7 +107,7 @@ const AddBeachReview = () => {
 
             <FormField
               control={form.control}
-              name="beach_name"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -89,13 +121,20 @@ const AddBeachReview = () => {
 
             <FormField
               control={form.control}
-              name="beach_name"
+              name="rating"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-col gap-2">
                     <FormLabel>Leave rating</FormLabel>
                     <FormControl>
-                      <Rating size={40} transition allowFraction {...field} />
+                      <Rating
+                        size={40}
+                        transition
+                        allowFraction
+                        {...field}
+                        onClick={handleRating}
+                        initialValue={field.value}
+                      />
                     </FormControl>
                   </div>
                   <FormMessage />

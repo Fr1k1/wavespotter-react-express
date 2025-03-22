@@ -29,3 +29,11 @@ export interface BeachData {
 export interface Image {
   path: string;
 }
+
+export interface Review {
+  id: number;
+  description: string;
+  rating: number;
+  userId: string;
+  beachId: number;
+}

@@ -66,7 +66,14 @@ function App() {
             }
           />
           <Route path="/beach-requests" element={<BeachRequests />} />
-          <Route path="/beach/:id/add-review" element={<AddReview />} />
+          <Route
+            path="/beach/:id/add-review"
+            element={
+              <ProtectedRoute redirectPath="/login" isAllowed={isLoggedIn}>
+                <AddReview />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </>
