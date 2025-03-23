@@ -8,6 +8,13 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
       },
+
+      title: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true,
+      },
+
       description: {
         type: DataTypes.TEXT,
         allowNull: true,

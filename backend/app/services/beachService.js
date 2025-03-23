@@ -72,7 +72,7 @@ class BeachService {
   async getBeachById(id) {
     try {
       const beach = await db.models.Beach.findOne({
-        where: { id },
+        where: { id: Number(id) },
         include: [
           {
             model: db.models.BeachTexture,
@@ -86,14 +86,33 @@ class BeachService {
             model: db.models.BeachDepth,
             attributes: ["description"],
           },
+
+          //moram ovak jer grad nije direktno povezan na plazu
           {
             model: db.models.City,
             attributes: ["name", "latitude", "longitude"],
+            include: [
+              {
+                model: db.models.Country,
+                attributes: ["name"],
+              },
+            ],
           },
 
           {
             model: db.models.User,
             attributes: ["first_name", "last_name"],
+          },
+
+          {
+            model: db.models.Review,
+            attributes: ["title", "description", "rating"],
+            include: [
+              {
+                model: db.models.User,
+                attributes: ["first_name", "last_name"],
+              },
+            ],
           },
           {
             model: db.models.Characteristic,
@@ -105,7 +124,7 @@ class BeachService {
           },
         ],
       });
-      return beach;
+      return beach || null;
     } catch (error) {
       return [];
     }

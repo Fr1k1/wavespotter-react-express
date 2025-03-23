@@ -2,11 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Rating } from "react-simple-star-rating";
 import { Button } from "./button";
 import { Link } from "react-router-dom";
-
-interface CardData {
-  name: string;
-  image: string;
-}
+import { CardData } from "@/common/types";
 
 //on jos treba dobivati rating, drzavu i grad
 
@@ -32,7 +28,7 @@ const CardItem = ({ data }: { data: CardData }) => {
               </div>
             </div>
             <div>
-              <Link to="/beach/1">
+              <Link to={`/beach/${data.id}`}>
                 <Button underlined variant={"darker"}>
                   More
                 </Button>

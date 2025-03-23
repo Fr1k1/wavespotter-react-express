@@ -1,37 +1,27 @@
 import { Rating } from "react-simple-star-rating";
 import { Card, CardHeader } from "./card";
+import { Review } from "@/common/types";
 
-// interface CardData {
-//   title: string;
-//   rating: string;
-//   description: string;
-//   user:string;
-// }
-
-const BeachDetailsReviewCard = () => {
+const BeachDetailsReviewCard = ({ review }: { review: Review }) => {
   return (
     <Card>
       <div>
         <CardHeader>
           <div className="flex justify-between items-center">
-            <h3 className="text-base font-semibold">It's awesome</h3>
+            <h3 className="text-base font-semibold">{review?.title}</h3>
 
             <Rating
-              // onClick={handleRating1}
               size={25}
               transition
               allowFraction
-              //showTooltip
-              // tooltipArray={tooltipArray}
-              // fillColorArray={fillColorArray}
+              initialValue={review?.rating}
             />
           </div>
           <div>
-            <p className="text-sm mb-2">
-              This is the beach ever. We are definitely coming back next Summer
-              with our friends! Loved the beach bar with awesome music!
+            <p className="text-sm mb-2">{review?.description}</p>
+            <p className="text-sm">
+              {review?.user?.first_name} {review?.user?.last_name}
             </p>
-            <p className="text-sm">Marko Markec</p>
           </div>
         </CardHeader>
       </div>

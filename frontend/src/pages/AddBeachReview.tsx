@@ -24,11 +24,11 @@ import { useState } from "react";
 const AddBeachReview = () => {
   const { id } = useParams();
 
-  const [ratingValue, setRatingValue] = useState(0);
+  const [, setRatingValue] = useState(0);
 
   const formSchema = z.object({
-    beach_name: z.string().min(2, {
-      message: "Beach name must be at least 2 characters.",
+    title: z.string().min(2, {
+      message: "Title must be at least 2 characters.",
     }),
     description: z.string().min(2, {
       message: "Description must be at least 2 characters.",
@@ -60,7 +60,7 @@ const AddBeachReview = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      beach_name: "",
+      title: "",
       description: "",
       rating: 0,
       beachId: id,
@@ -93,7 +93,7 @@ const AddBeachReview = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="beach_name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title (max 20 characters) </FormLabel>

@@ -5,28 +5,29 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const BaechDetailsAccordion = () => {
+const BaechDetailsAccordion = ({
+  bestTimeToVisit,
+  localWildlife,
+  restaurantsAndBars,
+}: {
+  bestTimeToVisit: string | undefined;
+  localWildlife: string | undefined;
+  restaurantsAndBars: string | undefined;
+}) => {
   return (
     <div className="p-4 mb-4 lg:mb-0">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger>Best time to visit?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
-          </AccordionContent>
+          <AccordionContent>{bestTimeToVisit}</AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
           <AccordionTrigger>Local wildlife?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It comes with default styles that matches the other
-            components&apos; aesthetic.
-          </AccordionContent>
+          <AccordionContent>{localWildlife}</AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
           <AccordionTrigger>Food and drinks nearby?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It's animated by default, but you can disable it if you prefer.
-          </AccordionContent>
+          <AccordionContent>{restaurantsAndBars}</AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
