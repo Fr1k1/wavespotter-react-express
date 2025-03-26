@@ -60,3 +60,21 @@ export async function getBeachByType(id: number) {
   }
   return data;
 }
+
+export async function getBeaches(
+  page = 1,
+  pageSize = 12,
+  approved: number | null = null
+) {
+  const response = await fetch(
+    `${apiUrl}/beaches?page=${page}&pageSize=${pageSize}&approved=${approved}`
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.log(data.error);
+    return data.error;
+  }
+  return data;
+}

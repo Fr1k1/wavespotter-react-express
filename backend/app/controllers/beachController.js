@@ -61,6 +61,22 @@ class BeachController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async getBeaches(req, res) {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 12;
+      const approved = parseInt(req.query.approved) || null;
+      const response = await beachService.getBeaches(page, pageSize, approved);
+      if (response.length == 0) {
+        res.status(404).json({ error: `No beaches found` });
+      } else {
+        res.status(200).json(response);
+      }
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new BeachController();

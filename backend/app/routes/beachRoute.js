@@ -3,6 +3,8 @@ import controller from "../controllers/beachController.js";
 
 const router = new Router();
 
+router.get("/", controller.getBeaches);
+
 router.post("/", controller.addBeach);
 
 router.get("/:id", controller.getBeachById);

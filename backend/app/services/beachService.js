@@ -149,6 +149,76 @@ class BeachService {
       return [];
     }
   }
+
+  async getBeaches(page, pageSize, approved) {
+    const limit = pageSize;
+    const offset = (page - 1) * pageSize;
+    let whereClause = {};
+    if (approved === 0 || approved === 1) {
+      whereClause = { approved: approved === 1 };
+    }
+
+    try {
+      const beaches = await db.models.Beach.findAll({
+        limit: limit,
+        offset: offset,
+        include: [
+          {
+            model: db.models.BeachTexture,
+            attributes: ["name", "img_url"],
+          },
+          {
+            model: db.models.BeachType,
+            attributes: ["name"],
+          },
+          {
+            model: db.models.BeachDepth,
+            attributes: ["description"],
+          },
+
+          //moram ovak jer grad nije direktno povezan na plazu
+          {
+            model: db.models.City,
+            attributes: ["name", "latitude", "longitude"],
+            include: [
+              {
+                model: db.models.Country,
+                attributes: ["name"],
+              },
+            ],
+          },
+
+          {
+            model: db.models.User,
+            attributes: ["first_name", "last_name"],
+          },
+
+          {
+            model: db.models.Review,
+            attributes: ["title", "description", "rating"],
+            include: [
+              {
+                model: db.models.User,
+                attributes: ["first_name", "last_name"],
+              },
+            ],
+          },
+          {
+            model: db.models.Characteristic,
+            attributes: ["name", "icon_url"],
+            through: {
+              model: db.models.BeachHasCharacteristic,
+              attributes: ["featured"],
+            },
+          },
+        ],
+        where: whereClause,
+      });
+      return beaches;
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export default new BeachService();

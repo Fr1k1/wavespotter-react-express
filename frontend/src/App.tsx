@@ -12,6 +12,7 @@ import AddReview from "./pages/AddBeachReview";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ui/protectedRoute";
 import { useEffect, useState } from "react";
+import ConfirmBeachRequest from "./pages/ConfirmBeachRequest";
 
 const originalSetItem = localStorage.setItem;
 localStorage.setItem = function (key, value) {
@@ -66,6 +67,8 @@ function App() {
             }
           />
           <Route path="/beach-requests" element={<BeachRequests />} />
+          <Route path="/beach-requests/:id" element={<ConfirmBeachRequest />} />
+
           <Route
             path="/beach/:id/add-review"
             element={
