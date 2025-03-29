@@ -66,15 +66,31 @@ class BeachController {
     try {
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 12;
-      const approved = parseInt(req.query.approved) || null;
+      const approved = parseInt(req.query.approved);
       const response = await beachService.getBeaches(page, pageSize, approved);
-      if (response.length == 0) {
-        res.status(404).json({ error: `No beaches found` });
-      } else {
-        res.status(200).json(response);
-      }
+
+      res.status(200).json(response);
     } catch (error) {
       return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async updateBeach(req, res) {
+    try {
+      const { id } = req.params;
+      const updatedBeach = await beachService.updateBeach(id, req.body);
+      res.status(200).json({
+        success: true,
+        message: "Beach updated successfully",
+        data: updatedBeach,
+      });
+    } catch (error) {
+      console.error("Error in updateBeach controller:", error);
+      res.status(500).json({
+        success: false,
+        message: "An error occurred while updating the beach",
+        error: error.message,
+      });
     }
   }
 }

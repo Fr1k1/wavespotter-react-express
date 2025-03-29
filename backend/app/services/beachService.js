@@ -62,6 +62,22 @@ class BeachService {
     try {
       const beaches = await db.models.Beach.findAll({
         where: { beach_type_id: typeId },
+        include: [
+          {
+            model: db.models.City,
+            attributes: ["name", "latitude", "longitude"],
+            include: [
+              {
+                model: db.models.Country,
+                attributes: ["name"],
+              },
+            ],
+          },
+          {
+            model: db.models.Review,
+            attributes: ["title", "description", "rating"],
+          },
+        ],
       });
       return beaches;
     } catch (error) {
@@ -94,7 +110,7 @@ class BeachService {
             include: [
               {
                 model: db.models.Country,
-                attributes: ["name"],
+                attributes: ["id", "name"],
               },
             ],
           },
@@ -116,7 +132,7 @@ class BeachService {
           },
           {
             model: db.models.Characteristic,
-            attributes: ["name", "icon_url"],
+            attributes: ["id", "name", "icon_url"],
             through: {
               model: db.models.BeachHasCharacteristic,
               attributes: ["featured"],
@@ -154,8 +170,9 @@ class BeachService {
     const limit = pageSize;
     const offset = (page - 1) * pageSize;
     let whereClause = {};
-    if (approved === 0 || approved === 1) {
-      whereClause = { approved: approved === 1 };
+    const approvedValue = approved !== null ? Number(approved) : null;
+    if (approvedValue === 0 || approvedValue === 1) {
+      whereClause = { approved: approvedValue === 1 };
     }
 
     try {
@@ -217,6 +234,72 @@ class BeachService {
       return beaches;
     } catch (error) {
       return [];
+    }
+  }
+
+  async updateBeach(id, beachData) {
+    console.log("Updating Beach Data:", beachData);
+    const transaction = await db.sequelize.transaction();
+    try {
+      const beach = await db.models.Beach.findByPk(id, { transaction });
+
+      if (!beach) {
+        throw new Error(`Beach with ID ${id} not found`);
+      }
+
+      await beach.update(beachData, { transaction });
+
+      await db.sequelize.query(
+        "DELETE FROM beach_has_characteristics WHERE beach_id = :beach_id",
+        {
+          replacements: { beach_id: id },
+          type: db.sequelize.QueryTypes.DELETE,
+          transaction,
+        }
+      );
+      const allCharacteristics = [
+        ...beachData.characteristics.map((charId) => ({
+          beach_id: id,
+          characteristic_id: parseInt(charId, 10),
+          featured: false,
+        })),
+        ...beachData.featured_items.map((charId) => ({
+          beach_id: id,
+          characteristic_id: parseInt(charId, 10),
+          featured: true,
+        })),
+      ];
+
+      console.log("All Characteristic Entries for update:", allCharacteristics);
+      for (const entry of allCharacteristics) {
+        try {
+          await db.sequelize.query(
+            "INSERT INTO beach_has_characteristics (featured, characteristic_id, beach_id) VALUES (:featured, :characteristic_id, :beach_id)",
+            {
+              replacements: {
+                featured: entry.featured,
+                characteristic_id: entry.characteristic_id,
+                beach_id: entry.beach_id,
+              },
+              type: db.sequelize.QueryTypes.INSERT,
+              transaction,
+            }
+          );
+        } catch (error) {
+          console.error(
+            `Error inserting entry: ${JSON.stringify(entry)}`,
+            error
+          );
+          throw error;
+        }
+      }
+
+      await transaction.commit();
+      return beach;
+    } catch (error) {
+      await transaction.rollback();
+      console.error("Error in updateBeach service:", error);
+      throw error;
     }
   }
 }
