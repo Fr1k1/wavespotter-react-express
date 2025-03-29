@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FacebookLogo, InstagramLogo, XLogo } from "@phosphor-icons/react";
 
 const Footer = () => {
+  const date = new Date();
   return (
     <div className="bg-primary-800 flex justify-center h-64">
       <div className="flex gap-6 flex-col max-w-7xl  justify-center">
@@ -27,7 +28,10 @@ const Footer = () => {
         </div>
 
         <div className="flex justify-center text-white">
-          <p>Copyright 2024. All rights reserved by Martin Friščić</p>
+          <p>
+            Copyright {date.getFullYear()}. All rights reserved by Martin
+            Friščić
+          </p>
         </div>
       </div>
     </div>

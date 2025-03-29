@@ -84,4 +84,16 @@ export interface CardData {
   name: string;
   image: string;
   rating: number;
+  city: {
+    name: string;
+    latitude: string;
+    longitude: string;
+    country: { name: string };
+  };
+  reviews: Array<{
+    title: string;
+    description: string;
+    rating: number;
+    user: { first_name: string; last_name: string };
+  }>;
 }
