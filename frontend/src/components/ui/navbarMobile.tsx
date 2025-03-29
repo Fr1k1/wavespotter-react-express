@@ -7,6 +7,9 @@ import { Button } from "./button";
 const NavbarMobile = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
+  const isLoggedIn = localStorage.getItem("user_id");
+  const isAdmin = localStorage.getItem("is_admin");
+
   const navHandler = () => {
     setIsNavOpen(!isNavOpen);
   };
@@ -38,6 +41,13 @@ const NavbarMobile = () => {
         <div className="flex flex-col justify-center items-center gap-4 bg-white p-4">
           <Link to="/">Homepage</Link>
           <Link to="/place/:id">Find a beach</Link>
+          {isAdmin ? (
+            <>
+              <Link to="/beach-requests">Beach requests</Link>
+            </>
+          ) : (
+            <></>
+          )}
           <Button
             variant={"secondary"}
             onClick={() => {
@@ -46,15 +56,32 @@ const NavbarMobile = () => {
           >
             Add new beach
           </Button>
-          <div>
-            <Button
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              Login
-            </Button>
-          </div>
+          {isLoggedIn ? (
+            <>
+              <div>
+                <Button
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate("/login");
+                  }}
+                >
+                  Log out
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <Button
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  Login
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </nav>
     </div>

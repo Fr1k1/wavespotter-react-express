@@ -33,10 +33,17 @@ function App() {
     localStorage.getItem("user_id") ? true : false
   );
 
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("is_admin") ? true : false
+  );
+
   useEffect(() => {
     const checkLoginStatus = () => {
       const loggedInStatus = localStorage.getItem("user_id") ? true : false;
+      const adminStatus = localStorage.getItem("is_admin") ? true : false;
+
       setIsLoggedIn(loggedInStatus);
+      setIsAdmin(adminStatus);
     };
 
     window.addEventListener("localStorageChange", checkLoginStatus);
@@ -66,8 +73,28 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/beach-requests" element={<BeachRequests />} />
-          <Route path="/beach-requests/:id" element={<ConfirmBeachRequest />} />
+          <Route
+            path="/beach-requests"
+            element={
+              <ProtectedRoute
+                redirectPath="/login"
+                isAllowed={isLoggedIn && isAdmin}
+              >
+                <BeachRequests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/beach-requests/:id"
+            element={
+              <ProtectedRoute
+                redirectPath="/login"
+                isAllowed={isLoggedIn && isAdmin}
+              >
+                <ConfirmBeachRequest />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/beach/:id/add-review"
