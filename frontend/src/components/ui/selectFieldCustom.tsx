@@ -61,33 +61,36 @@ const SelectFieldCustom = <T extends FieldValues>({
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder}>
-                  {options?.find((option) => option.id == field.value)?.name ||
+                  {(options.length > 0 &&
+                    options?.find((option) => option?.id == field.value)
+                      ?.name) ||
                     placeholder}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>{label}</SelectLabel>
-                  {options?.map((option) => (
-                    <SelectItem key={option.id} value={option.id.toString()}>
-                      <div className="flex flex-row gap-2 ">
-                        {option.name}
+                  {options.length > 0 &&
+                    options.map((option) => (
+                      <SelectItem key={option.id} value={option.id.toString()}>
+                        <div className="flex flex-row gap-2">
+                          {option.name}
 
-                        {option.description && (
-                          <span>{option.description}</span>
-                        )}
-                        {option.icon_url && (
-                          <div className="bg-primary-500 rounded-lg p-0.5 ">
-                            <img
-                              src={option.icon_url}
-                              alt={option.name}
-                              className="w-6 h-6 "
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </SelectItem>
-                  ))}
+                          {option.description && (
+                            <span>{option.description}</span>
+                          )}
+                          {option.icon_url && (
+                            <div className="bg-primary-500 rounded-lg p-0.5">
+                              <img
+                                src={option.icon_url}
+                                alt={option.name}
+                                className="w-6 h-6"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
                 </SelectGroup>
               </SelectContent>
             </Select>

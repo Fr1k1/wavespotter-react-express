@@ -127,6 +127,12 @@ const AddNewBeach = () => {
       characteristics: [],
       approved: false,
       userId: localStorage.getItem("user_id") || "",
+      description: "",
+      best_time_to_visit: "",
+      local_wildlife: "",
+      restaurants_and_bars_nearby: "",
+      beach_working_hours: "",
+      featured_items: [],
     },
   });
 
