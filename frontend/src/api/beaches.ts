@@ -55,7 +55,7 @@ export async function getBeachById(id: string | undefined) {
   return data;
 }
 
-export async function getBeachImages(id: string) {
+export async function getBeachImages(id: string | number) {
   const response = await fetch(`${apiUrl}/beaches/${id}/images`);
 
   const data = await response.json();

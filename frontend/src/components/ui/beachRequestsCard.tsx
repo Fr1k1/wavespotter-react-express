@@ -2,8 +2,9 @@ import { MapPin, User } from "@phosphor-icons/react";
 import { Button } from "./button";
 import { Card, CardHeader, CardTitle } from "./card";
 import { useNavigate } from "react-router";
+import { BeachDetailsData } from "@/common/types";
 
-const BeachRequestsCard = ({ request }) => {
+const BeachRequestsCard = ({ request }: { request: BeachDetailsData }) => {
   const navigate = useNavigate();
 
   const id = request.id;
@@ -25,7 +26,7 @@ const BeachRequestsCard = ({ request }) => {
                   <div className="flex items-center gap-2 text-gray-600">
                     <User size={24} weight="fill" color="#0E7490" />
                     <p>
-                      {request.user.first_name} {request.user.last_name}
+                      {request?.user?.first_name} {request?.user?.last_name}
                     </p>
                   </div>
                 </div>

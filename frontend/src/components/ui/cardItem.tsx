@@ -6,6 +6,7 @@ import { CardData, Review } from "@/common/types";
 import { useEffect, useState } from "react";
 import { getBeachImages } from "@/api/beaches";
 import { supabase } from "@/supabaseClient";
+import { Image } from "@/common/types";
 
 const CardItem = ({ data }: { data: CardData }) => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);

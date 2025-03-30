@@ -44,6 +44,7 @@ import { getBeachById, getBeachImages, updateBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
 import { notifySuccess } from "@/components/ui/toast";
 import { useParams } from "react-router-dom";
+import { Image } from "@/common/types";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -90,7 +91,7 @@ const formSchema = z.object({
   }),
   characteristics: z.array(z.number()).optional(),
 
-  featured_items: z.array(z.string()).default([]),
+  featured_items: z.array(z.string().optional()).default([]),
 
   approved: z.boolean().optional(),
   userId: z.string().min(1, {
@@ -101,44 +102,10 @@ const formSchema = z.object({
 });
 
 const ConfirmBeachRequest = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id?: string }>();
   const [loading, setLoading] = useState(true);
+  const [, setDataLoaded] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
-  useEffect(() => {
-    fetchBeachImages();
-  }, [id]);
-
-  const fetchBeachImages = async () => {
-    try {
-      setLoading(true);
-      const beachImages = await getBeachImages(id);
-      if (beachImages && beachImages.length > 0) {
-        const signedUrlPromises = beachImages.map(async (image: Image) => {
-          const { data, error } = await supabase.storage
-            .from("beach_images")
-            .createSignedUrl(image.path, 7200);
-
-          if (error) {
-            console.error("Error creating URL:", error);
-            return null;
-          }
-
-          return data.signedUrl;
-        });
-
-        const urls = await Promise.all(signedUrlPromises);
-        const validUrls = urls.filter((url) => url !== null);
-
-        setImageUrls(validUrls);
-        console.log("Image ursl su", validUrls);
-      }
-    } catch (error) {
-      console.error("Error fetching beach images:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -171,8 +138,6 @@ const ConfirmBeachRequest = () => {
     Characteristic[]
   >([]);
   const [images, setImages] = useState<File[]>([]);
-  const [existingImages, setExistingImages] = useState<string[]>([]);
-
   const [isCountryChanged, setIsCountryChanged] = useState(false);
   const [featuredItems, setFeaturedItems] = useState<string[]>([]);
 
@@ -180,110 +145,25 @@ const ConfirmBeachRequest = () => {
     form.setValue("featured_items", featuredItems);
   }, [featuredItems, form]);
 
-  const openNewWindow = (imagePath) => {
+  const openNewWindow = (imagePath: string) => {
     const newTab = window.open("", "_blank");
-    newTab.document.body.innerHTML = `
-      <html>
-        <head>
-          <title>Image Preview</title>
-          <style>
-            body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-            img { max-width: 100%; max-height: 100vh; object-fit: contain; }
-          </style>
-        </head>
-        <body>
-          <img src="${imagePath}" alt="Image Preview">
-        </body>
-      </html>
-    `;
+    if (newTab) {
+      newTab.document.body.innerHTML = `
+  <html>
+    <head>
+      <title>Image Preview</title>
+      <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        img { max-width: 100%; max-height: 100vh; object-fit: contain; }
+      </style>
+    </head>
+    <body>
+      <img src="${imagePath}" alt="Image Preview">
+    </body>
+  </html>
+`;
+    }
   };
-
-  useEffect(() => {
-    const fetchBeachData = async () => {
-      if (!id) return;
-
-      try {
-        setLoading(true);
-        const beachData = await getBeachById(id);
-
-        if (beachData) {
-          console.log("Beach data na confirmu je", beachData);
-          const regularCharacteristics = [];
-          const featuredItems = [];
-
-          if (
-            beachData.characteristics &&
-            beachData.characteristics.length > 0
-          ) {
-            console.log("Karakteristike su", beachData.characteristics);
-            beachData.characteristics.forEach((characteristic) => {
-              if (
-                characteristic.beach_has_characteristics &&
-                characteristic.beach_has_characteristics.featured
-              ) {
-                featuredItems.push(characteristic.id.toString());
-              } else {
-                console.log("Pusham u regularne", characteristic.id);
-                regularCharacteristics.push(characteristic.id);
-              }
-            });
-          }
-          // Set form values
-          form.reset({
-            ...beachData,
-            beachTypeId: String(beachData.beachTypeId || ""),
-            beachTextureId: String(beachData.beachTextureId || ""),
-            beachDepthId: String(beachData.beachDepthId || ""),
-            beach_country: String(beachData.city.country.id || ""),
-            cityId: String(beachData.cityId || ""),
-            characteristics: regularCharacteristics,
-            featured_items: featuredItems,
-          });
-
-          setFeaturedItems(featuredItems);
-
-          if (beachData.images && beachData.images.length > 0) {
-            console.log("Slike su", beachData.images);
-            setExistingImages(beachData.images);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching beach data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchInitialData = async () => {
-      try {
-        const [
-          typesRes,
-          texturesRes,
-          depthsRes,
-          countriesRes,
-          characteristicsRes,
-        ] = await Promise.all([
-          getBeachTypes(),
-          getBeachTextures(),
-          getBeachDepths(),
-          getCountries(),
-          getCharacteristics(),
-        ]);
-        setBeachTypes(typesRes);
-        setBeachTextures(texturesRes);
-        setBeachDepths(depthsRes);
-        setCountries(countriesRes);
-        setFeaturedCharacteristics(characteristicsRes);
-
-        await fetchBeachData();
-      } catch (err) {
-        console.error("Error fetching initial data:", err);
-        setLoading(false);
-      }
-    };
-
-    fetchInitialData();
-  }, [id, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Updateane vrijednosti su", values);
@@ -293,6 +173,7 @@ const ConfirmBeachRequest = () => {
       const updatedValues = {
         ...values,
         approved: true,
+        featured_items: values.featured_items.filter(Boolean) as string[],
       };
 
       await updateBeach(id, updatedValues);
@@ -349,7 +230,120 @@ const ConfirmBeachRequest = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const [
+          typesRes,
+          texturesRes,
+          depthsRes,
+          countriesRes,
+          characteristicsRes,
+          beachData,
+          beachImagesRes,
+        ] = await Promise.all([
+          getBeachTypes(),
+          getBeachTextures(),
+          getBeachDepths(),
+          getCountries(),
+          getCharacteristics(),
+          getBeachById(id),
+          getBeachImages(id),
+        ]);
+
+        setBeachTypes(typesRes);
+        setBeachTextures(texturesRes);
+        setBeachDepths(depthsRes);
+        setCountries(countriesRes);
+        setFeaturedCharacteristics(characteristicsRes);
+
+        if (beachData) {
+          console.log("Beach data na confirmu je", beachData);
+          const regularCharacteristics: number[] = [];
+
+          const featuredItems: string[] = [];
+
+          if (
+            beachData.characteristics &&
+            beachData.characteristics.length > 0
+          ) {
+            console.log("Karakteristike su", beachData.characteristics);
+            beachData.characteristics.forEach(
+              (characteristic: Characteristic) => {
+                if (
+                  characteristic.beach_has_characteristics &&
+                  characteristic.beach_has_characteristics.featured
+                ) {
+                  featuredItems.push(characteristic.id.toString());
+                } else {
+                  console.log("Pusham u regularne", characteristic.id);
+                  regularCharacteristics.push(Number(characteristic.id));
+                }
+              }
+            );
+          }
+
+          if (beachData.city?.country?.id) {
+            const citiesRes = await getCitiesByCountry(
+              beachData.city.country.id.toString()
+            );
+            setCities(citiesRes);
+          }
+
+          form.reset({
+            ...beachData,
+            beachTypeId: String(beachData.beachTypeId || ""),
+            beachTextureId: String(beachData.beachTextureId || ""),
+            beachDepthId: String(beachData.beachDepthId || ""),
+            beach_country: String(beachData.city.country.id || ""),
+            cityId: String(beachData.cityId || ""),
+            characteristics: regularCharacteristics,
+            featured_items: featuredItems,
+          });
+
+          setFeaturedItems(featuredItems);
+        }
+
+        // Process images
+        if (beachImagesRes && beachImagesRes.length > 0) {
+          const signedUrlPromises = beachImagesRes.map(async (image: Image) => {
+            const { data, error } = await supabase.storage
+              .from("beach_images")
+              .createSignedUrl(image.path, 7200);
+
+            if (error) {
+              console.error("Error creating URL:", error);
+              return null;
+            }
+
+            return data.signedUrl;
+          });
+
+          const urls = await Promise.all(signedUrlPromises);
+          const validUrls = urls.filter((url) => url !== null) as string[];
+          setImageUrls(validUrls);
+          console.log("Image urls su", validUrls);
+        }
+        setDataLoaded(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, [id, form]);
+
   const [fileInputs, setFileInputs] = useState([0]);
+
   //duplicate function, will reuse
 
   const addFileInput = () => {
@@ -561,9 +555,14 @@ const ConfirmBeachRequest = () => {
                     options={featuredCharacteristics}
                     onValueChange={(value) => {
                       const newItems = [...featuredItems];
-                      newItems[index] = value.toString();
-                      setFeaturedItems(newItems.filter(Boolean));
-                      form.setValue("featured_items", newItems.filter(Boolean));
+                      if (value) {
+                        newItems[index] = value.toString();
+                      } else {
+                        newItems.splice(index, 1);
+                      }
+                      const filteredItems = newItems.filter(Boolean);
+                      setFeaturedItems(filteredItems);
+                      form.setValue("featured_items", filteredItems);
                     }}
                   />
                 ))}

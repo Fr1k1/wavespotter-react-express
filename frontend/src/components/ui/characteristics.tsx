@@ -28,7 +28,7 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
     if (form) {
       const currentValues = form.getValues("characteristics") || [];
       console.log("Current characteristics from form:", currentValues);
-      setSelectedCharacteristics(currentValues.map((id) => String(id)));
+      setSelectedCharacteristics(currentValues.map((id: number) => String(id)));
     }
   }, [form, form?.watch("characteristics")]);
 

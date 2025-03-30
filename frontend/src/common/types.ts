@@ -7,6 +7,7 @@ export interface User {
 }
 
 export interface BeachData {
+  id?: number;
   name: string;
   address: string;
   beachTypeId: string;
@@ -27,6 +28,7 @@ export interface BeachData {
 }
 
 export interface BeachDetailsData {
+  id?: number;
   name: string;
   address: string;
   beachTypeId: number;
@@ -63,6 +65,7 @@ export interface BeachDetailsData {
     rating: number;
     user: { first_name: string; last_name: string };
   }>;
+  user?: { first_name: string; last_name: string };
 }
 
 export interface Image {
