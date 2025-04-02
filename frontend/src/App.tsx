@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router";
 import "./App.css";
 import Layout from "./components/ui/layout";
 import Homepage from "./pages/Homepage";
-import PlacePage from "./pages/PlacePage";
 import Login from "./pages/Login";
 import BeachDetails from "./pages/BeachDetails";
 import AddNewBeach from "./pages/AddNewBeach";
@@ -13,6 +12,7 @@ import Register from "./pages/Register";
 import ProtectedRoute from "./components/ui/protectedRoute";
 import { useEffect, useState } from "react";
 import ConfirmBeachRequest from "./pages/ConfirmBeachRequest";
+import CountryPage from "./pages/CountryPage";
 
 const originalSetItem = localStorage.setItem;
 localStorage.setItem = function (key, value) {
@@ -63,7 +63,7 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/place/:id" element={<PlacePage />} />
+          <Route path="/country/:id" element={<CountryPage />} />
           <Route path="/beach/:id" element={<BeachDetails />} />
           <Route
             path="/add-beach"

@@ -40,7 +40,7 @@ const NavbarMobile = () => {
       <nav className={isNavOpen ? "" : "hidden"} onClick={closeNav}>
         <div className="flex flex-col justify-center items-center gap-4 bg-white p-4">
           <Link to="/">Homepage</Link>
-          <Link to="/place/:id">Find a beach</Link>
+          <Link to="/country/:id">Find a beach</Link>
           {isAdmin ? (
             <>
               <Link to="/beach-requests">Beach requests</Link>

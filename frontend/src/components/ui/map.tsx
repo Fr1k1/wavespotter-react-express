@@ -23,7 +23,7 @@ const Map = ({ cities }: { cities: City[] }) => {
             position={[city.latitude, city.longitude]}
             eventHandlers={{
               click: () => {
-                navigate("/place/" + city.id);
+                navigate("/country/" + city.id);
               },
             }}
           />

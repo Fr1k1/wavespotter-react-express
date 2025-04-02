@@ -15,7 +15,7 @@ const NavbarDesktop = () => {
 
       <nav className="flex gap-6 p-2 items-center">
         <Link to="/">Homepage</Link>
-        <Link to="/place/:id">Find a beach</Link>
+        <Link to="/country/:id">Find a beach</Link>
         {isAdmin ? (
           <>
             <Link to="/beach-requests">Beach requests</Link>
