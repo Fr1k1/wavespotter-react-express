@@ -93,6 +93,23 @@ class BeachController {
       });
     }
   }
+
+  async getBeachGeoDataById(req, res) {
+    try {
+      const { id } = req.params;
+      const response = await beachService.getBeachGeoDataById(id);
+      if (!response) {
+        return res
+          .status(404)
+          .json({ error: `No beaches geodata for provided id` });
+      } else {
+        return res.status(200).json(response);
+      }
+    } catch (error) {
+      console.error("Error fetching beach geodata by id:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new BeachController();

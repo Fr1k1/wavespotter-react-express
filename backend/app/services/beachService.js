@@ -302,6 +302,30 @@ class BeachService {
       throw error;
     }
   }
+
+  async getBeachGeoDataById(id) {
+    try {
+      const beach = await db.models.Beach.findOne({
+        where: { id: Number(id) },
+        attributes: ["name"], //return nothing from beach entity except name
+        include: [
+          {
+            model: db.models.City,
+            attributes: ["name", "latitude", "longitude"],
+            include: [
+              {
+                model: db.models.Country,
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      });
+      return beach || null;
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export default new BeachService();

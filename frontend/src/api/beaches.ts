@@ -96,3 +96,15 @@ export async function getBeaches(
   }
   return data;
 }
+
+export async function getBeachGeoDataById(id: string | undefined) {
+  const response = await fetch(`${apiUrl}/beaches/${id}/geodata`);
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.log(data.error);
+    return data.error;
+  }
+  return data;
+}

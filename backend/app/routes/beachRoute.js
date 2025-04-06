@@ -15,4 +15,6 @@ router.get("/:id/images", controller.getBeachImages);
 
 router.get("/type/:id", controller.getBeachByType);
 
+router.get("/:id/geodata", controller.getBeachGeoDataById);
+
 export default router;

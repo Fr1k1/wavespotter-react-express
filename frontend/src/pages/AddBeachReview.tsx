@@ -19,10 +19,26 @@ import { Rating } from "react-simple-star-rating";
 import { useParams } from "react-router";
 import { addReview } from "@/api/reviews";
 import { notifySuccess } from "@/components/ui/toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getBeachGeoDataById } from "@/api/beaches";
 
 const AddBeachReview = () => {
+  const [beachGeoData, setBeachGeoData] = useState(null);
+
   const { id } = useParams();
+
+  const fetchData = async () => {
+    try {
+      const response = await getBeachGeoDataById(id);
+      setBeachGeoData(response);
+    } catch {
+      console.error("Beach geo data not fetched successfully");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const [, setRatingValue] = useState(0);
 
@@ -74,12 +90,13 @@ const AddBeachReview = () => {
   };
   return (
     <div className="flex flex-col gap-4">
-      <Title className="">Beach Zlatni rat</Title>
+      <Title className="">{beachGeoData?.name}</Title>
       <div className="flex items-center bg-primary-800 rounded-lg px-4 py-2 w-fit">
         <MapPin weight="duotone" className="mr-2" size={32} color="white" />
         <div className="text-white">
-          <p>Brač, Croatia</p>
-          <p className="text-xs">24120, Bol</p>
+          <p>
+            {beachGeoData?.city?.name} {beachGeoData?.city?.country?.name}
+          </p>
         </div>
       </div>
       <Subtitle>Review</Subtitle>
@@ -112,7 +129,10 @@ const AddBeachReview = () => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="shadcn" {...field} />
+                    <Textarea
+                      placeholder="I like this beach very much..."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
