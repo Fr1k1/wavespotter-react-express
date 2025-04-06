@@ -61,16 +61,17 @@ const SelectFieldCustom = <T extends FieldValues>({
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder}>
-                  {(options.length > 0 &&
-                    options?.find((option) => option?.id == field.value)
-                      ?.name) ||
-                    placeholder}
+                  {options?.length > 0 && field.value
+                    ? options?.find(
+                        (option) => option?.id.toString() === field.value
+                      )?.name || placeholder
+                    : placeholder}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>{label}</SelectLabel>
-                  {options.length > 0 &&
+                  {options?.length > 0 ? (
                     options.map((option) => (
                       <SelectItem key={option.id} value={option.id.toString()}>
                         <div className="flex flex-row gap-2">
@@ -90,7 +91,12 @@ const SelectFieldCustom = <T extends FieldValues>({
                           )}
                         </div>
                       </SelectItem>
-                    ))}
+                    ))
+                  ) : (
+                    <SelectItem value="no-options" disabled>
+                      No options available
+                    </SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>

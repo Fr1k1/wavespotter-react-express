@@ -44,7 +44,8 @@ const Filter: React.FC<{
 
   const navigate = useNavigate();
   const location = useLocation();
-  const searchParams = new URLSearchParams();
+  //da mogu dobiti i city od prije
+  const searchParams = new URLSearchParams(location.search);
   const pathParts = location.pathname.split("/");
   const countryIdFromPath = pathParts.length > 2 ? pathParts[2] : "";
   const cityIdFromUrl = searchParams.get("city") || "";
@@ -73,7 +74,7 @@ const Filter: React.FC<{
       if (countryIdFromPath) {
         const url = `/country/${countryIdFromPath}`;
 
-        const params = new URLSearchParams(searchParams);
+        const params = new URLSearchParams(location.search);
 
         if (cityIdFromUrl) {
           params.set("city", cityIdFromUrl);

@@ -24,8 +24,8 @@ const formSchema = z.object({
 });
 
 const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
-  const searchParams = new URLSearchParams();
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const pathParts = location.pathname.split("/");
   const countryIdFromPath = pathParts.length > 2 ? pathParts[2] : "";
   const cityIdFromUrl = searchParams.get("city") || "";
@@ -55,6 +55,11 @@ const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
       setSelectedCountryId(countryId);
       const citiesRes = await getCitiesByCountry(countryId);
       setCities(citiesRes);
+
+      if (cityIdFromUrl && countryId === countryIdFromPath) {
+        setSelectedCityId(cityIdFromUrl);
+        form.setValue("beach_city", cityIdFromUrl);
+      }
     } catch (err) {
       console.error("Error fetching cities:", err);
       setCities([]);
