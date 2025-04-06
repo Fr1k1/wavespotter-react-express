@@ -59,9 +59,6 @@ const Login = () => {
         return;
       }
 
-      localStorage.setItem("is_admin", userData?.is_admin);
-      localStorage.setItem("user_id", userData?.id);
-
       navigate("/");
     }
   };

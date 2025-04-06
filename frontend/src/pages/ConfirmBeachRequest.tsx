@@ -45,6 +45,7 @@ import { supabase } from "../supabaseClient";
 import { notifySuccess } from "@/components/ui/toast";
 import { useParams } from "react-router-dom";
 import { Image } from "@/common/types";
+import { checkAuth } from "@/common/globals";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -106,6 +107,9 @@ const ConfirmBeachRequest = () => {
   const [loading, setLoading] = useState(true);
   const [, setDataLoaded] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [userId] = useState(null);
+  const [, setIsLoggedIn] = useState(false);
+  const [, setIsAdmin] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -119,7 +123,7 @@ const ConfirmBeachRequest = () => {
       beachTextureId: "",
       characteristics: [],
       approved: false,
-      userId: localStorage.getItem("user_id") || "",
+      userId: "",
       description: "",
       best_time_to_visit: "",
       local_wildlife: "",
@@ -128,6 +132,10 @@ const ConfirmBeachRequest = () => {
       featured_items: [],
     },
   });
+
+  useEffect(() => {
+    checkAuth(setIsLoggedIn, setIsAdmin);
+  }, []);
 
   const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
@@ -167,7 +175,7 @@ const ConfirmBeachRequest = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Updateane vrijednosti su", values);
-    if (!id) return;
+    if (!id || !userId) return;
 
     try {
       const updatedValues = {

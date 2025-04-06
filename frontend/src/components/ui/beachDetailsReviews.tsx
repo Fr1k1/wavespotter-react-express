@@ -1,7 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Title from "./title";
 import { Button } from "./button";
-import { supabase } from "@/supabaseClient";
 import BeachDetailsReviewCard from "./beachDetailsReviewCard";
 
 const BeachDetailsReviews = ({ reviews }: { reviews?: Array<any> }) => {
@@ -10,16 +9,6 @@ const BeachDetailsReviews = ({ reviews }: { reviews?: Array<any> }) => {
   if (reviews === undefined) {
     return null;
   }
-  const conditionalRedirect = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser(); //returns the user only if there is an existing session
-    if (user) {
-      navigate(`/beach/${id}/add-review`);
-    } else {
-      navigate("/login");
-    }
-  };
 
   const hasReviews = reviews && reviews.length > 0;
 
@@ -54,7 +43,7 @@ const BeachDetailsReviews = ({ reviews }: { reviews?: Array<any> }) => {
         <Button
           variant={"darker"}
           underlined
-          onClick={() => conditionalRedirect()}
+          onClick={() => navigate(`/beach/${id}/add-review`)}
         >
           Leave a review
         </Button>

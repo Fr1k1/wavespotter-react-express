@@ -21,9 +21,12 @@ import { addReview } from "@/api/reviews";
 import { notifySuccess } from "@/components/ui/toast";
 import { useEffect, useState } from "react";
 import { getBeachGeoDataById } from "@/api/beaches";
+import { getUserId } from "@/common/globals";
 
 const AddBeachReview = () => {
   const [beachGeoData, setBeachGeoData] = useState(null);
+
+  const [userId, setUserId] = useState(null);
 
   const { id } = useParams();
 
@@ -35,10 +38,6 @@ const AddBeachReview = () => {
       console.error("Beach geo data not fetched successfully");
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const [, setRatingValue] = useState(0);
 
@@ -62,6 +61,10 @@ const AddBeachReview = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!userId) {
+      console.error("User not authenticated");
+      return;
+    }
     try {
       const response = await addReview(values);
       if (response) {
@@ -80,9 +83,14 @@ const AddBeachReview = () => {
       description: "",
       rating: 0,
       beachId: id,
-      userId: localStorage.getItem("user_id") || "",
+      userId: "",
     },
   });
+
+  useEffect(() => {
+    fetchData();
+    getUserId(setUserId, form);
+  }, []);
 
   const handleRating = (rating: number) => {
     setRatingValue(rating);

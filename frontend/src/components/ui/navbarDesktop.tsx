@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./button";
 import Plazomat from "../../assets/Plazomat.png";
+import { supabase } from "@/supabaseClient";
 
-const NavbarDesktop = () => {
+const NavbarDesktop = ({
+  isLoggedIn,
+  isAdmin,
+}: {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+}) => {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("user_id");
-  const isAdmin = localStorage.getItem("is_admin");
 
   return (
     <div className="flex justify-between p-3 w-full items-center ">
@@ -36,8 +41,8 @@ const NavbarDesktop = () => {
           <>
             <div>
               <Button
-                onClick={() => {
-                  localStorage.clear();
+                onClick={async () => {
+                  await supabase.auth.signOut();
                   navigate("/login");
                 }}
               >

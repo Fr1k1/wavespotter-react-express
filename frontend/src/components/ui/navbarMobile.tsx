@@ -3,12 +3,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Plazomat.png";
 import { Button } from "./button";
+import { supabase } from "@/supabaseClient";
 
-const NavbarMobile = () => {
+const NavbarMobile = ({
+  isLoggedIn,
+  isAdmin,
+}: {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+}) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-
-  const isLoggedIn = localStorage.getItem("user_id");
-  const isAdmin = localStorage.getItem("is_admin");
 
   const navHandler = () => {
     setIsNavOpen(!isNavOpen);
@@ -60,8 +64,8 @@ const NavbarMobile = () => {
             <>
               <div>
                 <Button
-                  onClick={() => {
-                    localStorage.clear();
+                  onClick={async () => {
+                    await supabase.auth.signOut();
                     navigate("/login");
                   }}
                 >

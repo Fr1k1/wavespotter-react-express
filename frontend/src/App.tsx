@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/ui/layout";
 import Homepage from "./pages/Homepage";
@@ -13,53 +13,44 @@ import ProtectedRoute from "./components/ui/protectedRoute";
 import { useEffect, useState } from "react";
 import ConfirmBeachRequest from "./pages/ConfirmBeachRequest";
 import CountryPage from "./pages/CountryPage";
-
-const originalSetItem = localStorage.setItem;
-localStorage.setItem = function (key, value) {
-  originalSetItem.apply(this, [key, value]);
-  const event = new Event("localStorageChange");
-  window.dispatchEvent(event);
-};
-
-const originalRemoveItem = localStorage.removeItem;
-localStorage.removeItem = function (key) {
-  originalRemoveItem.apply(this, [key]);
-  const event = new Event("localStorageChange");
-  window.dispatchEvent(event);
-};
+import { checkAuth } from "./common/globals";
+import { supabase } from "./supabaseClient";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("user_id") ? true : false
-  );
-
-  const [isAdmin, setIsAdmin] = useState(
-    localStorage.getItem("is_admin") ? true : false
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const loggedInStatus = localStorage.getItem("user_id") ? true : false;
-      const adminStatus = localStorage.getItem("is_admin") ? true : false;
-
-      setIsLoggedIn(loggedInStatus);
-      setIsAdmin(adminStatus);
+    const initAuth = async () => {
+      setIsLoading(true);
+      await checkAuth(setIsLoggedIn, setIsAdmin);
+      setIsLoading(false);
     };
 
-    window.addEventListener("localStorageChange", checkLoginStatus);
-
-    window.addEventListener("storage", checkLoginStatus);
-
+    initAuth();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      checkAuth(setIsLoggedIn, setIsAdmin);
+    });
     return () => {
-      window.removeEventListener("localStorageChange", checkLoginStatus);
-      window.removeEventListener("storage", checkLoginStatus);
+      subscription.unsubscribe();
     };
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route
+          path="/"
+          element={<Layout isLoggedIn={isLoggedIn} isAdmin={isAdmin} />}
+        >
           <Route index element={<Homepage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -95,7 +86,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/beach/:id/add-review"
             element={

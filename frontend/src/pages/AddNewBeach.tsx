@@ -44,6 +44,7 @@ import { Characteristic } from "@/types/Characteristic";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
 import { notifySuccess } from "@/components/ui/toast";
+import { getUserId } from "@/common/globals";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -101,7 +102,13 @@ const formSchema = z.object({
 });
 
 const AddNewBeach = () => {
+  const [userId, setUserId] = useState(null);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!userId) {
+      console.error("User not authenticated");
+      return;
+    }
     try {
       const response = await addBeach(values);
       if (images?.length && response) {
@@ -126,7 +133,7 @@ const AddNewBeach = () => {
       beachTextureId: "",
       characteristics: [],
       approved: false,
-      userId: localStorage.getItem("user_id") || "",
+      userId: "",
       description: "",
       best_time_to_visit: "",
       local_wildlife: "",
@@ -135,6 +142,10 @@ const AddNewBeach = () => {
       featured_items: [],
     },
   });
+
+  useEffect(() => {
+    getUserId(setUserId, form);
+  }, []);
 
   const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
