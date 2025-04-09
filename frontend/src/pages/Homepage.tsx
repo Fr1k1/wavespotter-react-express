@@ -23,18 +23,6 @@ const Homepage = () => {
     fetchSeaBeaches();
   }, []);
 
-  useEffect(() => {
-    if (riverBeaches) {
-      console.log("River beaches are: ", riverBeaches);
-    }
-  }, [riverBeaches]);
-
-  useEffect(() => {
-    if (seaBeaches) {
-      console.log("Sea beaches are: ", seaBeaches);
-    }
-  }, [seaBeaches]);
-
   return (
     <div>
       <Hero />

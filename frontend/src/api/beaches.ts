@@ -108,3 +108,36 @@ export async function getBeachGeoDataById(id: string | undefined) {
   }
   return data;
 }
+
+export const getFilteredBeaches = async (countryId, filters) => {
+  const baseUrl = `${apiUrl}/beaches/country/${countryId}`;
+  const params = new URLSearchParams();
+
+  if (filters.cityId) {
+    params.append("city", filters.cityId);
+  }
+
+  if (filters.waterTypeId) {
+    params.append("waterType", filters.waterTypeId);
+  }
+
+  if (filters.beachTextureId) {
+    params.append("beachTexture", filters.beachTextureId);
+  }
+
+  if (filters.characteristicIds && filters.characteristicIds.length > 0) {
+    params.append("characteristics", filters.characteristicIds.join(","));
+  }
+
+  const url = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+
+  console.log("Sending request to:", url);
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Error fetching filtered beaches: ${response.statusText}`);
+  }
+
+  return await response.json();
+};

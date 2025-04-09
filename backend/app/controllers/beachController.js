@@ -110,6 +110,32 @@ class BeachController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async getFilteredBeaches(req, res) {
+    try {
+      //url params
+      const { countryId } = req.params;
+      //query params
+      const { city, waterType, beachTexture, characteristics } = req.query;
+
+      const filters = {
+        countryId,
+        cityId: city || null,
+        waterTypeId: waterType || null,
+        beachTextureId: beachTexture || null,
+        characteristicIds: characteristics
+          ? characteristics.split(",").map((id) => Number(id))
+          : [],
+      };
+
+      const response = await beachService.getFilteredBeaches(filters);
+
+      return res.status(200).json(response);
+    } catch (error) {
+      console.error("Error fetching beaches for given filters:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new BeachController();

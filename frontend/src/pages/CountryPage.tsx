@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import CardsGrid from "@/components/ui/cardsGrid";
 import Filter from "@/components/ui/filter";
 import MapSearcher from "@/components/ui/mapSearcher";
 import Pagination from "@/components/ui/Pagination/Pagination";
@@ -7,9 +8,15 @@ import { useState } from "react";
 
 const CountryPage = () => {
   const [isToggledFilter, setIsToggledFilter] = useState(false);
+  const [filteredBeaches, setFilteredBeaches] = useState([]);
   return (
     <div className="flex flex-col gap-6">
-      {isToggledFilter && <Filter setIsToggledFilter={setIsToggledFilter} />}
+      {isToggledFilter && (
+        <Filter
+          setIsToggledFilter={setIsToggledFilter}
+          setFilteredBeaches={setFilteredBeaches}
+        />
+      )}
 
       <div className="flex justify-between">
         <Button variant={"darkest"}>
@@ -47,6 +54,14 @@ const CountryPage = () => {
         <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
           <p>Something other</p>
         </div>
+      </div>
+
+      <div>
+        <CardsGrid
+          hasMoreButton
+          title="Top picks this season"
+          cardData={filteredBeaches}
+        />
       </div>
 
       <Pagination setPage={() => {}} totalPages={2} />

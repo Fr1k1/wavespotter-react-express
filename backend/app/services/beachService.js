@@ -1,3 +1,4 @@
+import { supabase } from "../../supabaseClient.js";
 import db from "../models/index.js";
 
 class BeachService {
@@ -323,6 +324,145 @@ class BeachService {
       });
       return beach || null;
     } catch (error) {
+      return [];
+    }
+  }
+
+  async getBeachImagesWithSignedUrls(id) {
+    try {
+      const beachImages = await this.getBeachImages(id);
+
+      if (beachImages && beachImages.length > 0) {
+        const signedUrlPromises = beachImages.map(async (image) => {
+          const { data, error } = await supabase.storage
+            .from("beach_images")
+            .createSignedUrl(image.path, 7200);
+
+          if (error) {
+            console.error("Error creating URL:", error);
+            return null;
+          }
+
+          return data.signedUrl;
+        });
+
+        const urls = await Promise.all(signedUrlPromises);
+        return urls.filter((url) => url !== null);
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error processing beach images:", error);
+      return [];
+    }
+  }
+
+  async getFilteredBeaches(filters) {
+    try {
+      const {
+        countryId,
+        cityId,
+        waterTypeId,
+        beachTextureId,
+        characteristicIds,
+      } = filters;
+
+      //svi drugi se koriste samo za filtriranje, ovo trebam za izracun
+      let queryOptions = {
+        attributes: ["id", "name"],
+        include: [
+          {
+            model: db.models.Review,
+            attributes: ["rating"],
+          },
+          {
+            model: db.models.City,
+            attributes: ["id", "name"],
+          },
+        ],
+        where: {},
+      };
+
+      if (waterTypeId) {
+        queryOptions.where.beach_type_id = waterTypeId;
+      }
+
+      if (beachTextureId) {
+        queryOptions.where.beach_texture_id = beachTextureId;
+      }
+
+      if (cityId || countryId) {
+        const cityInclude = {
+          model: db.models.City,
+          attributes: [],
+          required: true,
+          where: {},
+        };
+
+        if (cityId) {
+          cityInclude.where.id = cityId;
+        }
+
+        if (countryId) {
+          cityInclude.include = [
+            {
+              model: db.models.Country,
+              attributes: [],
+              required: true,
+              where: {
+                id: countryId,
+              },
+            },
+          ];
+        }
+
+        queryOptions.include.push(cityInclude);
+      }
+
+      if (characteristicIds && characteristicIds.length > 0) {
+        characteristicIds.forEach((charId) => {
+          queryOptions.include.push({
+            model: db.models.Characteristic,
+            attributes: [],
+            through: {
+              attributes: [],
+            },
+            where: {
+              id: Number(charId),
+            },
+            required: true,
+          });
+        });
+      }
+
+      const filteredBeaches = await db.models.Beach.findAll(queryOptions);
+
+      const result = await Promise.all(
+        filteredBeaches.map(async (beach) => {
+          const beachImages = await this.getBeachImagesWithSignedUrls(beach.id);
+          const firstImageUrl = beachImages.length > 0 ? beachImages[0] : null;
+
+          let avgRating = 0;
+          if (beach.reviews && beach.reviews.length > 0) {
+            const totalRating = beach.reviews.reduce(
+              (sum, review) => sum + review.rating,
+              0
+            );
+            avgRating = totalRating / beach.reviews.length;
+          }
+
+          return {
+            id: beach.id,
+            name: beach.name,
+            image: firstImageUrl,
+            avgRating: avgRating,
+          };
+        })
+      );
+
+      return result;
+    } catch (error) {
+      console.error("Error in getFilteredBeaches service:", error);
       return [];
     }
   }

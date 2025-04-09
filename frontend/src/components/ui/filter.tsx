@@ -20,8 +20,9 @@ import { BeachTexture } from "@/types/BeachTexture";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { Form } from "@/components/ui/form";
+import { getFilteredBeaches } from "@/api/beaches";
 
 const formSchema = z.object({
   beach_country: z.string().min(2, {
@@ -38,16 +39,16 @@ const formSchema = z.object({
 
 const Filter: React.FC<{
   setIsToggledFilter: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setIsToggledFilter }) => {
+  setFilteredBeaches: React.Dispatch<React.SetStateAction<any[]>>;
+}> = ({ setIsToggledFilter, setFilteredBeaches }) => {
   const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
 
+  const { id } = useParams();
+
   const navigate = useNavigate();
   const location = useLocation();
-  //da mogu dobiti i city od prije
   const searchParams = new URLSearchParams(location.search);
-  const pathParts = location.pathname.split("/");
-  const countryIdFromPath = pathParts.length > 2 ? pathParts[2] : "";
   const cityIdFromUrl = searchParams.get("city") || "";
   const waterTypeFromUrl = searchParams.get("waterType") || "";
   const beachTextureFromUrl = searchParams.get("beachTexture") || "";
@@ -66,48 +67,62 @@ const Filter: React.FC<{
     },
   });
 
+  const updateUrl = (countryId: string | undefined, formValues) => {
+    const params = new URLSearchParams(location.search);
+
+    if (cityIdFromUrl) {
+      params.set("city", cityIdFromUrl);
+    }
+
+    if (formValues.waterType) {
+      params.set("waterType", formValues.waterType);
+    } else {
+      params.delete("waterType");
+    }
+
+    if (formValues.beachTexture) {
+      params.set("beachTexture", formValues.beachTexture);
+    } else {
+      params.delete("beachTexture");
+    }
+
+    if (formValues.characteristics && formValues.characteristics.length > 0) {
+      params.set("characteristics", formValues.characteristics.join(","));
+    } else {
+      params.delete("characteristics");
+    }
+
+    const url = `/country/${countryId}`;
+    const finalUrl = params.toString() ? `${url}?${params.toString()}` : url;
+    navigate(finalUrl);
+  };
+
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const formValues = form.getValues();
 
-      if (countryIdFromPath) {
-        const url = `/country/${countryIdFromPath}`;
+      if (id) {
+        const filters = {
+          cityId: cityIdFromUrl || undefined,
+          waterTypeId: formValues.waterType || undefined,
+          beachTextureId: formValues.beachTexture || undefined,
+          characteristicIds:
+            formValues.characteristics && formValues.characteristics.length > 0
+              ? formValues.characteristics
+              : undefined,
+        };
 
-        const params = new URLSearchParams(location.search);
+        getFilteredBeaches(id, filters)
+          .then((response) => {
+            setFilteredBeaches(response);
+            setIsToggledFilter(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching filtered beaches:", error);
+          });
 
-        if (cityIdFromUrl) {
-          params.set("city", cityIdFromUrl);
-        }
-
-        if (formValues.waterType) {
-          params.set("waterType", formValues.waterType);
-        } else {
-          params.delete("waterType");
-        }
-
-        if (formValues.beachTexture) {
-          params.set("beachTexture", formValues.beachTexture);
-        } else {
-          params.delete("beachTexture");
-        }
-
-        if (
-          formValues.characteristics &&
-          formValues.characteristics.length > 0
-        ) {
-          console.log("karakteristike nisu nula");
-          params.set("characteristics", formValues.characteristics.join(","));
-        } else {
-          params.delete("characteristics");
-        }
-
-        const finalUrl = params.toString()
-          ? `${url}?${params.toString()}`
-          : url;
-
-        navigate(finalUrl);
-        setIsToggledFilter(false);
+        updateUrl(id, formValues);
       }
     } catch (error) {
       console.log("Error happened", error);
@@ -138,7 +153,7 @@ const Filter: React.FC<{
   }, []);
 
   useEffect(() => {
-    form.setValue("beach_country", countryIdFromPath);
+    form.setValue("beach_country", id);
     form.setValue("beach_city", cityIdFromUrl);
 
     if (waterTypeFromUrl) {
@@ -157,6 +172,19 @@ const Filter: React.FC<{
     }
   }, [location]);
 
+  const clearAllFilters = () => {
+    form.reset({
+      beach_country: id,
+      beach_city: "",
+      characteristics: [],
+      waterType: "",
+      beachTexture: "",
+    });
+
+    const url = `/country/${id}`;
+    navigate(url);
+  };
+
   return (
     <div className="bg-gradient-to-r from-primary-800 to-gray-800 z-50 absolute left-0 w-full  ">
       <div className="max-w-screen-2xl m-auto p-4 flex flex-col gap-6">
@@ -172,7 +200,7 @@ const Filter: React.FC<{
           />
         </div>
         <Form {...form}>
-          <form action="" onSubmit={handleSearch}>
+          <form action="" onSubmit={handleSearch} id="form">
             <div className="flex flex-col lg:flex-row gap-6">
               <div className=" w-60">
                 <div className="w-44">
@@ -230,11 +258,20 @@ const Filter: React.FC<{
                 <Characteristics form={form} />
               </div>
             </div>
-            <div className="flex flex-end justify-end ">
-              <Button className="w-80">Search</Button>
-            </div>
           </form>
         </Form>
+        <div className="flex flex-col items-end gap-4">
+          <Button className="w-80" form="form">
+            Search
+          </Button>
+          <Button
+            className="w-80"
+            variant={"secondary"}
+            onClick={clearAllFilters}
+          >
+            Clear all filters
+          </Button>
+        </div>
       </div>
     </div>
   );

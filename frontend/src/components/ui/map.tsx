@@ -5,12 +5,13 @@ import { useNavigate } from "react-router";
 
 const Map = ({ cities }: { cities: City[] }) => {
   const navigate = useNavigate();
+
   return (
     <div>
       <MapContainer
         style={{ width: "100%", height: "450px", borderRadius: "16px" }}
-        center={[45.8131, 15.9775, 25]}
-        zoom={11}
+        center={[43.508133, 16.440193]}
+        zoom={6}
         scrollWheelZoom={true}
       >
         <TileLayer
@@ -23,7 +24,7 @@ const Map = ({ cities }: { cities: City[] }) => {
             position={[city.latitude, city.longitude]}
             eventHandlers={{
               click: () => {
-                navigate("/country/" + city.id);
+                navigate("/country/" + city.countryId + "?city=" + city.id);
               },
             }}
           />
