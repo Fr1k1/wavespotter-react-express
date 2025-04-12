@@ -68,6 +68,12 @@ const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
 
   useEffect(() => {
     fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    //stop rerender
+    if (countries.length === 0) return;
+
     if (countryIdFromPath) {
       fetchCitiesByCountry(countryIdFromPath);
       setIsCountryChanged(true);
@@ -75,8 +81,13 @@ const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
       if (cityIdFromUrl) {
         form.setValue("beach_city", cityIdFromUrl);
       }
+    } else {
+      const defaultCountryId = countries[0].id;
+      fetchCitiesByCountry(defaultCountryId);
+      setIsCountryChanged(true);
+      form.setValue("beach_country", defaultCountryId);
     }
-  }, [location]);
+  }, [location, countries]);
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

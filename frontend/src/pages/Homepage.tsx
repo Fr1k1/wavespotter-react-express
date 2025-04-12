@@ -1,4 +1,5 @@
 import { getBeachByType } from "@/api/beaches";
+import { calculateAverageRating } from "@/common/globals";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Hero from "@/components/ui/hero";
 import MapSearcher from "@/components/ui/mapSearcher";
@@ -7,6 +8,7 @@ import { useEffect, useState } from "react";
 const Homepage = () => {
   const [riverBeaches, setRiverBeaches] = useState<any>(null);
   const [seaBeaches, setSeaBeaches] = useState<any>(null);
+  const [bestRatedBeaches, setBestRatedBeaches] = useState<any>(null);
 
   const fetchRiverBeaches = async () => {
     const response = await getBeachByType(1);
@@ -23,6 +25,24 @@ const Homepage = () => {
     fetchSeaBeaches();
   }, []);
 
+  useEffect(() => {
+    if (riverBeaches && seaBeaches) {
+      const allBeaches = [...riverBeaches, ...seaBeaches];
+
+      const beachesWithRating = allBeaches.map((beach) => ({
+        ...beach,
+        calculatedRating: calculateAverageRating(beach),
+      }));
+
+      const sortedBeaches = beachesWithRating.sort(
+        (a, b) => b.calculatedRating - a.calculatedRating
+      );
+
+      const topPicks = sortedBeaches.slice(0, 4);
+      setBestRatedBeaches(topPicks);
+    }
+  }, [riverBeaches, seaBeaches]);
+
   return (
     <div>
       <Hero />
@@ -30,17 +50,13 @@ const Homepage = () => {
         <CardsGrid
           hasMoreButton
           title="Top picks this season"
-          cardData={riverBeaches}
+          cardData={bestRatedBeaches}
         />
         <MapSearcher />
+        <CardsGrid hasMoreButton title="Sea beaches" cardData={seaBeaches} />
         <CardsGrid
           hasMoreButton
-          title="Best rated sea beaches"
-          cardData={seaBeaches}
-        />
-        <CardsGrid
-          hasMoreButton
-          title="Best rated river beaches"
+          title="River beaches"
           cardData={riverBeaches}
         />
       </div>

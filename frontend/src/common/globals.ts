@@ -45,11 +45,11 @@ export const getUserId = async (
 };
 
 export const calculateAverageRating = (data) => {
-  if (data.avgRating && data.avgRating != null) {
+  if (data?.avgRating && data?.avgRating != null) {
     return data.avgRating;
   }
   console.log("Data za izracunati average rating je", data);
-  if (data.reviews && data.reviews.length > 0) {
+  if (data?.reviews && data?.reviews?.length > 0) {
     const totalRating = data.reviews.reduce(
       (sum: number, review: Review) => sum + review.rating,
       0

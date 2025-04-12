@@ -54,15 +54,14 @@ class BeachService {
     }
   }
 
-  //get beach by type, by city- to mi treba za homepage
-  //filtriranje mi treba za filter
-  //trebam gettanje prema ratingu, ali jos nemam implementirane recenzije
-  //beach by id mi isto treba za beach details
-
-  async getBeachesByType(typeId) {
+  async getBeachesByType(typeId, page, pageSize) {
+    const limit = pageSize;
+    const offset = (page - 1) * pageSize;
     try {
       const beaches = await db.models.Beach.findAll({
         where: { beach_type_id: typeId },
+        limit: limit,
+        offset: offset,
         include: [
           {
             model: db.models.City,

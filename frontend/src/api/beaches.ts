@@ -67,8 +67,10 @@ export async function getBeachImages(id: string | number) {
   return data;
 }
 
-export async function getBeachByType(id: number) {
-  const response = await fetch(`${apiUrl}/beaches/type/${id}`);
+export async function getBeachByType(id: number, page = 1, pageSize = 4) {
+  const response = await fetch(
+    `${apiUrl}/beaches/type/${id}?page=${page}&pageSize=${pageSize}`
+  );
 
   const data = await response.json();
 

@@ -8,7 +8,8 @@ import BeachDetailsReviews from "@/components/ui/beachDetailsReviews";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getBeachById } from "@/api/beaches";
-import { BeachDetailsData, Review } from "@/common/types";
+import { BeachDetailsData } from "@/common/types";
+import { calculateAverageRating } from "@/common/globals";
 
 const BeachDetails = () => {
   const { id } = useParams();
@@ -32,21 +33,8 @@ const BeachDetails = () => {
     }
   };
 
-  const calculateAverageRating = () => {
-    if (!beach || !beach.reviews || beach.reviews.length === 0) {
-      return 0;
-    }
-
-    const totalRating = beach.reviews.reduce(
-      (sum: number, review: Review) => sum + review.rating,
-      0
-    );
-
-    return totalRating / beach.reviews.length;
-  };
-
   const getReviewCount = () => beach?.reviews?.length ?? 0;
-  const averageRating = calculateAverageRating();
+  const averageRating = calculateAverageRating(beach);
   const reviewCount = getReviewCount();
 
   if (loading) {
