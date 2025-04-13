@@ -31,7 +31,7 @@ function App() {
     initAuth();
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange(() => {
       checkAuth(setIsLoggedIn, setIsAdmin);
     });
     return () => {

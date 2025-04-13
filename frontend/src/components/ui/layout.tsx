@@ -2,7 +2,13 @@ import Header from "./header";
 import { Outlet, useLocation } from "react-router";
 import Footer from "./footer";
 
-const Layout = ({ isLoggedIn, isAdmin }) => {
+const Layout = ({
+  isLoggedIn,
+  isAdmin,
+}: {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+}) => {
   const location = useLocation();
   return (
     <main className="min-h-screen flex flex-col ">

@@ -2,6 +2,9 @@ import CardItem from "./cardItem";
 import { Link } from "react-router-dom";
 import Title from "./title";
 import { useEffect } from "react";
+import { CardData, FilteredBeaches } from "@/common/types";
+
+type CombinedCardData = CardData | FilteredBeaches;
 
 const CardsGrid = ({
   title,
@@ -10,7 +13,7 @@ const CardsGrid = ({
 }: {
   title: string;
   hasMoreButton: boolean;
-  cardData: [];
+  cardData: Array<CombinedCardData>;
 }) => {
   useEffect(() => {
     console.log("Cards grid ima data: ", cardData);

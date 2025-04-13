@@ -1,3 +1,4 @@
+import { FilteredBeaches } from "@/common/types";
 import { Button } from "@/components/ui/button";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Filter from "@/components/ui/filter";
@@ -8,7 +9,7 @@ import { useState } from "react";
 
 const CountryPage = () => {
   const [isToggledFilter, setIsToggledFilter] = useState(false);
-  const [filteredBeaches, setFilteredBeaches] = useState([]);
+  const [filteredBeaches, setFilteredBeaches] = useState<FilteredBeaches[]>([]);
   return (
     <div className="flex flex-col gap-6">
       {isToggledFilter && (

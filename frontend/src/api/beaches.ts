@@ -1,4 +1,4 @@
-import { BeachData } from "@/common/types";
+import { BeachData, Filters } from "@/common/types";
 import { apiUrl } from "./api";
 
 // dodaj neki auth
@@ -111,7 +111,10 @@ export async function getBeachGeoDataById(id: string | undefined) {
   return data;
 }
 
-export const getFilteredBeaches = async (countryId, filters) => {
+export const getFilteredBeaches = async (
+  countryId: string,
+  filters: Filters
+) => {
   const baseUrl = `${apiUrl}/beaches/country/${countryId}`;
   const params = new URLSearchParams();
 

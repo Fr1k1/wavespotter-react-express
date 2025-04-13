@@ -34,7 +34,9 @@ const BeachDetails = () => {
   };
 
   const getReviewCount = () => beach?.reviews?.length ?? 0;
-  const averageRating = calculateAverageRating(beach);
+  const averageRating = beach?.reviews
+    ? calculateAverageRating(beach.reviews)
+    : 0;
   const reviewCount = getReviewCount();
 
   if (loading) {

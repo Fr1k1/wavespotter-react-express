@@ -22,11 +22,12 @@ import { notifySuccess } from "@/components/ui/toast";
 import { useEffect, useState } from "react";
 import { getBeachGeoDataById } from "@/api/beaches";
 import { getUserId } from "@/common/globals";
+import { BeachGeoData } from "@/common/types";
 
 const AddBeachReview = () => {
-  const [beachGeoData, setBeachGeoData] = useState(null);
+  const [beachGeoData, setBeachGeoData] = useState<BeachGeoData | null>(null);
 
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(String);
 
   const { id } = useParams();
 

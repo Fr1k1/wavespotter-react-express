@@ -31,7 +31,7 @@ const Homepage = () => {
 
       const beachesWithRating = allBeaches.map((beach) => ({
         ...beach,
-        calculatedRating: calculateAverageRating(beach),
+        calculatedRating: calculateAverageRating(beach?.reviews),
       }));
 
       const sortedBeaches = beachesWithRating.sort(

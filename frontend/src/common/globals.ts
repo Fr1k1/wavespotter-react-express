@@ -1,5 +1,4 @@
 import { supabase } from "@/supabaseClient";
-import { UseFormReturn } from "react-hook-form";
 import { Review, Image } from "./types";
 import { getBeachImages } from "@/api/beaches";
 
@@ -33,7 +32,7 @@ export const checkAuth = async (
 
 export const getUserId = async (
   setUserId: React.Dispatch<React.SetStateAction<string>>,
-  form: UseFormReturn
+  form: any
 ) => {
   const {
     data: { user },
@@ -44,25 +43,26 @@ export const getUserId = async (
   }
 };
 
-export const calculateAverageRating = (data) => {
-  if (data?.avgRating && data?.avgRating != null) {
-    return data.avgRating;
-  }
+export const calculateAverageRating = (data: Array<Review>) => {
   console.log("Data za izracunati average rating je", data);
-  if (data?.reviews && data?.reviews?.length > 0) {
-    const totalRating = data.reviews.reduce(
+  if (data && data?.length > 0) {
+    const totalRating = data.reduce(
       (sum: number, review: Review) => sum + review.rating,
       0
     );
-    return totalRating / data.reviews.length;
+    return totalRating / data.length;
   }
   return 0;
 };
 
-export const fetchBeachImages = async (data, setLoading, setImageUrls) => {
+export const fetchBeachImages = async (
+  id: number,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setImageUrls: React.Dispatch<React.SetStateAction<string[]>>
+) => {
   try {
     setLoading(true);
-    const beachImages = await getBeachImages(data.id);
+    const beachImages = await getBeachImages(id);
     if (beachImages && beachImages.length > 0) {
       const signedUrlPromises = beachImages.map(async (image: Image) => {
         const { data, error } = await supabase.storage

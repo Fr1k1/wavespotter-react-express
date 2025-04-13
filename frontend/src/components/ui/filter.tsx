@@ -23,6 +23,7 @@ import { z } from "zod";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Form } from "@/components/ui/form";
 import { getFilteredBeaches } from "@/api/beaches";
+import { FilteredBeaches } from "@/common/types";
 
 const formSchema = z.object({
   beach_country: z.string().min(2, {
@@ -39,7 +40,7 @@ const formSchema = z.object({
 
 const Filter: React.FC<{
   setIsToggledFilter: React.Dispatch<React.SetStateAction<boolean>>;
-  setFilteredBeaches: React.Dispatch<React.SetStateAction<any[]>>;
+  setFilteredBeaches: React.Dispatch<React.SetStateAction<FilteredBeaches[]>>;
 }> = ({ setIsToggledFilter, setFilteredBeaches }) => {
   const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
@@ -67,7 +68,10 @@ const Filter: React.FC<{
     },
   });
 
-  const updateUrl = (countryId: string | undefined, formValues) => {
+  const updateUrl = (
+    countryId: string | undefined,
+    formValues: { [key: string]: any }
+  ) => {
     const params = new URLSearchParams(location.search);
 
     if (cityIdFromUrl) {
@@ -153,7 +157,7 @@ const Filter: React.FC<{
   }, []);
 
   useEffect(() => {
-    form.setValue("beach_country", id);
+    form.setValue("beach_country", id || "");
     form.setValue("beach_city", cityIdFromUrl);
 
     if (waterTypeFromUrl) {

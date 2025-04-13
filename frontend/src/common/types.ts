@@ -66,6 +66,7 @@ export interface BeachDetailsData {
     user: { first_name: string; last_name: string };
   }>;
   user?: { first_name: string; last_name: string };
+  avgRating?: number;
 }
 
 export interface Image {
@@ -99,4 +100,31 @@ export interface CardData {
     rating: number;
     user: { first_name: string; last_name: string };
   }>;
+}
+
+export interface Filters {
+  cityId: string | undefined;
+  waterTypeId: string | undefined;
+  beachTextureId: string | undefined;
+  characteristicIds: number[] | undefined;
+}
+
+export interface BeachGeoData {
+  city: {
+    name: string;
+    latitude: number;
+    longitude: number;
+    country: {
+      id: number;
+      name: string;
+    };
+  };
+  name: string;
+}
+
+export interface FilteredBeaches {
+  avgRating?: number;
+  id: number;
+  image?: string;
+  name: string;
 }

@@ -102,7 +102,7 @@ const formSchema = z.object({
 });
 
 const AddNewBeach = () => {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(String);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!userId) {
