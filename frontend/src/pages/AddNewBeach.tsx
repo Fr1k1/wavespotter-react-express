@@ -73,8 +73,8 @@ const formSchema = z.object({
     message: "Beach city must be selected.",
   }),
 
-  beach_working_hours: z.string().min(2, {
-    message: "Beach city must be at least 2 characters.",
+  working_hours: z.string().min(2, {
+    message: "Working hours must be at least 2 characters.",
   }),
 
   description: z.string().min(2, {
@@ -138,7 +138,7 @@ const AddNewBeach = () => {
       best_time_to_visit: "",
       local_wildlife: "",
       restaurants_and_bars_nearby: "",
-      beach_working_hours: "",
+      working_hours: "",
       featured_items: [],
     },
   });
@@ -322,7 +322,7 @@ const AddNewBeach = () => {
 
               <FormFieldCustom
                 form={form}
-                name="beach_working_hours"
+                name="working_hours"
                 label="Beach working hours"
                 placeholder="Enter beach working hours"
               />

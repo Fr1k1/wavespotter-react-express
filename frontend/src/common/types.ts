@@ -15,7 +15,7 @@ export interface BeachData {
   beach_country: string;
   beachTextureId: string;
   cityId: string;
-  beach_working_hours: string;
+  working_hours: string;
   description: string;
   best_time_to_visit?: string;
   local_wildlife?: string;

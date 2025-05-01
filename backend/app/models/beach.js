@@ -42,6 +42,11 @@ export default (sequelize, DataTypes) => {
         allowNull: true,
         unique: false,
       },
+      working_hours: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        unique: false,
+      },
     },
     {
       underscored: true,

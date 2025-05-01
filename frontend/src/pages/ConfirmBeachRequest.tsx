@@ -74,8 +74,8 @@ const formSchema = z.object({
     message: "Beach city must be selected.",
   }),
 
-  beach_working_hours: z.string().min(2, {
-    message: "Beach working hours must be at least 2 characters.",
+  working_hours: z.string().min(2, {
+    message: "Working hours must be at least 2 characters.",
   }),
 
   description: z.string().min(2, {
@@ -107,7 +107,6 @@ const ConfirmBeachRequest = () => {
   const [loading, setLoading] = useState(true);
   const [, setDataLoaded] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [userId] = useState(null);
   const [, setIsLoggedIn] = useState(false);
   const [, setIsAdmin] = useState(false);
 
@@ -128,7 +127,7 @@ const ConfirmBeachRequest = () => {
       best_time_to_visit: "",
       local_wildlife: "",
       restaurants_and_bars_nearby: "",
-      beach_working_hours: "",
+      working_hours: "",
       featured_items: [],
     },
   });
@@ -175,7 +174,7 @@ const ConfirmBeachRequest = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Updateane vrijednosti su", values);
-    if (!id || !userId) return;
+    if (!id) return;
 
     try {
       const updatedValues = {
@@ -445,7 +444,7 @@ const ConfirmBeachRequest = () => {
 
               <FormFieldCustom
                 form={form}
-                name="beach_working_hours"
+                name="working_hours"
                 label="Beach working hours"
                 placeholder="Enter beach working hours"
               />
