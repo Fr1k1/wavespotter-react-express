@@ -59,7 +59,7 @@ const CountryPage = () => {
 
       <div>
         <CardsGrid
-          hasMoreButton
+          hasMoreButton={false}
           title="Top picks this season"
           cardData={filteredBeaches}
         />
