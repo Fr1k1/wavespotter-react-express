@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { calculateAverageRating, fetchBeachImages } from "@/common/globals";
 import { CardData, FilteredBeaches } from "@/common/types";
+import PlaceholderImage from "../../assets/no__image_placeholder.png";
 
 type CardItemData = FilteredBeaches | CardData;
 
@@ -19,8 +20,10 @@ const CardItem = ({ data }: { data: CardItemData }) => {
   if (loading) {
     return <div>Loading images...</div>;
   }
-  const hasDirectImage = "image" in data && data.image;
-  const image = hasDirectImage ? data.image : imageUrls[0];
+
+  const firstImage = imageUrls[0];
+
+  const image = firstImage ? firstImage : PlaceholderImage;
   const hasReviews = "reviews" in data;
   const hasAvgRating = "avgRating" in data;
 
@@ -32,7 +35,7 @@ const CardItem = ({ data }: { data: CardItemData }) => {
 
   return (
     <div>
-      <Card>
+      <Card className="h-full flex flex-col">
         <CardHeader>
           <div className="flex flex-row items-center justify-between">
             <div>
@@ -62,8 +65,10 @@ const CardItem = ({ data }: { data: CardItemData }) => {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <img src={image} alt="" className="w-full h-full" />
+        <CardContent className="flex-1">
+          <div className="w-full h-72 overflow-hidden">
+            <img src={image} alt="" className="w-full h-full object-cover" />
+          </div>
         </CardContent>
       </Card>
     </div>

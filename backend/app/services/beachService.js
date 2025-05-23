@@ -59,7 +59,7 @@ class BeachService {
     const offset = (page - 1) * pageSize;
     try {
       const beaches = await db.models.Beach.findAll({
-        where: { beach_type_id: typeId },
+        where: { beach_type_id: typeId, approved: true },
         limit: limit,
         offset: offset,
         include: [
