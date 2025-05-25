@@ -1,8 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./button";
-import Plazomat from "../../assets/Plazomat.png";
+import Logo from "../../assets/logo.png";
 import { supabase } from "@/supabaseClient";
-
 const NavbarDesktop = ({
   isLoggedIn,
   isAdmin,
@@ -15,7 +14,7 @@ const NavbarDesktop = ({
   return (
     <div className="flex justify-between p-3 w-full items-center ">
       <div>
-        <img src={Plazomat} alt="" />
+        <img src={Logo} alt="" />
       </div>
 
       <nav className="flex gap-6 p-2 items-center">

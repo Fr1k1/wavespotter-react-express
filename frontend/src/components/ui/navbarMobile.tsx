@@ -1,7 +1,7 @@
 import { List, X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/Plazomat.png";
+import Logo from "../../assets/logo.png";
 import { Button } from "./button";
 import { supabase } from "@/supabaseClient";
 
