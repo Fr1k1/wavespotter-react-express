@@ -41,12 +41,7 @@ const CardItem = ({ data }: { data: CardItemData }) => {
             <div>
               <CardTitle>{data?.name}</CardTitle>
               <div className="flex items-center gap-2">
-                <Rating
-                  size={25}
-                  transition
-                  allowFraction
-                  initialValue={rating}
-                />
+                <Rating size={25} transition initialValue={rating} readonly />
                 <h4>
                   {"city" in data && data.city && (
                     <h4>

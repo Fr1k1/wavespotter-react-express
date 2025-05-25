@@ -159,7 +159,6 @@ const AddBeachReview = () => {
                       <Rating
                         size={40}
                         transition
-                        allowFraction
                         {...field}
                         onClick={handleRating}
                         initialValue={field.value}

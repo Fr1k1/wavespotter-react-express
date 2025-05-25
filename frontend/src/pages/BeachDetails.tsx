@@ -60,12 +60,7 @@ const BeachDetails = () => {
             <div className="flex flex-col gap-1">
               <h2 className="font-extrabold text-3xl">{beach.name}</h2>
               <div className="flex items-center gap-1">
-                <Rating
-                  size={25}
-                  transition
-                  allowFraction
-                  initialValue={averageRating}
-                />
+                <Rating size={25} transition initialValue={averageRating} />
                 <p>{reviewCount} reviews</p>
               </div>
             </div>
