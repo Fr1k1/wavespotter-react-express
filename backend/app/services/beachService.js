@@ -379,7 +379,7 @@ class BeachService {
             attributes: ["id", "name"],
           },
         ],
-        where: {},
+        where: { approved: true },
       };
 
       if (waterTypeId) {
