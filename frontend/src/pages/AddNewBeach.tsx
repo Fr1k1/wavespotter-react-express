@@ -47,9 +47,14 @@ import { notifySuccess } from "@/components/ui/toast";
 import { getUserId } from "@/common/globals";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Beach name must be at least 2 characters.",
-  }),
+  name: z
+    .string()
+    .min(2, {
+      message: "Beach name must be at least 2 characters.",
+    })
+    .max(80, {
+      message: "Name must not exceed 80 characters",
+    }),
   address: z.string().min(2, {
     message: "Beach address must be at least 2 characters.",
   }),

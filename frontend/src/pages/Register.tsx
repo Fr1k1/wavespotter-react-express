@@ -16,18 +16,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormFieldCustom from "@/components/ui/formFieldCustom";
 
 const formSchema = z.object({
-  first_name: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
-  }),
-  last_name: z.string().min(2, {
-    message: "Last name must be at least 2 characters.",
-  }),
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Invalid email address.",
-  }),
+  first_name: z
+    .string()
+    .min(2, {
+      message: "First name must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "First name must not exceed 50 characters",
+    }),
+  last_name: z
+    .string()
+    .min(2, {
+      message: "Last name must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Last name must not exceed 50 characters",
+    }),
+  username: z
+    .string()
+    .min(2, {
+      message: "Username must be at least 2 characters.",
+    })
+    .max(30, {
+      message: "Username must not exceed 30 characters",
+    }),
+  email: z
+    .string()
+    .email({
+      message: "Invalid email address.",
+    })
+    .max(80, {
+      message: "Email must not exceed 80 characters",
+    }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
