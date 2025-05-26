@@ -2,8 +2,8 @@ import { Switch } from "./switch";
 import { Label } from "./label";
 import { getCharacteristics } from "@/api/characteristics";
 import { useEffect, useState } from "react";
-import { Characteristic } from "@/types/Characteristic";
 import { UseFormReturn } from "react-hook-form";
+import { Characteristic } from "@/common/types";
 
 interface CharacteristicsProps {
   form?: UseFormReturn<any>;

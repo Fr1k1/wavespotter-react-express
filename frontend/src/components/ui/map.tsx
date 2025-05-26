@@ -1,7 +1,7 @@
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { City } from "@/types/City";
 import { useNavigate } from "react-router";
+import { City } from "@/common/types";
 
 const Map = ({ cities }: { cities: City[] }) => {
   const navigate = useNavigate();

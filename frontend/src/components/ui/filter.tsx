@@ -13,17 +13,15 @@ import { Label } from "./label";
 import { Button } from "./button";
 import Characteristics from "./characteristics";
 import { FormEvent, useEffect, useState } from "react";
-import { BeachType } from "@/types/BeachType";
 import { getBeachTypes } from "@/api/beachTypes";
 import { getBeachTextures } from "@/api/beachTextures";
-import { BeachTexture } from "@/types/BeachTexture";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Form } from "@/components/ui/form";
 import { getFilteredBeaches } from "@/api/beaches";
-import { FilteredBeaches } from "@/common/types";
+import { BeachTexture, BeachType, FilteredBeaches } from "@/common/types";
 
 const formSchema = z.object({
   beach_country: z.string().min(2, {

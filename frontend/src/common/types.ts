@@ -128,3 +128,38 @@ export interface FilteredBeaches {
   image?: string;
   name: string;
 }
+
+export interface BeachDepth {
+  id: string;
+  description: string;
+}
+
+export interface BeachTexture {
+  id: string;
+  name: string;
+}
+
+export interface BeachType {
+  id: string;
+  name: string;
+}
+
+export interface Characteristic {
+  id: string;
+  name: string;
+  icon_url: string;
+  beach_has_characteristics?: { featured: boolean };
+}
+
+export interface City {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  countryId: string;
+}
+
+export interface Country {
+  id: string;
+  name: string;
+}

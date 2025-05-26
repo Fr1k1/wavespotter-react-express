@@ -27,24 +27,26 @@ import BeachTips from "@/components/ui/beachTips";
 import Title from "@/components/ui/title";
 import Subtitle from "@/components/ui/subtitle";
 import { useEffect, useState } from "react";
-import { BeachType } from "@/types/BeachType";
-import { BeachTexture } from "@/types/BeachTexture";
 import { getBeachTypes } from "@/api/beachTypes";
 import { getBeachTextures } from "@/api/beachTextures";
-import { BeachDepth } from "@/types/BeachDepth";
 import { getBeachDepths } from "@/api/beachDepths";
-import { Country } from "@/types/Country";
 import { getCountries } from "@/api/countries";
 import { getCitiesByCountry } from "@/api/cities";
-import { City } from "@/types/City";
 import { getCharacteristics } from "@/api/characteristics";
 import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
-import { Characteristic } from "@/types/Characteristic";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
 import { notifySuccess } from "@/components/ui/toast";
 import { getUserId } from "@/common/globals";
+import {
+  BeachDepth,
+  BeachTexture,
+  BeachType,
+  Characteristic,
+  City,
+  Country,
+} from "@/common/types";
 
 const formSchema = z.object({
   name: z

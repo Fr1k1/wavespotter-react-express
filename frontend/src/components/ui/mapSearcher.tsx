@@ -2,8 +2,6 @@ import Map from "./map";
 import { Button } from "./button";
 import Title from "./title";
 import { FormEvent, useEffect, useState } from "react";
-import { City } from "@/types/City";
-import { Country } from "@/types/Country";
 import { getCountries } from "@/api/countries";
 import SelectFieldCustom from "./selectFieldCustom";
 import { useForm } from "react-hook-form";
@@ -12,6 +10,7 @@ import { z } from "zod";
 import { getCitiesByCountry } from "@/api/cities";
 import { Form } from "@/components/ui/form";
 import { useLocation, useNavigate } from "react-router";
+import { City, Country } from "@/common/types";
 
 const formSchema = z.object({
   beach_country: z.string().min(2, {
