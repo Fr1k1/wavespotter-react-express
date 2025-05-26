@@ -242,8 +242,15 @@ const AddNewBeach = () => {
 
   const [fileInputs, setFileInputs] = useState([0]);
 
+  const MAX_IMAGE_INPUT = 5;
+
   const addFileInput = () => {
-    setFileInputs((prev) => [...prev, prev.length]);
+    setFileInputs((prev) => {
+      if (prev.length >= MAX_IMAGE_INPUT) {
+        return prev;
+      }
+      return [...prev, prev.length];
+    });
   };
 
   const handleFileChange = (files: FileList | null) => {
