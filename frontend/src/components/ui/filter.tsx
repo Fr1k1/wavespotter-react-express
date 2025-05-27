@@ -256,7 +256,7 @@ const Filter: React.FC<{
                         {beachTextures.map((beachTexture: BeachTexture) => (
                           <SelectItem
                             key={beachTexture.id}
-                            value={beachTexture.id}
+                            value={beachTexture.id.toString()}
                           >
                             {beachTexture.name}
                           </SelectItem>
