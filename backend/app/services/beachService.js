@@ -356,7 +356,9 @@ class BeachService {
     }
   }
 
-  async getFilteredBeaches(filters) {
+  async getFilteredBeaches(filters, page, pageSize) {
+    const limit = pageSize;
+    const offset = (page - 1) * pageSize;
     try {
       const {
         countryId,
@@ -368,6 +370,8 @@ class BeachService {
 
       //svi drugi se koriste samo za filtriranje, ovo trebam za izracun
       let queryOptions = {
+        limit: limit,
+        offset: offset,
         attributes: ["id", "name"],
         include: [
           {
@@ -434,6 +438,14 @@ class BeachService {
         });
       }
 
+      const countOptions = {
+        where: queryOptions.where,
+        include: queryOptions.include.filter((inc) => inc.required),
+      };
+
+      const totalCount = await db.models.Beach.count(countOptions);
+      const totalPages = Math.ceil(totalCount / pageSize);
+
       const filteredBeaches = await db.models.Beach.findAll(queryOptions);
 
       const result = await Promise.all(
@@ -459,10 +471,20 @@ class BeachService {
         })
       );
 
-      return result;
+      return {
+        data: result,
+        totalPages: totalPages,
+        currentPage: page,
+        totalCount: totalCount,
+      };
     } catch (error) {
       console.error("Error in getFilteredBeaches service:", error);
-      return [];
+      return {
+        data: [],
+        totalPages: 0,
+        currentPage: page,
+        totalCount: 0,
+      };
     }
   }
 }

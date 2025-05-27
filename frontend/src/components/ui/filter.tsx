@@ -39,7 +39,14 @@ const formSchema = z.object({
 const Filter: React.FC<{
   setIsToggledFilter: React.Dispatch<React.SetStateAction<boolean>>;
   setFilteredBeaches: React.Dispatch<React.SetStateAction<FilteredBeaches[]>>;
-}> = ({ setIsToggledFilter, setFilteredBeaches }) => {
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+}> = ({
+  setIsToggledFilter,
+  setFilteredBeaches,
+  setCurrentPage,
+  setTotalPages,
+}) => {
   const [beachTypes, setBeachTypes] = useState<BeachType[]>([]);
   const [beachTextures, setBeachTextures] = useState<BeachTexture[]>([]);
 
@@ -115,9 +122,13 @@ const Filter: React.FC<{
               : undefined,
         };
 
-        getFilteredBeaches(id, filters)
+        getFilteredBeaches(id, filters, 1, 9)
           .then((response) => {
-            setFilteredBeaches(response);
+            setFilteredBeaches(response.data);
+            setTotalPages(
+              response.totalPages || Math.ceil(response.length / 9)
+            );
+            setCurrentPage(1);
             setIsToggledFilter(false);
           })
           .catch((error) => {

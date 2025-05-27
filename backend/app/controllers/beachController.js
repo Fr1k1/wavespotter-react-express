@@ -115,6 +115,8 @@ class BeachController {
 
   async getFilteredBeaches(req, res) {
     try {
+      const page = parseInt(req.query.page) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 9;
       //url params
       const { countryId } = req.params;
       //query params
@@ -130,7 +132,11 @@ class BeachController {
           : [],
       };
 
-      const response = await beachService.getFilteredBeaches(filters);
+      const response = await beachService.getFilteredBeaches(
+        filters,
+        page,
+        pageSize
+      );
 
       return res.status(200).json(response);
     } catch (error) {

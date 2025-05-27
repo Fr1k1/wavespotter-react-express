@@ -113,10 +113,15 @@ export async function getBeachGeoDataById(id: string | undefined) {
 
 export const getFilteredBeaches = async (
   countryId: string,
-  filters: Filters
+  filters: Filters,
+  page = 1,
+  pageSize = 9
 ) => {
   const baseUrl = `${apiUrl}/beaches/country/${countryId}`;
   const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+  params.append("pageSize", pageSize.toString());
 
   if (filters.cityId) {
     params.append("city", filters.cityId);
