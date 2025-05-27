@@ -116,8 +116,12 @@ const AddNewBeach = () => {
       console.error("User not authenticated");
       return;
     }
+    const filteredValues = {
+      ...values,
+      featured_items: values.featured_items.filter(Boolean),
+    };
     try {
-      const response = await addBeach(values);
+      const response = await addBeach(filteredValues);
       if (images?.length && response) {
         await uploadImages(images, response.data.id);
       }
@@ -166,7 +170,9 @@ const AddNewBeach = () => {
 
   const [isCountryChanged, setIsCountryChanged] = useState(false);
 
-  const [featuredItems, setFeaturedItems] = useState<string[]>([]);
+  const [featuredItems, setFeaturedItems] = useState<string[]>(
+    Array(5).fill("")
+  );
 
   useEffect(() => {
     form.setValue("featured_items", featuredItems);
@@ -427,9 +433,13 @@ const AddNewBeach = () => {
                     options={featuredCharacteristics}
                     onValueChange={(value) => {
                       const newItems = [...featuredItems];
-                      newItems[index] = value.toString();
-                      setFeaturedItems(newItems.filter(Boolean));
-                      form.setValue("featured_items", newItems.filter(Boolean));
+                      if (value) {
+                        newItems[index] = value.toString();
+                      } else {
+                        newItems[index] = "";
+                      }
+                      setFeaturedItems(newItems);
+                      form.setValue("featured_items", newItems);
                     }}
                   />
                 ))}
