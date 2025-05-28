@@ -22,7 +22,13 @@ const formSchema = z.object({
   }),
 });
 
-const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
+const MapSearcher = ({
+  hasMap = true,
+  onSearch,
+}: {
+  hasMap?: boolean;
+  onSearch?: () => void;
+}) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const pathParts = location.pathname.split("/");
@@ -52,6 +58,8 @@ const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
   const fetchCitiesByCountry = async (countryId: string) => {
     try {
       setSelectedCountryId(countryId);
+      setSelectedCityId("");
+      form.setValue("beach_city", "");
       const citiesRes = await getCitiesByCountry(countryId);
       setCities(citiesRes);
 
@@ -104,6 +112,9 @@ const MapSearcher = ({ hasMap = true }: { hasMap?: boolean }) => {
           ? `${url}?${searchParams.toString()}`
           : url;
         navigate(finalUrl);
+        if (onSearch) {
+          onSearch();
+        }
       }
     } catch (error) {
       console.log("Error happened", error);

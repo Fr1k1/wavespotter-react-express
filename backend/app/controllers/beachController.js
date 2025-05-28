@@ -118,12 +118,12 @@ class BeachController {
       const page = parseInt(req.query.page) || 1;
       const pageSize = parseInt(req.query.pageSize) || 9;
       //url params
-      const { countryId } = req.params;
+      const { id } = req.params;
       //query params
       const { city, waterType, beachTexture, characteristics } = req.query;
 
       const filters = {
-        countryId,
+        countryId: id,
         cityId: city || null,
         waterTypeId: waterType || null,
         beachTextureId: beachTexture || null,

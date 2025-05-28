@@ -17,6 +17,6 @@ router.get("/type/:id", controller.getBeachByType);
 
 router.get("/:id/geodata", controller.getBeachGeoDataById);
 
-router.get("/country/:countryId", controller.getFilteredBeaches);
+router.get("/country/:id", controller.getFilteredBeaches);
 
 export default router;

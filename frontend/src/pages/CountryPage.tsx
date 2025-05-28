@@ -7,39 +7,66 @@ import MapSearcher from "@/components/ui/mapSearcher";
 import Pagination from "@/components/ui/Pagination/Pagination";
 import { Faders, MapPin } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 
 const CountryPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  useEffect(() => {
-    if (id && filteredBeaches.length > 0) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const filters = {
-        cityId: searchParams.get("city") || undefined,
-        waterTypeId: searchParams.get("waterType") || undefined,
-        beachTextureId: searchParams.get("beachTexture") || undefined,
-        characteristicIds: searchParams.get("characteristics")
-          ? searchParams
-              .get("characteristics")!
-              .split(",")
-              .map((id) => Number(id))
-          : undefined,
-      };
-
-      getFilteredBeaches(id, filters, currentPage, 9)
-        .then((response) => {
-          setFilteredBeaches(response.data);
-          setTotalPages(response.totalPages);
-        })
-        .catch((error) => {
-          console.error("Error fetching beaches for page:", error);
-        });
-    }
-  }, [currentPage, id]);
   const [isToggledFilter, setIsToggledFilter] = useState(false);
   const [filteredBeaches, setFilteredBeaches] = useState<FilteredBeaches[]>([]);
+
+  const fetchFilteredBeaches = (page = currentPage) => {
+    if (!id) return;
+
+    const searchParams = new URLSearchParams(location.search);
+    const filters = {
+      cityId: searchParams.get("city") || undefined,
+      waterTypeId: searchParams.get("waterType") || undefined,
+      beachTextureId: searchParams.get("beachTexture") || undefined,
+      characteristicIds: searchParams.get("characteristics")
+        ? searchParams
+            .get("characteristics")!
+            .split(",")
+            .map((id) => Number(id))
+        : undefined,
+    };
+
+    getFilteredBeaches(id, filters, page, 9)
+      .then((response) => {
+        setFilteredBeaches(response.data);
+        setTotalPages(response.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error fetching beaches:", error);
+      });
+  };
+
+  const handleMapSearch = () => {
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    fetchFilteredBeaches();
+  }, [currentPage, id, location.search]);
+
+  if (!id) {
+    return (
+      <div className="flex flex-col gap-6">
+        <MapSearcher hasMap={true} onSearch={handleMapSearch} />
+      </div>
+    );
+  }
+
+  const parsedCountryId = parseInt(id);
+  if (isNaN(parsedCountryId)) {
+    return (
+      <div className="flex flex-col gap-6">
+        <MapSearcher hasMap={true} onSearch={handleMapSearch} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -68,7 +95,9 @@ const CountryPage = () => {
           Filter
         </Button>
       </div>
-      <MapSearcher hasMap={false} />
+
+      <MapSearcher hasMap={false} onSearch={handleMapSearch} />
+
       <div className="grid grid-cols-3 gap-4 lg:flex ">
         <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
           <p>Sea</p>
