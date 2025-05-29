@@ -10,3 +10,14 @@ export async function getCountries() {
   }
   return data;
 }
+
+export async function getCountryById(id: string | number) {
+  const response = await fetch(`${apiUrl}/countries/${id}`);
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.log(data.error);
+    return data.error;
+  }
+  return data;
+}

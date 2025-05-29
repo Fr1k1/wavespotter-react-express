@@ -13,6 +13,21 @@ class CountryController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async getCountryById(req, res) {
+    try {
+      const { id } = req.params;
+
+      if (!id || isNaN(id)) {
+        return res.status(400).json({ error: "Invalid country ID" });
+      }
+      const response = await countryService.getCountryById(id);
+
+      res.status(200).json(response);
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new CountryController();

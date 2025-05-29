@@ -1,5 +1,7 @@
 import { getFilteredBeaches } from "@/api/beaches";
-import { FilteredBeaches } from "@/common/types";
+import { getCitiesByCountry } from "@/api/cities";
+import { getCountryById } from "@/api/countries";
+import { City, FilteredBeaches } from "@/common/types";
 import { Button } from "@/components/ui/button";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Filter from "@/components/ui/filter";
@@ -9,6 +11,16 @@ import { Faders, MapPin } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 
+interface CountryData {
+  id: number;
+  name: string;
+}
+
+interface CityData {
+  id: number;
+  name: string;
+}
+
 const CountryPage = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -16,8 +28,10 @@ const CountryPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isToggledFilter, setIsToggledFilter] = useState(false);
   const [filteredBeaches, setFilteredBeaches] = useState<FilteredBeaches[]>([]);
+  const [countryData, setCountryData] = useState<CountryData | null>(null);
+  const [cityData, setCityData] = useState<CityData | null>(null);
 
-  const fetchFilteredBeaches = (page = currentPage) => {
+  const fetchFilteredBeaches = async (page = currentPage) => {
     if (!id) return;
 
     const searchParams = new URLSearchParams(location.search);
@@ -33,14 +47,28 @@ const CountryPage = () => {
         : undefined,
     };
 
-    getFilteredBeaches(id, filters, page, 9)
-      .then((response) => {
-        setFilteredBeaches(response.data);
-        setTotalPages(response.totalPages);
-      })
-      .catch((error) => {
-        console.error("Error fetching beaches:", error);
-      });
+    try {
+      const [beachResponse, countryResponse] = await Promise.all([
+        getFilteredBeaches(id, filters, page, 9),
+        getCountryById(id),
+      ]);
+
+      setFilteredBeaches(beachResponse.data);
+      setTotalPages(beachResponse.totalPages);
+      setCountryData(countryResponse);
+      const cityId = new URLSearchParams(location.search).get("city");
+      if (cityId) {
+        const citiesResponse = await getCitiesByCountry(id);
+        const selectedCity = citiesResponse.find(
+          (city: City) => city.id.toString() === cityId
+        );
+        setCityData(selectedCity);
+      } else {
+        setCityData(null);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleMapSearch = () => {
@@ -82,7 +110,9 @@ const CountryPage = () => {
       <div className="flex justify-between">
         <Button variant={"darkest"}>
           <MapPin weight="duotone" className="mr-2" size={32} />
-          Brač, Croatia
+          {cityData
+            ? `${cityData.name}, ${countryData?.name}`
+            : countryData?.name || "Loading..."}
         </Button>
 
         <Button
