@@ -127,7 +127,9 @@ const CountryPage = () => {
         />
       </div>
 
-      <Pagination setPage={setCurrentPage} totalPages={totalPages} />
+      {totalPages > 1 && (
+        <Pagination setPage={setCurrentPage} totalPages={totalPages} />
+      )}
     </div>
   );
 };

@@ -394,7 +394,7 @@ class BeachService {
         queryOptions.where.beach_texture_id = beachTextureId;
       }
 
-      if (cityId || countryId) {
+      if ((cityId && cityId !== ":id") || (countryId && countryId !== ":id")) {
         const cityInclude = {
           model: db.models.City,
           attributes: [],
@@ -402,11 +402,11 @@ class BeachService {
           where: {},
         };
 
-        if (cityId) {
+        if (cityId && cityId !== ":id") {
           cityInclude.where.id = cityId;
         }
 
-        if (countryId) {
+        if (countryId && countryId !== ":id") {
           cityInclude.include = [
             {
               model: db.models.Country,
