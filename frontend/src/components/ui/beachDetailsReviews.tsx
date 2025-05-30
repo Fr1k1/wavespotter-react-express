@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Title from "./title";
 import { Button } from "./button";
 import BeachDetailsReviewCard from "./beachDetailsReviewCard";
