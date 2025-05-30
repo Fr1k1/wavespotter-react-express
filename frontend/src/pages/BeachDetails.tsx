@@ -10,11 +10,12 @@ import { useEffect, useState } from "react";
 import { getBeachById } from "@/api/beaches";
 import { BeachDetailsData } from "@/common/types";
 import { calculateAverageRating } from "@/common/globals";
+import { useLoading } from "@/components/ui/LoaderContext/loaderContext";
 
 const BeachDetails = () => {
   const { id } = useParams();
   const [beach, setBeach] = useState<BeachDetailsData>();
-  const [loading, setLoading] = useState(true);
+  const { setIsLoading } = useLoading();
 
   useEffect(() => {
     fetchBeach();
@@ -22,14 +23,14 @@ const BeachDetails = () => {
 
   const fetchBeach = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const response = await getBeachById(id);
       console.log("Beach data:", response);
       setBeach(response);
     } catch (err) {
       console.error("Error fetching beach:", err);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -38,12 +39,6 @@ const BeachDetails = () => {
     ? calculateAverageRating(beach.reviews)
     : 0;
   const reviewCount = getReviewCount();
-
-  if (loading) {
-    return (
-      <div className="flex justify-center p-8">Loading beach details...</div>
-    );
-  }
 
   if (!beach || Object.keys(beach).length === 0) {
     return (

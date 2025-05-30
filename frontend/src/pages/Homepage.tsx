@@ -2,6 +2,7 @@ import { getBeachByType } from "@/api/beaches";
 import { calculateAverageRating } from "@/common/globals";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Hero from "@/components/ui/hero";
+import { useLoading } from "@/components/ui/LoaderContext/loaderContext";
 import MapSearcher from "@/components/ui/mapSearcher";
 import { useEffect, useState } from "react";
 
@@ -20,10 +21,22 @@ const Homepage = () => {
     setSeaBeaches(response);
   };
 
+  const { setIsLoading } = useLoading();
+
   useEffect(() => {
-    fetchRiverBeaches();
-    fetchSeaBeaches();
-  }, []);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all([fetchRiverBeaches(), fetchSeaBeaches()]);
+      } catch (error) {
+        console.error("Error fetching beaches:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [setIsLoading]);
 
   useEffect(() => {
     if (riverBeaches && seaBeaches) {
