@@ -5,7 +5,7 @@ export async function getCities() {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -16,7 +16,7 @@ export async function getCitiesByCountry(countryId: string) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;

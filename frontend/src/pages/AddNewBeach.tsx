@@ -125,7 +125,6 @@ const AddNewBeach = () => {
       if (images?.length && response) {
         await uploadImages(images, response.data.id);
       }
-      console.log("Data successfully sent to backend", values);
       notifySuccess("Beach request successfully sent!");
     } catch (error) {
       console.error("Error sending data to backend:", error);

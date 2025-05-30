@@ -39,13 +39,9 @@ app.use("/", (req, res) => {
 db.sequelize
   .authenticate()
   .then(() => {
-    console.log("Connection has been established successfully.");
-
     db.sequelize
       .sync() //alter true to force changes, force true to delete everything
       .then(() => {
-        console.log("Table created successfully!");
-
         app.listen(PORT, "0.0.0.0", (error) => {
           if (!error) {
             console.log(
@@ -53,7 +49,7 @@ db.sequelize
                 PORT
             );
           } else {
-            console.log("Error occurred, server can't start", error);
+            console.error("Error occurred, server can't start", error);
           }
         });
       })

@@ -27,7 +27,6 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
   useEffect(() => {
     if (form) {
       const currentValues = form.getValues("characteristics") || [];
-      console.log("Current characteristics from form:", currentValues);
       setSelectedCharacteristics(currentValues.map((id: number) => String(id)));
     }
   }, [form, form?.watch("characteristics")]);
@@ -55,7 +54,6 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
       shouldDirty: true,
       shouldValidate: true,
     });
-    console.log("Nove karakteristike su: ", numericCharacteristics);
   };
 
   return (

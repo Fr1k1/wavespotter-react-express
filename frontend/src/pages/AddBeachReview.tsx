@@ -69,7 +69,6 @@ const AddBeachReview = () => {
     try {
       const response = await addReview(values);
       if (response) {
-        console.log("Data successfully sent to backend", values);
         notifySuccess("Beach review successfully added!");
       }
     } catch (error) {

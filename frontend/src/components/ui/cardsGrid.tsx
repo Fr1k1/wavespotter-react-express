@@ -1,7 +1,6 @@
 import CardItem from "./cardItem";
 import { Link } from "react-router-dom";
 import Title from "./title";
-import { useEffect } from "react";
 import { CardData, FilteredBeaches } from "@/common/types";
 
 type CombinedCardData = CardData | FilteredBeaches;
@@ -15,9 +14,6 @@ const CardsGrid = ({
   hasMoreButton: boolean;
   cardData: Array<CombinedCardData>;
 }) => {
-  useEffect(() => {
-    console.log("Cards grid ima data: ", cardData);
-  });
   return (
     <div>
       <div className="flex items-center justify-between mb-6 ">

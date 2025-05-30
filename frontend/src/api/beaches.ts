@@ -3,7 +3,6 @@ import { apiUrl } from "./api";
 
 // dodaj neki auth
 export async function addBeach(beachData: BeachData) {
-  console.log("Podaci su mi: ", beachData);
   const response = await fetch(`${apiUrl}/beaches`, {
     headers: {
       Accept: "application/json",
@@ -17,14 +16,13 @@ export async function addBeach(beachData: BeachData) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
 }
 
 export async function updateBeach(id: string, beachData: BeachData) {
-  console.log("Updating beach with ID:", id, "Data:", beachData);
   const response = await fetch(`${apiUrl}/beaches/${id}`, {
     headers: {
       Accept: "application/json",
@@ -37,7 +35,7 @@ export async function updateBeach(id: string, beachData: BeachData) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -49,7 +47,7 @@ export async function getBeachById(id: string | undefined) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -61,7 +59,7 @@ export async function getBeachImages(id: string | number) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -75,7 +73,7 @@ export async function getBeachByType(id: number, page = 1, pageSize = 4) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -93,7 +91,7 @@ export async function getBeaches(
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -105,7 +103,7 @@ export async function getBeachGeoDataById(id: string | undefined) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -140,8 +138,6 @@ export const getFilteredBeaches = async (
   }
 
   const url = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
-
-  console.log("Sending request to:", url);
 
   const response = await fetch(url);
 

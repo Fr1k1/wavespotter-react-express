@@ -25,7 +25,6 @@ const BeachDetails = () => {
     try {
       setIsLoading(true);
       const response = await getBeachById(id);
-      console.log("Beach data:", response);
       setBeach(response);
     } catch (err) {
       console.error("Error fetching beach:", err);

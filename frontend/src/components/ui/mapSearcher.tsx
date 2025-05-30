@@ -117,7 +117,7 @@ const MapSearcher = ({
         }
       }
     } catch (error) {
-      console.log("Error happened", error);
+      console.error("Error happened", error);
     }
   };
 

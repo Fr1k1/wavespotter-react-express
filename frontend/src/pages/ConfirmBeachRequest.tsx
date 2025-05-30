@@ -175,7 +175,6 @@ const ConfirmBeachRequest = () => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Updateane vrijednosti su", values);
     if (!id) return;
 
     try {
@@ -274,7 +273,6 @@ const ConfirmBeachRequest = () => {
         setFeaturedCharacteristics(characteristicsRes);
 
         if (beachData) {
-          console.log("Beach data na confirmu je", beachData);
           const regularCharacteristics: number[] = [];
 
           const featuredItems: string[] = [];
@@ -283,7 +281,6 @@ const ConfirmBeachRequest = () => {
             beachData.characteristics &&
             beachData.characteristics.length > 0
           ) {
-            console.log("Karakteristike su", beachData.characteristics);
             beachData.characteristics.forEach(
               (characteristic: Characteristic) => {
                 if (
@@ -292,7 +289,6 @@ const ConfirmBeachRequest = () => {
                 ) {
                   featuredItems.push(characteristic.id.toString());
                 } else {
-                  console.log("Pusham u regularne", characteristic.id);
                   regularCharacteristics.push(Number(characteristic.id));
                 }
               }
@@ -338,7 +334,6 @@ const ConfirmBeachRequest = () => {
           const urls = await Promise.all(signedUrlPromises);
           const validUrls = urls.filter((url) => url !== null) as string[];
           setImageUrls(validUrls);
-          console.log("Image urls su", validUrls);
         }
         setDataLoaded(true);
       } catch (error) {

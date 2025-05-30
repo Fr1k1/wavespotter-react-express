@@ -13,9 +13,7 @@ const ProtectedRoute = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Is allowed je", isAllowed);
     if (!isAllowed) {
-      console.log("Nije dopusteno");
       navigate(redirectPath);
     }
   }, [navigate, redirectPath, isAllowed]);

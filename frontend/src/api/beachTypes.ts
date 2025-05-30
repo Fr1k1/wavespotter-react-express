@@ -5,7 +5,7 @@ export async function getBeachTypes() {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;

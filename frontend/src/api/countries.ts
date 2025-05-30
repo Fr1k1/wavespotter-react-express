@@ -5,7 +5,7 @@ export async function getCountries() {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;
@@ -16,7 +16,7 @@ export async function getCountryById(id: string | number) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data.error);
+    console.error(data.error);
     return data.error;
   }
   return data;

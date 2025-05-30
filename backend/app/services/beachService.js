@@ -3,7 +3,6 @@ import db from "../models/index.js";
 
 class BeachService {
   async addBeach(beachData) {
-    console.log("Beach Data:", beachData);
     const transaction = await db.sequelize.transaction();
     try {
       const newBeach = await db.models.Beach.create(beachData, { transaction });
@@ -20,8 +19,6 @@ class BeachService {
           featured: true,
         })),
       ];
-
-      console.log("All Characteristic Entries:", allCharacteristics);
       for (const entry of allCharacteristics) {
         try {
           await db.sequelize.query(
@@ -238,7 +235,6 @@ class BeachService {
   }
 
   async updateBeach(id, beachData) {
-    console.log("Updating Beach Data:", beachData);
     const transaction = await db.sequelize.transaction();
     try {
       const beach = await db.models.Beach.findByPk(id, { transaction });
@@ -270,7 +266,6 @@ class BeachService {
         })),
       ];
 
-      console.log("All Characteristic Entries for update:", allCharacteristics);
       for (const entry of allCharacteristics) {
         try {
           await db.sequelize.query(

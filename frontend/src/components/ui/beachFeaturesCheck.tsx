@@ -13,7 +13,6 @@ const BeachFeaturesCheck = ({
   const fetchCharacteristics = async () => {
     try {
       const response = await getCharacteristics();
-      console.log("All characteristics fetched:", response);
       setAllCharacteristics(response || []);
     } catch (error) {
       console.error("Error fetching characteristics:", error);

@@ -138,7 +138,7 @@ const Filter: React.FC<{
         updateUrl(id, formValues);
       }
     } catch (error) {
-      console.log("Error happened", error);
+      console.error("Error happened", error);
     }
   };
 
@@ -147,7 +147,7 @@ const Filter: React.FC<{
       const response = await getBeachTypes();
       setBeachTypes(response);
     } catch {
-      console.log("Error fetching beach types");
+      console.error("Error fetching beach types");
     }
   };
 
@@ -156,7 +156,7 @@ const Filter: React.FC<{
       const response = await getBeachTextures();
       setBeachTextures(response);
     } catch {
-      console.log("Error fetching beach textures");
+      console.error("Error fetching beach textures");
     }
   };
 

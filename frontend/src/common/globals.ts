@@ -44,7 +44,6 @@ export const getUserId = async (
 };
 
 export const calculateAverageRating = (data: Array<Review>) => {
-  console.log("Data za izracunati average rating je", data);
   if (data && data?.length > 0) {
     const totalRating = data.reduce(
       (sum: number, review: Review) => sum + review.rating,
