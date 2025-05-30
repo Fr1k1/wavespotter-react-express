@@ -2,6 +2,7 @@ import { getFilteredBeaches } from "@/api/beaches";
 import { getCitiesByCountry } from "@/api/cities";
 import { getCountryById } from "@/api/countries";
 import { City, FilteredBeaches } from "@/common/types";
+import ActiveFilters from "@/components/ui/activeFilters";
 import { Button } from "@/components/ui/button";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Filter from "@/components/ui/filter";
@@ -126,28 +127,25 @@ const CountryPage = () => {
         </Button>
       </div>
 
-      <MapSearcher hasMap={false} onSearch={handleMapSearch} />
+      <ActiveFilters
+        filters={{
+          waterTypeId:
+            new URLSearchParams(location.search).get("waterType") || undefined,
+          beachTextureId:
+            new URLSearchParams(location.search).get("beachTexture") ||
+            undefined,
+          characteristicIds: new URLSearchParams(location.search).get(
+            "characteristics"
+          )
+            ? new URLSearchParams(location.search)
+                .get("characteristics")!
+                .split(",")
+                .map((id) => Number(id))
+            : undefined,
+        }}
+      />
 
-      <div className="grid grid-cols-3 gap-4 lg:flex ">
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Sea</p>
-        </div>
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Sand</p>
-        </div>
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Free parking</p>
-        </div>
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Restaurants</p>
-        </div>
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Free entry</p>
-        </div>
-        <div className="bg-secondary rounded-xl text-white px-3 py-1 text-sm">
-          <p>Something other</p>
-        </div>
-      </div>
+      <MapSearcher hasMap={false} onSearch={handleMapSearch} />
 
       <div>
         <CardsGrid
