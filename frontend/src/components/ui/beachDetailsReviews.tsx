@@ -16,14 +16,6 @@ const BeachDetailsReviews = ({ reviews }: { reviews?: Array<any> }) => {
     <div>
       <div className="flex items-center justify-between mb-6 ">
         <Title>Reviews</Title>
-        {hasReviews && (
-          <Link
-            to={`/beach/${id}/reviews`}
-            className="text-primary-800 underline text-base "
-          >
-            More
-          </Link>
-        )}
       </div>
 
       {!hasReviews && (
