@@ -47,6 +47,7 @@ import {
   City,
   Country,
 } from "@/common/types";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   name: z
@@ -111,6 +112,8 @@ const formSchema = z.object({
 const AddNewBeach = () => {
   const [userId, setUserId] = useState(String);
 
+  const navigate = useNavigate();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!userId) {
       console.error("User not authenticated");
@@ -126,6 +129,7 @@ const AddNewBeach = () => {
         await uploadImages(images, response.data.id);
       }
       notifySuccess("Beach request successfully sent!");
+      navigate("/");
     } catch (error) {
       console.error("Error sending data to backend:", error);
     }

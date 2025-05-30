@@ -37,7 +37,7 @@ import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { getBeachById, getBeachImages, updateBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
 import { notifySuccess } from "@/components/ui/toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   BeachDepth,
   BeachTexture,
@@ -111,6 +111,7 @@ const ConfirmBeachRequest = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [, setIsLoggedIn] = useState(false);
   const [, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -190,6 +191,7 @@ const ConfirmBeachRequest = () => {
       }
 
       notifySuccess("Beach request successfully updated!");
+      navigate("/beach/" + id);
     } catch (error) {
       console.error("Error updating beach data:", error);
     }
