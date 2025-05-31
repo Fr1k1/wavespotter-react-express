@@ -37,7 +37,7 @@ import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
-import { notifySuccess } from "@/components/ui/toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { getUserId } from "@/common/globals";
 import {
   BeachDepth,
@@ -141,6 +141,7 @@ const AddNewBeach = () => {
       notifySuccess("Beach request successfully sent!");
       navigate("/");
     } catch (error) {
+      notifyFailure("Something went wrong");
       console.error("Error sending data to backend:", error);
     }
   };
@@ -186,6 +187,7 @@ const AddNewBeach = () => {
   const [featuredItems, setFeaturedItems] = useState<string[]>(
     Array(5).fill("")
   );
+  const [selectedFeaturedIds, setSelectedFeaturedIds] = useState<string[]>([]);
 
   useEffect(() => {
     form.setValue("featured_items", featuredItems);
@@ -446,12 +448,18 @@ const AddNewBeach = () => {
                     options={featuredCharacteristics}
                     onValueChange={(value) => {
                       const newItems = [...featuredItems];
+                      const newSelectedIds = [...selectedFeaturedIds];
+
                       if (value) {
                         newItems[index] = value.toString();
+                        newSelectedIds[index] = value.toString();
                       } else {
                         newItems[index] = "";
+                        newSelectedIds[index] = "";
                       }
+
                       setFeaturedItems(newItems);
+                      setSelectedFeaturedIds(newSelectedIds.filter(Boolean));
                       form.setValue("featured_items", newItems);
                     }}
                   />
@@ -462,7 +470,10 @@ const AddNewBeach = () => {
 
           <div>
             <Subtitle className="mb-6">Characteristics</Subtitle>
-            <Characteristics form={form} />
+            <Characteristics
+              form={form}
+              disabledCharacteristics={selectedFeaturedIds}
+            />
           </div>
           <BeachTips form={form} />
           <div className="flex justify-end">
