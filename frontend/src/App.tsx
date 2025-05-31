@@ -15,12 +15,12 @@ import ConfirmBeachRequest from "./pages/ConfirmBeachRequest";
 import CountryPage from "./pages/CountryPage";
 import { checkAuth } from "./common/globals";
 import { supabase } from "./supabaseClient";
-import { useLoading } from "./components/ui/LoaderContext/loaderContext";
+import Loader from "./components/ui/loader";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const { setIsLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -38,7 +38,11 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [setIsLoading]);
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>

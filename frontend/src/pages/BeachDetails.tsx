@@ -10,12 +10,12 @@ import { useEffect, useState } from "react";
 import { getBeachById } from "@/api/beaches";
 import { BeachDetailsData } from "@/common/types";
 import { calculateAverageRating } from "@/common/globals";
-import { useLoading } from "@/components/ui/LoaderContext/loaderContext";
+import Loader from "@/components/ui/loader";
 
 const BeachDetails = () => {
   const { id } = useParams();
   const [beach, setBeach] = useState<BeachDetailsData>();
-  const { setIsLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchBeach();
@@ -38,6 +38,10 @@ const BeachDetails = () => {
     ? calculateAverageRating(beach.reviews)
     : 0;
   const reviewCount = getReviewCount();
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (!beach || Object.keys(beach).length === 0) {
     return (
