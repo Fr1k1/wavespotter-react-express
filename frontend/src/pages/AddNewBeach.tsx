@@ -81,16 +81,26 @@ const formSchema = z.object({
     message: "Beach city must be selected.",
   }),
 
-  working_hours: z.string().min(2, {
-    message: "Working hours must be at least 2 characters.",
-  }),
+  working_hours: z
+    .string()
+    .min(2, {
+      message: "Working hours must be at least 2 characters.",
+    })
+    .max(80, {
+      message: "Working hours must not exceed 80 characters",
+    }),
 
   description: z.string().min(2, {
     message: "Beach description must be at least 2 characters.",
   }),
-  best_time_to_visit: z.string().min(2, {
-    message: "Best time to visit must be at least 2 characters.",
-  }),
+  best_time_to_visit: z
+    .string()
+    .min(2, {
+      message: "Best time to visit must be at least 2 characters.",
+    })
+    .max(100, {
+      message: "Best time to visit must not exceed 100 characters",
+    }),
   local_wildlife: z.string().min(2, {
     message: "Local wildlife must be at least 2 characters.",
   }),
@@ -215,7 +225,7 @@ const AddNewBeach = () => {
 
     for (const file of images) {
       const { data, error } = await supabase.storage
-        .from("beach_images") // ime bucketa
+        .from("beach_images") // bucket name
         .upload(`beaches/${beachId}/${file.name}`, file, {
           cacheControl: "3600", // 1 hour
           upsert: false, // Do not overwrite

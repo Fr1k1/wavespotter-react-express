@@ -124,7 +124,7 @@ const AddBeachReview = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title (max 20 characters) </FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter title..." {...field} />
                   </FormControl>
