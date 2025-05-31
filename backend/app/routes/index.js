@@ -9,7 +9,6 @@ import beach from "./beachRoute.js";
 import review from "./reviewRoute.js";
 
 const router = new Router();
-//ja zapravo trebam dobivati sve gradove koji imaju plazu, a ne sve opcenito
 router.use("/cities", city);
 
 router.use("/beach-textures", beachTexture);

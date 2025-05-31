@@ -1,13 +1,11 @@
 import { BeachData, Filters } from "@/common/types";
 import { apiUrl } from "./api";
 
-// dodaj neki auth
 export async function addBeach(beachData: BeachData) {
   const response = await fetch(`${apiUrl}/beaches`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
     method: "POST",
     body: JSON.stringify(beachData),
@@ -65,7 +63,7 @@ export async function getBeachImages(id: string | number) {
   return data;
 }
 
-export async function getBeachByType(id: number, page = 1, pageSize = 4) {
+export async function getBeachByType(id: number, page = 1, pageSize = 3) {
   const response = await fetch(
     `${apiUrl}/beaches/type/${id}?page=${page}&pageSize=${pageSize}`
   );

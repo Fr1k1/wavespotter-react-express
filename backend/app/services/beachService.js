@@ -59,6 +59,7 @@ class BeachService {
         where: { beach_type_id: typeId, approved: true },
         limit: limit,
         offset: offset,
+        order: [["id", "ASC"]],
         include: [
           {
             model: db.models.City,
@@ -100,7 +101,7 @@ class BeachService {
             attributes: ["description"],
           },
 
-          //moram ovak jer grad nije direktno povezan na plazu
+          //required because city is not directly linked to beach
           {
             model: db.models.City,
             attributes: ["name", "latitude", "longitude"],
@@ -190,7 +191,6 @@ class BeachService {
             attributes: ["description"],
           },
 
-          //moram ovak jer grad nije direktno povezan na plazu
           {
             model: db.models.City,
             attributes: ["name", "latitude", "longitude"],
@@ -363,7 +363,7 @@ class BeachService {
         characteristicIds,
       } = filters;
 
-      //svi drugi se koriste samo za filtriranje, ovo trebam za izracun
+      //needed for calculations
       let queryOptions = {
         limit: limit,
         offset: offset,

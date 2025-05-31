@@ -51,7 +51,7 @@ const Homepage = () => {
         (a, b) => b.calculatedRating - a.calculatedRating
       );
 
-      const topPicks = sortedBeaches.slice(0, 4);
+      const topPicks = sortedBeaches.slice(0, 3);
       setBestRatedBeaches(topPicks);
     }
   }, [riverBeaches, seaBeaches]);

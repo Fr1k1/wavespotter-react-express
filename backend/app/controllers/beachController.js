@@ -22,14 +22,10 @@ class BeachController {
   async getBeachByType(req, res) {
     try {
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 4;
+      const pageSize = parseInt(req.query.pageSize) || 3;
       const { id } = req.params;
       const response = await beachService.getBeachesByType(id, page, pageSize);
-      if (response.length == 0) {
-        res.status(404).json({ error: `No beaches found for provided type` });
-      } else {
-        res.status(200).json(response);
-      }
+      res.status(200).json(response);
     } catch (error) {
       return res.status(500).json({ error: "Internal server error" });
     }
