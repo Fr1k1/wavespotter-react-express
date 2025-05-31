@@ -11,13 +11,17 @@ const Homepage = () => {
   const [seaBeaches, setSeaBeaches] = useState<any>(null);
   const [bestRatedBeaches, setBestRatedBeaches] = useState<any>(null);
 
+  const SEA_BEACH_TYPE = 1;
+
+  const RIVER_BEACH_TYPE = 2;
+
   const fetchRiverBeaches = async () => {
-    const response = await getBeachByType(1);
+    const response = await getBeachByType(RIVER_BEACH_TYPE);
     setRiverBeaches(response);
   };
 
   const fetchSeaBeaches = async () => {
-    const response = await getBeachByType(2);
+    const response = await getBeachByType(SEA_BEACH_TYPE);
     setSeaBeaches(response);
   };
 
