@@ -36,7 +36,7 @@ import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { getBeachById, getBeachImages, updateBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
-import { notifySuccess } from "@/components/ui/toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   BeachDepth,
@@ -193,6 +193,7 @@ const ConfirmBeachRequest = () => {
       notifySuccess("Beach request confirmed succesfully");
       navigate("/beach/" + id);
     } catch (error) {
+      notifyFailure("Something went wrong");
       console.error("Error updating beach data:", error);
     }
   };

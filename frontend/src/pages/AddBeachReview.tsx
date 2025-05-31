@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Rating } from "react-simple-star-rating";
 import { useNavigate, useParams } from "react-router";
 import { addReview } from "@/api/reviews";
-import { notifySuccess } from "@/components/ui/toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { useEffect, useState } from "react";
 import { getBeachGeoDataById } from "@/api/beaches";
 import { getUserId } from "@/common/globals";
@@ -76,6 +76,7 @@ const AddBeachReview = () => {
       }
     } catch (error) {
       console.error("Error sending data to backend:", error);
+      notifyFailure("Something went wrong");
     }
   };
 
