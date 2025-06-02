@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="bg-primary-800 flex justify-center h-64">
       <div className="flex gap-6 flex-col max-w-7xl  justify-center">
-        <div className="flex-row justify-between ">
+        <div className="flex flex-row justify-between ">
           <a
             href="https://fosleen.com/"
             className="text-white p-4"
@@ -21,13 +21,7 @@ const Footer = () => {
           >
             Contact
           </a>
-          <a
-            href="https://fosleen.com/"
-            className="text-white p-4"
-            target="_blank"
-          >
-            Contribute
-          </a>
+
           <Link to="/add-beach" className="text-white p-4">
             Add a beach
           </Link>
