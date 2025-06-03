@@ -48,13 +48,11 @@ const Login = () => {
     }
 
     if (authUser) {
-      const { data: userData, error: userError } = await supabase
+      const { error: userError } = await supabase
         .from("users")
         .select("is_admin, username, first_name, last_name,id")
         .eq("id", authUser.user.id)
         .single();
-
-      console.log("Response korisnika je: ", userData);
       if (userError) {
         return;
       }

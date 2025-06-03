@@ -36,8 +36,8 @@ import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { getBeachById, getBeachImages, updateBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
-import { notifySuccess } from "@/components/ui/toast";
-import { useParams } from "react-router-dom";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   BeachDepth,
   BeachTexture,
@@ -111,6 +111,7 @@ const ConfirmBeachRequest = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [, setIsLoggedIn] = useState(false);
   const [, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -189,13 +190,14 @@ const ConfirmBeachRequest = () => {
         await uploadImages(images, id);
       }
 
-      notifySuccess("Beach request successfully updated!");
+      notifySuccess("Beach request confirmed succesfully");
+      navigate("/beach/" + id);
     } catch (error) {
+      notifyFailure("Something went wrong");
       console.error("Error updating beach data:", error);
     }
   };
 
-  //duplicate function, will reuse
   const uploadImages = async (images: File[], beachId: string) => {
     const uploadedImageIds: string[] = [];
 
@@ -226,7 +228,6 @@ const ConfirmBeachRequest = () => {
 
     return uploadedImageIds;
   };
-  //duplicate function, will reuse
 
   const fetchCitiesByCountry = async (countryId: string) => {
     try {
@@ -316,7 +317,6 @@ const ConfirmBeachRequest = () => {
           setFeaturedItems(featuredItems);
         }
 
-        // Process images
         if (beachImagesRes && beachImagesRes.length > 0) {
           const signedUrlPromises = beachImagesRes.map(async (image: Image) => {
             const { data, error } = await supabase.storage
@@ -348,8 +348,6 @@ const ConfirmBeachRequest = () => {
 
   const [fileInputs, setFileInputs] = useState([0]);
 
-  //duplicate function, will reuse
-
   const MAX_IMAGE_INPUT = 5;
 
   const addFileInput = () => {
@@ -360,7 +358,6 @@ const ConfirmBeachRequest = () => {
       return [...prev, prev.length];
     });
   };
-  //duplicate function, will reuse
 
   const handleFileChange = (files: FileList | null) => {
     if (files) {
@@ -372,7 +369,6 @@ const ConfirmBeachRequest = () => {
     console.error("Validation Errors:", errors);
   });
 
-  //duplicate
   const [featuredItemFields] = useState([
     { name: "featured_item_1", label: "Featured Item" },
     { name: "featured_item_2", label: "Featured Item" },

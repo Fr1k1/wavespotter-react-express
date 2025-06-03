@@ -1,12 +1,12 @@
 import { getBeaches } from "@/api/beaches";
 import BeachRequestsCard from "@/components/ui/beachRequestsCard";
-import { useLoading } from "@/components/ui/LoaderContext/loaderContext";
+import Loader from "@/components/ui/loader";
 import Title from "@/components/ui/title";
 import { useEffect, useState } from "react";
 
 const BeachRequests = () => {
   const [beachRequests, setBeachRequests] = useState([]);
-  const { setIsLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchBeachRequests = async () => {
     setIsLoading(true);
@@ -23,6 +23,10 @@ const BeachRequests = () => {
   useEffect(() => {
     fetchBeachRequests();
   }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (!beachRequests || beachRequests.length === 0) {
     return <div>No beach requests data available</div>;

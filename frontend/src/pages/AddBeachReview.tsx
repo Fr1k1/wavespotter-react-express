@@ -16,9 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Rating } from "react-simple-star-rating";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { addReview } from "@/api/reviews";
-import { notifySuccess } from "@/components/ui/toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { useEffect, useState } from "react";
 import { getBeachGeoDataById } from "@/api/beaches";
 import { getUserId } from "@/common/globals";
@@ -61,6 +61,8 @@ const AddBeachReview = () => {
     }),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!userId) {
       console.error("User not authenticated");
@@ -70,9 +72,11 @@ const AddBeachReview = () => {
       const response = await addReview(values);
       if (response) {
         notifySuccess("Beach review successfully added!");
+        navigate(`/beach/${id}`);
       }
     } catch (error) {
       console.error("Error sending data to backend:", error);
+      notifyFailure("Something went wrong");
     }
   };
 
@@ -121,7 +125,7 @@ const AddBeachReview = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title (max 20 characters) </FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter title..." {...field} />
                   </FormControl>

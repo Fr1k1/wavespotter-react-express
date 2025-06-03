@@ -55,7 +55,7 @@ const SelectFieldCustom = <T extends FieldValues>({
               value={field.value}
               onValueChange={(value) => {
                 field.onChange(value);
-                onValueChange?.(value); // optional callback
+                onValueChange?.(value);
               }}
               disabled={disabled}
             >

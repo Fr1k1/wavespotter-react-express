@@ -7,9 +7,13 @@ import { Characteristic } from "@/common/types";
 
 interface CharacteristicsProps {
   form?: UseFormReturn<any>;
+  disabledCharacteristics?: string[];
 }
 
-const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
+const Characteristics: React.FC<CharacteristicsProps> = ({
+  form,
+  disabledCharacteristics = [],
+}) => {
   const [characteristics, setCharacteristics] = useState<Characteristic[]>([]);
   const [selectedCharacteristics, setSelectedCharacteristics] = useState<
     string[]
@@ -71,6 +75,9 @@ const Characteristics: React.FC<CharacteristicsProps> = ({ form }) => {
               onCheckedChange={(checked) =>
                 handleCharacteristicChange(String(characteristic.id), checked)
               }
+              disabled={disabledCharacteristics.includes(
+                characteristic.id.toString()
+              )}
             />
             <Label htmlFor={`characteristic-${characteristic.id}`}>
               {characteristic.name}

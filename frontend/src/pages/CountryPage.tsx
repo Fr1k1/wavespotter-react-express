@@ -48,9 +48,11 @@ const CountryPage = () => {
         : undefined,
     };
 
+    const PAGE_SIZE = 9;
+
     try {
       const [beachResponse, countryResponse] = await Promise.all([
-        getFilteredBeaches(id, filters, page, 9),
+        getFilteredBeaches(id, filters, page, PAGE_SIZE),
         getCountryById(id),
       ]);
 

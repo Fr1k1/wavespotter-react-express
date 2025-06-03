@@ -1,7 +1,6 @@
 import db from "../models/index.js";
 
 class CityService {
-  //treba mi za mapu na homepage
   async getCities() {
     try {
       const cities = await db.models.City.findAll({});
@@ -13,7 +12,7 @@ class CityService {
 
   async getCitiesByCountryId(id) {
     try {
-      //tu treba find all je findByPk vraca samo jedan item!!
+      //find all required because find by pk will only return one item
       const cities = await db.models.City.findAll({
         where: { countryId: id },
       });

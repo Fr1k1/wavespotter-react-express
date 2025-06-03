@@ -3,6 +3,7 @@ import { Carousel as ReactCarousel } from "react-responsive-carousel";
 import "./Carousel.scss";
 import { useEffect, useState } from "react";
 import { fetchBeachImages } from "@/common/globals";
+import PlaceholderImage from "../../../assets/no__image_placeholder.png";
 
 const Carousel = ({ beachId }: { beachId: string }) => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -14,6 +15,18 @@ const Carousel = ({ beachId }: { beachId: string }) => {
 
   if (loading) {
     return <div>Loading images...</div>;
+  }
+
+  if (!imageUrls || imageUrls.length === 0) {
+    return (
+      <div className="h-[550px]">
+        <img
+          src={PlaceholderImage}
+          alt="No image available"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
   }
 
   return (

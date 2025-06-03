@@ -37,7 +37,7 @@ import FormFieldCustom from "@/components/ui/formFieldCustom";
 import SelectFieldCustom from "@/components/ui/selectFieldCustom";
 import { addBeach } from "@/api/beaches";
 import { supabase } from "../supabaseClient";
-import { notifySuccess } from "@/components/ui/toast";
+import { notifyFailure, notifySuccess } from "@/components/ui/toast";
 import { getUserId } from "@/common/globals";
 import {
   BeachDepth,
@@ -47,6 +47,7 @@ import {
   City,
   Country,
 } from "@/common/types";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   name: z
@@ -80,16 +81,26 @@ const formSchema = z.object({
     message: "Beach city must be selected.",
   }),
 
-  working_hours: z.string().min(2, {
-    message: "Working hours must be at least 2 characters.",
-  }),
+  working_hours: z
+    .string()
+    .min(2, {
+      message: "Working hours must be at least 2 characters.",
+    })
+    .max(80, {
+      message: "Working hours must not exceed 80 characters",
+    }),
 
   description: z.string().min(2, {
     message: "Beach description must be at least 2 characters.",
   }),
-  best_time_to_visit: z.string().min(2, {
-    message: "Best time to visit must be at least 2 characters.",
-  }),
+  best_time_to_visit: z
+    .string()
+    .min(2, {
+      message: "Best time to visit must be at least 2 characters.",
+    })
+    .max(100, {
+      message: "Best time to visit must not exceed 100 characters",
+    }),
   local_wildlife: z.string().min(2, {
     message: "Local wildlife must be at least 2 characters.",
   }),
@@ -111,6 +122,8 @@ const formSchema = z.object({
 const AddNewBeach = () => {
   const [userId, setUserId] = useState(String);
 
+  const navigate = useNavigate();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!userId) {
       console.error("User not authenticated");
@@ -126,7 +139,9 @@ const AddNewBeach = () => {
         await uploadImages(images, response.data.id);
       }
       notifySuccess("Beach request successfully sent!");
+      navigate("/");
     } catch (error) {
+      notifyFailure("Something went wrong");
       console.error("Error sending data to backend:", error);
     }
   };
@@ -172,6 +187,7 @@ const AddNewBeach = () => {
   const [featuredItems, setFeaturedItems] = useState<string[]>(
     Array(5).fill("")
   );
+  const [selectedFeaturedIds, setSelectedFeaturedIds] = useState<string[]>([]);
 
   useEffect(() => {
     form.setValue("featured_items", featuredItems);
@@ -211,7 +227,7 @@ const AddNewBeach = () => {
 
     for (const file of images) {
       const { data, error } = await supabase.storage
-        .from("beach_images") // ime bucketa
+        .from("beach_images") // bucket name
         .upload(`beaches/${beachId}/${file.name}`, file, {
           cacheControl: "3600", // 1 hour
           upsert: false, // Do not overwrite
@@ -432,12 +448,18 @@ const AddNewBeach = () => {
                     options={featuredCharacteristics}
                     onValueChange={(value) => {
                       const newItems = [...featuredItems];
+                      const newSelectedIds = [...selectedFeaturedIds];
+
                       if (value) {
                         newItems[index] = value.toString();
+                        newSelectedIds[index] = value.toString();
                       } else {
                         newItems[index] = "";
+                        newSelectedIds[index] = "";
                       }
+
                       setFeaturedItems(newItems);
+                      setSelectedFeaturedIds(newSelectedIds.filter(Boolean));
                       form.setValue("featured_items", newItems);
                     }}
                   />
@@ -448,7 +470,10 @@ const AddNewBeach = () => {
 
           <div>
             <Subtitle className="mb-6">Characteristics</Subtitle>
-            <Characteristics form={form} />
+            <Characteristics
+              form={form}
+              disabledCharacteristics={selectedFeaturedIds}
+            />
           </div>
           <BeachTips form={form} />
           <div className="flex justify-end">
