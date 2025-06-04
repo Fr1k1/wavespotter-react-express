@@ -89,6 +89,7 @@ const Login = () => {
                     name="password"
                     placeholder="Password"
                     form={form}
+                    type="password"
                   />
                 </div>
               </div>
