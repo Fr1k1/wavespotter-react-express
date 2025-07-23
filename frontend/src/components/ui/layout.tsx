@@ -11,7 +11,7 @@ const Layout = ({
 }) => {
   const location = useLocation();
   return (
-    <main className="min-h-screen flex flex-col ">
+    <main className="min-h-screen flex flex-col">
       <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
 
       <div

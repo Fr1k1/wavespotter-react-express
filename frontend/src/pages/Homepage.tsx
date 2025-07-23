@@ -1,5 +1,6 @@
 import { getBeachByType } from "@/api/beaches";
 import { calculateAverageRating } from "@/common/globals";
+import AiAssistantCard from "@/components/ui/aiAssistantCard";
 import CardsGrid from "@/components/ui/cardsGrid";
 import Hero from "@/components/ui/hero";
 import Loader from "@/components/ui/loader";
@@ -65,7 +66,8 @@ const Homepage = () => {
   }
 
   return (
-    <div>
+    <div className="relative">
+      <AiAssistantCard />
       <Hero />
       <div className=" flex flex-col gap-6">
         <CardsGrid
