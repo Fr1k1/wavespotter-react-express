@@ -1,10 +1,9 @@
 import { useState } from "react";
 import {
+  ArrowsInSimple,
   ArrowsOutSimple,
-  BeachBall,
-  Island,
   PaperPlaneRight,
-  Waves,
+  X,
 } from "@phosphor-icons/react";
 import { z } from "zod";
 import { notifyFailure } from "./toast";
@@ -13,7 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./form";
 import { Input } from "./input";
 import AiAssistantLogo from "./aiAssistantLogo";
-import AiAssistantRecommendationCard from "./aiAssistantRecommendationCard";
+import AiAssistantHeader from "./aiAssistantHeader";
+import AiAssistantRecommendations from "./aiAssistantRecommendations";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -23,6 +23,7 @@ const formSchema = z.object({
 
 const AiAssistantCard = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isFullscreen, setIsFullScreen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,59 +41,90 @@ const AiAssistantCard = () => {
     }
   };
 
+  const handleFullScreenExpansion = () => {
+    if (isFullscreen) {
+      setIsFullScreen(false);
+    } else {
+      setIsExpanded(false);
+      setIsFullScreen(true);
+    }
+  };
+
+  const handleOnMouseEnter = () => {
+    if (!isFullscreen) setIsExpanded(true);
+  };
+
+  const handleOnMouseLeave = () => {
+    if (!isFullscreen) setIsExpanded(false);
+  };
+
   return (
-    <div className="fixed bottom-12 right-0 z-50 flex justify-end items-end">
+    <div
+      className={`fixed right-0 z-[9999] ${
+        isFullscreen
+          ? "top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-primary-800/40 backdrop-blur-sm"
+          : "flex justify-end items-end w-full bottom-12"
+      }`}
+    >
       <div
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-        className={`bg-white rounded-l-xl shadow-lg transition-all duration-500 ease-in-out overflow-hidden ${
-          isExpanded ? "h-fit max-h-[531px] w-96 overflow-hidden" : "h-16 w-20"
+        onClick={handleOnMouseEnter}
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        className={`relative bg-white rounded-l-xl shadow-lg transition-all duration-500 ease-in-out overflow-hidden border-2 border-white 
+          ${
+            isExpanded
+              ? "h-fit max-h-[531px] w-96 overflow-hidden border-4 border-gray-200 "
+              : "h-16 w-20"
+          } 
+        ${
+          isFullscreen &&
+          "w-[80vw] min-h-[90vh] h-full min-w-none border-primary-700 rounded-xl"
         }`}
       >
         <div className="h-full">
-          <div className={`${isExpanded ? "hidden" : ""}`}>
+          <div className={`${isExpanded || isFullscreen ? "hidden" : ""}`}>
             <AiAssistantLogo />
           </div>
           <div
             className={`${
-              isExpanded
-                ? "opacity-100 px-6 py-4 flex flex-col justify-between h-full"
+              isExpanded || isFullscreen
+                ? "opacity-100 px-6 py-4 flex flex-col justify-between h-full items-center"
                 : "opacity-0 pointer-events-none"
-            }`}
+            }
+            ${isFullscreen && "py-auto"}`}
           >
-            <button className="absolute top-4 left-4 hover:scale-110 transition-transform duration-300">
-              <ArrowsOutSimple size={28} weight="duotone" color="#347EB3" />
-            </button>
-            <div className="flex flex-col gap-1 items-center pt-1">
-              <AiAssistantLogo />
-              <h4 className="text-lg leading-5 font-semibold text-center max-w-60 text-gray-800">
-                Describe the beach of your dreams.
-              </h4>
-              <p className="text-sm text-gray-600 text-center mb-2">
-                I will find it for you.
-              </p>
+            <div className="flex w-full justify-between">
+              <button
+                className="absolute top-4 left-4 hover:scale-110 transition-transform duration-300"
+                onClick={handleFullScreenExpansion}
+              >
+                {isFullscreen ? (
+                  <ArrowsInSimple size={28} weight="duotone" color="#347EB3" />
+                ) : (
+                  <ArrowsOutSimple size={28} weight="duotone" color="#347EB3" />
+                )}
+              </button>
+              {isFullscreen && (
+                <button
+                  className="absolute top-4 right-4 hover:scale-110 transition-transform duration-300"
+                  onClick={handleFullScreenExpansion}
+                >
+                  <X size={28} color="#347EB3" />
+                </button>
+              )}
             </div>
-            <div className="flex flex-col gap-2 w-full my-12 overflow-hidden max-h-[336px]">
-              <AiAssistantRecommendationCard
-                text="A river beach with free parking near Kupa in Karlovac with rich wildlife"
-                icon={<Waves size={32} weight="fill" color="#347EB3" />}
-                isVisible={isExpanded}
-              />
-              <AiAssistantRecommendationCard
-                text="All beaches in Makarska, Croatia"
-                icon={<Island size={32} weight="fill" color="#347EB3" />}
-                isVisible={isExpanded}
-              />
-              <AiAssistantRecommendationCard
-                text="All pet friendly beaches with sand and volleyball in Croatia"
-                icon={<BeachBall size={32} weight="fill" color="#347EB3" />}
-                isVisible={isExpanded}
-              />
-            </div>
+            <AiAssistantHeader
+              isExpanded={isExpanded}
+              isFullscreen={isFullscreen}
+            />
+            <AiAssistantRecommendations
+              isExpanded={isExpanded}
+              isFullscreen={isFullscreen}
+            />
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="space-y-4 max-w-5xl w-full mt-4"
               >
                 <FormField
                   control={form.control}
