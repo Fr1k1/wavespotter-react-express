@@ -14,6 +14,8 @@ import { Input } from "./input";
 import AiAssistantLogo from "./aiAssistantLogo";
 import AiAssistantHeader from "./aiAssistantHeader";
 import AiAssistantRecommendations from "./aiAssistantRecommendations";
+import AiAssistantChat from "./aiAssistantChat";
+import { useConversationContext } from "@/context/ConversationContext";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -24,6 +26,7 @@ const formSchema = z.object({
 const AiAssistantCard = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFullscreen, setIsFullScreen] = useState(false);
+  const { isLoading, sendMessage, messages } = useConversationContext();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,10 +38,16 @@ const AiAssistantCard = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("onSubmit", values);
+      await sendMessage(values);
+      form.reset();
     } catch (error) {
       console.error("Error sending data to backend:", error);
       notifyFailure("Something went wrong");
     }
+  };
+
+  const handleSendClick = () => {
+    form.handleSubmit(onSubmit)();
   };
 
   const handleFullScreenExpansion = () => {
@@ -55,7 +64,13 @@ const AiAssistantCard = () => {
   };
 
   const handleOnMouseLeave = () => {
-    if (!isFullscreen) setIsExpanded(false);
+    if (!isFullscreen && !isLoading) {
+      setIsExpanded(false);
+      const currentMessage = form.getValues("message");
+      if (!currentMessage.trim()) {
+        form.setValue("message", "");
+      }
+    }
   };
 
   return (
@@ -117,10 +132,16 @@ const AiAssistantCard = () => {
               isExpanded={isExpanded}
               isFullscreen={isFullscreen}
             />
-            <AiAssistantRecommendations
-              isExpanded={isExpanded}
-              isFullscreen={isFullscreen}
-            />
+            {messages && messages.length > 0 ? (
+              <AiAssistantChat />
+            ) : (
+              <AiAssistantRecommendations
+                isExpanded={isExpanded}
+                isFullscreen={isFullscreen}
+                form={form}
+                onSubmit={onSubmit}
+              />
+            )}
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -138,7 +159,8 @@ const AiAssistantCard = () => {
                           suffixIcon={
                             <PaperPlaneRight size={24} color="#347EB3" />
                           }
-                          onSuffixClick={() => form.handleSubmit(onSubmit)()}
+                          onSuffixClick={handleSendClick}
+                          disabled={isLoading}
                         />
                       </FormControl>
                       <FormMessage />

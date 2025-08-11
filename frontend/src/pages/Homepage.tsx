@@ -5,6 +5,7 @@ import CardsGrid from "@/components/ui/cardsGrid";
 import Hero from "@/components/ui/hero";
 import Loader from "@/components/ui/loader";
 import MapSearcher from "@/components/ui/mapSearcher";
+import { ConversationProvider } from "@/providers/ConversationProvider";
 import { useEffect, useState } from "react";
 
 const Homepage = () => {
@@ -67,7 +68,9 @@ const Homepage = () => {
 
   return (
     <div className="relative">
-      <AiAssistantCard />
+      <ConversationProvider>
+        <AiAssistantCard />
+      </ConversationProvider>
       <Hero />
       <div className=" flex flex-col gap-6">
         <CardsGrid
