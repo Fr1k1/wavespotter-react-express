@@ -1,3 +1,4 @@
+import { useConversationContext } from "@/context/ConversationContext";
 import AiAssistantLogo from "./aiAssistantLogo";
 
 interface AiAssistantHeaderProps {
@@ -9,6 +10,12 @@ const AiAssistantHeader = ({
   isExpanded,
   isFullscreen,
 }: AiAssistantHeaderProps) => {
+  const { messages } = useConversationContext();
+
+  if (messages.length > 0) {
+    return null;
+  }
+
   return (
     <div
       className={`flex flex-col gap-0 items-center pt-1 ${

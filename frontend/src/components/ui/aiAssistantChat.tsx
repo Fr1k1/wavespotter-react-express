@@ -10,7 +10,7 @@ const AiAssistantChat = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto w-full p-4 space-y-2">
+    <div className="flex-1 overflow-y-auto w-full 2xl:max-w-5xl p-4 space-y-2">
       {messages.map((message, index) => (
         <MessageBubble key={message.id || index} message={message} />
       ))}
