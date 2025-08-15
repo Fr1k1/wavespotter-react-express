@@ -1,16 +1,15 @@
-import * as React from "react";
 import { cn } from "@/lib/utils";
+import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  prefixIcon?: React.ReactNode;
-  suffixIcon?: React.ReactNode;
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  prefixIcon?: ReactNode;
+  suffixIcon?: ReactNode;
   iconClassName?: string;
   onSuffixClick?: () => void;
   suffixClickable?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
@@ -20,6 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       iconClassName,
       onSuffixClick,
       suffixClickable = false,
+      disabled,
       ...props
     },
     ref
@@ -46,6 +46,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className
           )}
           ref={ref}
+          disabled={disabled}
           {...props}
         />
 
@@ -53,9 +54,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div
             className={cn(
               "absolute right-3 text-gray-500 flex items-center justify-center",
-              suffixClickable || onSuffixClick
+              (suffixClickable || onSuffixClick) && !disabled
                 ? "cursor-pointer hover:text-gray-700 transition-colors"
                 : "pointer-events-none",
+              disabled && "opacity-50 cursor-not-allowed",
               iconClassName
             )}
             onClick={onSuffixClick}
