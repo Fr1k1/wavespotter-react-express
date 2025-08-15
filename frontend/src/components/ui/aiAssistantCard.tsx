@@ -88,7 +88,7 @@ const AiAssistantCard = () => {
         className={`relative bg-white rounded-l-xl shadow-lg transition-all duration-500 ease-in-out overflow-hidden border-2 border-white 
           ${
             isExpanded
-              ? "h-fit max-h-[531px] w-96 overflow-hidden border-4 border-gray-200 "
+              ? "h-fit max-h-[531px] w-96 overflow-hidden overflow-y-scroll border-4 border-gray-200 "
               : "h-16 w-20"
           } 
         ${
