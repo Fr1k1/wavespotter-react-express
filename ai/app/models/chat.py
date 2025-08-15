@@ -4,4 +4,4 @@ class ChatRequest(BaseModel):
     messages: list[dict] 
 
 class ChatResponse(BaseModel):
-    answer: str
+    content: str

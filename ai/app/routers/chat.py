@@ -39,7 +39,7 @@ async def chat(req: ChatRequest):
             ),
         )
 
-        return ChatResponse(answer=response.text or "")
+        return ChatResponse(content=response.text or "")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

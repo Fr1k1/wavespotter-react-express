@@ -7,6 +7,8 @@ import beachType from "./beachTypeRoute.js";
 import beachDepth from "./beachDepthRoute.js";
 import beach from "./beachRoute.js";
 import review from "./reviewRoute.js";
+import message from "./messageRoute.js";
+import conversation from "./conversationRoute.js";
 
 const router = new Router();
 router.use("/cities", city);
@@ -14,6 +16,10 @@ router.use("/cities", city);
 router.use("/beach-textures", beachTexture);
 
 router.use("/characteristics", characteristic);
+
+router.use("/messages", message);
+
+router.use("/conversations", conversation);
 
 router.use("/countries", country);
 
