@@ -11,6 +11,8 @@ import City from "./city.js";
 import Beach from "./beach.js";
 import Review from "./review.js";
 import BeachHasCharacteristic from "./beach_has_characteristic.js";
+import Conversation from "./conversation.js";
+import Message from "./message.js";
 
 const db = {};
 
@@ -26,6 +28,7 @@ db.models.Characteristic = Characteristic(
   sequelizeConnection,
   Sequelize.DataTypes
 );
+db.models.Conversation = Conversation(sequelizeConnection, Sequelize.DataTypes);
 
 //tables that have secondary keys
 db.models.City = City(sequelizeConnection, Sequelize.DataTypes);
@@ -36,5 +39,6 @@ db.models.BeachHasCharacteristic = BeachHasCharacteristic(
   sequelizeConnection,
   Sequelize.DataTypes
 );
+db.models.Message = Message(sequelizeConnection, Sequelize.DataTypes);
 
 export default db;

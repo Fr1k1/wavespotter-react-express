@@ -63,6 +63,13 @@ export const createAssociations = () => {
 
   //----------------------------------------------
 
+  db.models.Conversation.hasMany(db.models.Message, {
+    foreignKey: { allowNull: false },
+  });
+  db.models.Message.belongsTo(db.models.Conversation);
+
+  //----------------------------------------------
+
   // M:N relationship setup
   db.models.Characteristic.belongsToMany(db.models.Beach, {
     through: db.models.BeachHasCharacteristic,
