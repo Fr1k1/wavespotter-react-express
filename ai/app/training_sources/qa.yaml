@@ -1,0 +1,42 @@
+qa_pairs:
+  - question: "Give me top beach"
+    sql: |
+      SELECT 
+        b.id,
+        b.name,
+        b.description,
+        b.address,
+        c.name as city_name,
+        co.name as country_name,
+        AVG(r.rating) as average_rating,
+        COUNT(r.id) as review_count
+      FROM public.beaches b
+      JOIN public.cities c ON b.city_id = c.id
+      JOIN public.countries co ON c.country_id = co.id
+      LEFT JOIN public.reviews r ON b.id = r.beach_id
+      WHERE b.approved = TRUE
+      GROUP BY b.id, b.name, b.description, b.address, c.name, co.name
+      HAVING COUNT(r.id) > 0
+      ORDER BY AVG(r.rating) DESC, COUNT(r.id) DESC
+      LIMIT 1;
+
+  - question: "Give me top 3 beaches by ratings"
+    sql: |
+      SELECT 
+        b.id,
+        b.name,
+        b.description,
+        b.address,
+        c.name as city_name,
+        co.name as country_name,
+        AVG(r.rating) as average_rating,
+        COUNT(r.id) as review_count
+      FROM public.beaches b
+      JOIN public.cities c ON b.city_id = c.id
+      JOIN public.countries co ON c.country_id = co.id
+      LEFT JOIN public.reviews r ON b.id = r.beach_id
+      WHERE b.approved = TRUE
+      GROUP BY b.id, b.name, b.description, b.address, c.name, co.name
+      HAVING COUNT(r.id) > 0
+      ORDER BY AVG(r.rating) DESC, COUNT(r.id) DESC
+      LIMIT 3;

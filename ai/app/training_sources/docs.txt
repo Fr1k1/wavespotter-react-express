@@ -1,0 +1,49 @@
+# Beach Database Documentation
+
+## Database Overview
+This is a beach recommendation system database that stores information about beaches (sea and river) worldwide, user reviews, and characteristics to help users find their perfect beach destination.
+
+## Table Relationships
+- Beaches belong to cities, which belong to countries
+- Beaches have textures, types, depths, and multiple characteristics
+
+## Key Business Rules
+- Only approved beaches are shown to users
+- Ratings are on a scale of 1-5 stars
+
+## Important Field Meanings
+
+### Beaches Table
+- approved: FALSE = pending review, TRUE = visible to users
+- best_time_to_visit: Text describing seasonal recommendations (e.g., "May to September", "In the morning")
+- local_wildlife: Description of animals/nature you might see
+- restaurants_and_bars_nearby: Text about dining options near the beach
+- working_hours: When the beach is accessible (e.g., "24/7" or "6 AM - 10 PM")
+
+### Reviews Table
+- rating: Integer from 1 (worst) to 5 (best)
+- title: Short summary of the review
+- description: Detailed review text
+
+### Beach Characteristics
+Common characteristics include: "Wheelchair Accessible", "Pet Friendly", "Lifeguard", "Restrooms", "Parking", "Snorkeling", "Surfing", "Family Friendly", "Quiet", "Crowded"
+
+### Beach Types
+Common types: "River" or "Sea"
+
+### Beach Depths
+Describes beach depth: "Far shallow", "Deep right from the start", "Deep after a certain distance" or "Moderately shallow with gradual depth increase"
+
+### Beach Textures
+Describes sand/surface quality: "Rocky", "Gravel" or "Sand"
+
+## Common Query Patterns
+
+### Finding Top Rated Beaches
+Use AVG(rating) from reviews table, typically filter for rating >= 4.0
+
+### Location-Based Searches
+Always join beaches -> cities -> countries for location filtering
+
+### Approved Content Only
+Always filter by approved = TRUE
