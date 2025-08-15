@@ -1,4 +1,5 @@
 import { Message } from "@/types/Message";
+import { format } from "date-fns";
 
 const MessageBubble = ({ message }: { message: Message }) => {
   return (
@@ -14,17 +15,14 @@ const MessageBubble = ({ message }: { message: Message }) => {
             : "bg-gray-100 text-gray-800 rounded-bl-none"
         }`}
       >
-        <p className="text-sm leading-relaxed">{message.text}</p>
+        <p className="text-sm leading-relaxed">{message.content}</p>
         {message.timestamp && (
           <p
             className={`text-xs mt-1 ${
               message.isUser ? "text-primary-100" : "text-gray-500"
             }`}
           >
-            {new Date(message.timestamp).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {format(new Date(message.timestamp), "HH:mm:ss")}
           </p>
         )}
       </div>

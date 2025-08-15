@@ -18,7 +18,7 @@ import AiAssistantChat from "./aiAssistantChat";
 import { useConversationContext } from "@/context/ConversationContext";
 
 const formSchema = z.object({
-  message: z.string().min(1, {
+  content: z.string().min(1, {
     message: "Message cannot be empty.",
   }),
 });
@@ -31,7 +31,7 @@ const AiAssistantCard = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      message: "",
+      content: "",
     },
   });
 
@@ -66,9 +66,9 @@ const AiAssistantCard = () => {
   const handleOnMouseLeave = () => {
     if (!isFullscreen && !isLoading) {
       setIsExpanded(false);
-      const currentMessage = form.getValues("message");
+      const currentMessage = form.getValues("content");
       if (!currentMessage.trim()) {
-        form.setValue("message", "");
+        form.setValue("content", "");
       }
     }
   };
@@ -149,7 +149,7 @@ const AiAssistantCard = () => {
               >
                 <FormField
                   control={form.control}
-                  name="message"
+                  name="content"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

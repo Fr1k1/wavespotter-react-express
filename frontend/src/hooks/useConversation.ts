@@ -1,15 +1,16 @@
-import { mockAIResponses } from "@/lib/mockData";
-import { Message, MessageDto } from "@/types/Message";
 import { useState } from "react";
+import { sendConversationMessage } from "@/api/messages";
+import { Message, MessageDto } from "@/types/Message";
 
 const useConversation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversationId, setConversationId] = useState<number | null>(null);
 
-  const addMessage = (text: string, isUser: boolean) => {
+  const addMessage = (content: string, isUser: boolean) => {
     const newMessage: Message = {
       id: Date.now().toString(),
-      text,
+      content,
       isUser,
       timestamp: new Date(),
     };
@@ -17,28 +18,28 @@ const useConversation = () => {
     return newMessage;
   };
 
-  const sendMessage = async ({ message }: MessageDto) => {
-    if (!message.trim()) return;
+  const sendMessage = async ({ content }: MessageDto) => {
+    if (!content.trim()) return;
 
-    console.log("sendMessage");
+    addMessage(content, true);
     setIsLoading(true);
+
     try {
-      addMessage(message, true);
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000 + Math.random() * 2000)
-      );
       const payload = {
-        message,
+        content,
+        conversationId,
       };
-      console.log("payload", payload);
 
-      // const { data } = await sendMessage(payload);
-      // console.log("data", data);
+      const response = await sendConversationMessage(payload);
 
-      const aiResponse =
-        mockAIResponses[Math.floor(Math.random() * mockAIResponses.length)];
-
-      addMessage(aiResponse, false);
+      if (response.success) {
+        if (!conversationId) {
+          setConversationId(response.data.conversationId);
+        }
+        addMessage(response.data.aiMessage.content, false);
+      } else {
+        addMessage("Sorry, I encountered an error. Please try again.", false);
+      }
     } catch (error: unknown) {
       console.error("Error in sending message:", error);
       addMessage("Sorry, I encountered an error. Please try again.", false);
@@ -49,6 +50,7 @@ const useConversation = () => {
 
   const clearMessages = () => {
     setMessages([]);
+    setConversationId(null);
   };
 
   return { isLoading, clearMessages, sendMessage, messages };

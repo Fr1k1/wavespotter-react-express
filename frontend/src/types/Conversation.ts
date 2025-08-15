@@ -11,3 +11,7 @@ export interface ConversationContextType {
   sendMessage: (payload: MessageDto) => Promise<void>;
   clearMessages: () => void;
 }
+
+export interface ConversationDto {
+  title?: string;
+}

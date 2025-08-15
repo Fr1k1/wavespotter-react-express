@@ -1,23 +1,13 @@
-import { MessageDto } from "@/types/Message";
-import { apiUrl } from "./api";
 import axios from "axios";
+import { apiUrl } from "./api";
+import { ConversationDto } from "@/types/Conversation";
 
-export async function createConversation(payload: MessageDto) {
+export async function createConversation(payload: ConversationDto) {
   try {
     const response = await axios.post(`${apiUrl}/conversations`, payload);
-    const data = await response.data();
-    return data;
+    return response.data;
   } catch (error: unknown) {
     console.error("Error creating conversation:", error);
-  }
-}
-
-export async function sendMessage(payload: MessageDto) {
-  try {
-    const response = await axios.post(`${apiUrl}/messages`, payload);
-    const data = await response.data();
-    return data;
-  } catch (error: unknown) {
-    console.error("Error creating conversation:", error);
+    throw error;
   }
 }

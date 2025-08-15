@@ -11,7 +11,7 @@ interface AiAssistantRecommendationsProps {
 }
 
 const formSchema = z.object({
-  message: z.string().min(1, {
+  content: z.string().min(1, {
     message: "Message cannot be empty.",
   }),
 });
@@ -25,7 +25,7 @@ const AiAssistantRecommendations = ({
   onSubmit,
 }: AiAssistantRecommendationsProps) => {
   const handleRecommendationClick = (text: string) => {
-    form.setValue("message", text);
+    form.setValue("content", text);
     form.handleSubmit(onSubmit);
   };
 
