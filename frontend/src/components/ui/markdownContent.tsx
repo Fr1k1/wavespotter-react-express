@@ -43,7 +43,7 @@ const MarkdownContent: FC<MarkdownContentProps> = ({ content }) => {
           const bulletText = trimmedLine.replace(/^\*\s+/, "");
           return (
             <div key={index} className="flex items-start gap-2 ml-4">
-              <span className="text-gray-600 mt-1">•</span>
+              <span className="text-gray-600 mt-[-1px]">•</span>
               <div
                 className="text-sm leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: formatText(bulletText) }}
