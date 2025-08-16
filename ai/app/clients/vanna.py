@@ -18,7 +18,7 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
         chroma_config = {"path": chroma_path}
         gemini_config = {
             "api_key": GEMINI_API_KEY,
-            "model": "gemini-1.5-flash",
+            "model_name": "gemini-1.5-flash",
         }
         ChromaDB_VectorStore.__init__(self, config=chroma_config)
         GoogleGeminiChat.__init__(self, config=gemini_config)
