@@ -2,6 +2,7 @@ from vanna.chromadb import ChromaDB_VectorStore
 from vanna.google import GoogleGeminiChat
 import yaml
 import os
+import logging
 from app.config import (
     GEMINI_API_KEY,
     PG_HOST,
@@ -10,6 +11,8 @@ from app.config import (
     PG_PASSWORD,
     PG_PORT,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
@@ -35,10 +38,10 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
                 file_size = os.path.getsize(sqlite_file)
                 if file_size > 8192:  # ChromaDB creates ~8KB minimum file
                     return True
-            print("No existing trained data found or file empty!")
+            logger.info("No existing trained data found or file empty!")
             return False
         except Exception as e:
-            print(f"Error checking trained model: {e}")
+            logger.error(f"Error checking trained model: {e}")
             return False
 
     def _get_chroma_path(self):
@@ -67,40 +70,40 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
                 ),
             )
         except Exception as e:
-            print(f"Database connection failed: {e}")
+            logger.error(f"Database connection failed: {e}")
 
     def train_from_files(self):
-        print("Starting training pipeline...")
+        logger.info("Starting training pipeline...")
         self._train_on_dll()
         self._train_on_documentation()
         self._train_on_qa()
         self.is_trained = True
-        print("Training pipeline completed!")
+        logger.info("Training pipeline completed!")
 
     def _train_on_dll(self):
         ddl_file_path = "app/training_sources/ddl.sql"  # gleda se s pozicije otkud se poziva komanda za treniranje
         if os.path.exists(ddl_file_path):
-            print("Training on DDL...")
+            logger.info("Training on DDL...")
             with open(ddl_file_path, "r") as f:
                 ddl_content = f.read()
             self.train(ddl=ddl_content)
         else:
-            print(f"DDL file not found: {ddl_file_path}")
+            logger.warning(f"DDL file not found: {ddl_file_path}")
 
     def _train_on_documentation(self):
         docs_file_path = "app/training_sources/docs.txt"
         if os.path.exists(docs_file_path):
-            print("Training on documentation...")
+            logger.info("Training on documentation...")
             with open(docs_file_path, "r") as f:
                 docs_content = f.read()
             self.train(documentation=docs_content)
         else:
-            print(f"Documentation file not found: {docs_file_path}")
+            logger.warning(f"Documentation file not found: {docs_file_path}")
 
     def _train_on_qa(self):
         qa_file_path = "app/training_sources/qa.yaml"
         if os.path.exists(qa_file_path):
-            print("Training on Q&A pairs...")
+            logger.info("Training on Q&A pairs...")
             with open(qa_file_path, "r") as f:
                 qa_data = yaml.safe_load(f)
             question_num = 0
@@ -110,9 +113,9 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
                 if question and sql:
                     question_num += 1
                     self.train(question=question, sql=sql)
-                    print(f"Q{question_num}: {question}")
+                    logger.info(f"Q{question_num}: {question}")
         else:
-            print(f"Q&A file not found: {qa_file_path}")
+            logger.warning(f"Q file not found: {qa_file_path}")
 
     def ask_question(self, question: str) -> dict:
         if not self.is_trained:
@@ -127,7 +130,7 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
             if hasattr(self, "run_sql"):
                 try:
                     results = self.run_sql(sql)
-                    print("results", results.to_string())
+                    logger.info(f"results {results.to_string()}")
                 except Exception as e:
                     results = f"SQL execution error: {str(e)}"
 

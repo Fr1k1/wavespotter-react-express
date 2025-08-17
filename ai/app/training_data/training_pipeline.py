@@ -5,6 +5,11 @@ Run with: python app/training_data/training_pipeline.py
 
 import sys
 import os
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 project_root = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,7 +20,7 @@ from app.clients.vanna import VannaClient
 
 
 def main():
-    print("Wavespotter - Vanna AI Training Pipeline")
+    logger.info(f"Wavespotter - Vanna AI Training Pipeline")
     client = VannaClient()
     client.train_from_files()
 
