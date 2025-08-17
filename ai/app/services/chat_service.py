@@ -1,12 +1,12 @@
 import asyncio
-import logging
+from app.utils.logger import get_logger
 from google.genai import types
 from app.clients.gemini import client
 from app.clients.vanna import get_vanna_client
 from app.models.chat import ChatRequest
 from app.services.response_formatter import format_vanna_response
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 async def process_chat(req: ChatRequest) -> str:

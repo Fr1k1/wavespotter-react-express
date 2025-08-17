@@ -2,7 +2,7 @@ from vanna.chromadb import ChromaDB_VectorStore
 from vanna.google import GoogleGeminiChat
 import yaml
 import os
-import logging
+from app.utils.logger import get_logger
 from app.config import (
     GEMINI_API_KEY,
     PG_HOST,
@@ -12,7 +12,7 @@ from app.config import (
     PG_PORT,
 )
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
@@ -73,12 +73,12 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
             logger.error(f"Database connection failed: {e}")
 
     def train_from_files(self):
-        logger.info("Starting training pipeline...")
+        print("Starting training pipeline...")
         self._train_on_dll()
         self._train_on_documentation()
         self._train_on_qa()
         self.is_trained = True
-        logger.info("Training pipeline completed!")
+        print("Training pipeline completed!")
 
     def _train_on_dll(self):
         ddl_file_path = "app/training_sources/ddl.sql"  # gleda se s pozicije otkud se poziva komanda za treniranje
@@ -103,7 +103,7 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
     def _train_on_qa(self):
         qa_file_path = "app/training_sources/qa.yaml"
         if os.path.exists(qa_file_path):
-            logger.info("Training on Q&A pairs...")
+            print("Training on Q&A pairs...")
             with open(qa_file_path, "r") as f:
                 qa_data = yaml.safe_load(f)
             question_num = 0
@@ -113,7 +113,7 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
                 if question and sql:
                     question_num += 1
                     self.train(question=question, sql=sql)
-                    logger.info(f"Q{question_num}: {question}")
+                    print(f"Q{question_num}: {question}")
         else:
             logger.warning(f"Q file not found: {qa_file_path}")
 
