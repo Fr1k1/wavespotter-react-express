@@ -16,8 +16,6 @@ from app.clients.vanna import VannaClient
 
 def main():
     print("Wavespotter - Vanna AI Training Pipeline")
-    print("=" * 50)
-
     client = VannaClient()
     client.train_from_files()
 

@@ -22,8 +22,24 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
         }
         ChromaDB_VectorStore.__init__(self, config=chroma_config)
         GoogleGeminiChat.__init__(self, config=gemini_config)
-        self.is_trained = False  # da se zna jel strenirano vec ili jos ne
+        self.is_trained = (
+            self._check_if_trained()
+        )  # da se zna jel strenirano vec ili jos ne
         self._connect_to_database()
+
+    def _check_if_trained(self):
+        try:
+            chroma_path = self._get_chroma_path()
+            sqlite_file = os.path.join(chroma_path, "chroma.sqlite3")
+            if os.path.exists(sqlite_file):
+                file_size = os.path.getsize(sqlite_file)
+                if file_size > 8192:  # ChromaDB creates ~8KB minimum file
+                    return True
+            print("No existing trained data found or file empty!")
+            return False
+        except Exception as e:
+            print(f"Error checking trained model: {e}")
+            return False
 
     def _get_chroma_path(self):
         # Get current file location: ai/app/clients/
@@ -34,6 +50,7 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
         training_data_dir = os.path.join(app_dir, "training_data")
         # Final path for ChromaDB storage: ai/app/training_data/chroma_data/
         chroma_path = os.path.join(training_data_dir, "chroma_data")
+        os.makedirs(chroma_path, exist_ok=True)
         return chroma_path
 
     def _connect_to_database(self):
@@ -49,7 +66,6 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
                     else 5432
                 ),
             )
-            print("Connected to PostgreSQL database")
         except Exception as e:
             print(f"Database connection failed: {e}")
 
@@ -111,26 +127,29 @@ class VannaClient(ChromaDB_VectorStore, GoogleGeminiChat):
             if hasattr(self, "run_sql"):
                 try:
                     results = self.run_sql(sql)
-                    print("results", results)
+                    print("results", results.to_string())
                 except Exception as e:
                     results = f"SQL execution error: {str(e)}"
 
             return {
                 "question": question,
                 "sql": sql,
-                "results": results or "Database not connected - SQL generated only",
+                "results": (
+                    results
+                    if results is not None
+                    else "Database not connected - SQL generated only"
+                ),
                 "success": True,
             }
         except Exception as e:
             return {"question": question, "error": str(e), "success": False}
 
 
-vanna_client = None
+_vanna_client_instance = None
 
 
-def get_vanna_client():  # soft singleton
-    global vanna_client
-    if vanna_client is None:
-        vanna_client = VannaClient()
-        vanna_client.train_from_files()
-    return vanna_client
+def get_vanna_client():
+    global _vanna_client_instance
+    if _vanna_client_instance is None:
+        _vanna_client_instance = VannaClient()
+    return _vanna_client_instance
